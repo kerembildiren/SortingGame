@@ -21,7 +21,7 @@ namespace SortingGame.Core
             ["tool.broom"] = "Broom",
             ["tool.magnet"] = "Magnet",
             ["tool.magnifier"] = "Magnifier",
-            ["tool.coming_soon"] = "Coming soon",
+            ["tool.coming_soon"] = "coming in M3",
 
             ["hud.section_complete"] = "Section complete!",
             ["hud.shelf_full"] = "{0} shelf full!",
@@ -34,6 +34,21 @@ namespace SortingGame.Core
             ["hud.close"] = "Close",
             ["hud.on"] = "On",
             ["hud.off"] = "Off",
+            ["hud.book"] = "Book",
+            ["hud.collection_book"] = "Collection Book",
+            ["hud.rare_find"] = "Rare find!",
+            ["hud.continue"] = "Continue",
+            ["hud.duplicate_sold"] = "Duplicate {0} sold +{1}",
+
+            // Collectibles: original names only (GDD 13).
+            ["collectible.captain_chubby"] = "Captain Chubby",
+            ["collectible.captain_chubby.desc"] = "A tiny hero in a homemade cape. Always ready to save the day, right after a nap.",
+            ["collectible.golden_robot"] = "Golden Robot",
+            ["collectible.golden_robot.desc"] = "A wind-up tin robot with a golden shine. Still walks, a little sideways.",
+            ["collectible.first_issue"] = "First Issue",
+            ["collectible.first_issue.desc"] = "The very first issue of 'Moonlight Mice'. The corners are a bit chewed.",
+            ["collectible.lucky_wrench"] = "Lucky Wrench",
+            ["collectible.lucky_wrench.desc"] = "Someone engraved a tiny star on it. Fixes bolts, and maybe luck too.",
         };
 
         public static string Get(string key) =>

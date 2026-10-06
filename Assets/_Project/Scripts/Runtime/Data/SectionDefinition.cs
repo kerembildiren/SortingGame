@@ -38,8 +38,11 @@ namespace SortingGame.Data
         [Range(0f, 1f), Tooltip("Share of items lying loose on the floor instead of inside containers.")]
         public float LooseItemRatio = 0.2f;
 
-        [Range(0f, 1f), Tooltip("Share of the floor covered by the dirt layer at start.")]
+        [Range(0f, 1f), Tooltip("Share of the floor covered by the dirt layer at start. 0 = no dirt, no broom needed.")]
         public float DirtCoverage = 0.6f;
+
+        [Range(0f, 1f), Tooltip("Share of items hidden under the dirt, revealed by sweeping (GDD 7.1). Needs DirtCoverage > 0.")]
+        public float BuriedItemRatio = 0.15f;
 
         [Tooltip("Same seed = same layout every time.")]
         public int Seed = 1;

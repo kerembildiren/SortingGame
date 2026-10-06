@@ -40,11 +40,20 @@ namespace SortingGame.Tests
             section.Shelves.Add(new SectionDefinition.ShelfEntry { Category = b, SlotCount = slotsB });
             if (boxes > 0) section.Containers.Add(new SectionDefinition.ContainerEntry { Container = box, Count = boxes });
             section.LooseItemRatio = looseRatio;
+            section.DirtCoverage = 0f; // individual tests opt in to dirt
             return (section, items);
         }
 
         static IEnumerable<ItemDefinition> AllItems(SectionLayout layout) =>
-            layout.LooseItems.Concat(layout.Containers.SelectMany(c => c.Items));
+            layout.LooseItems.Concat(layout.BuriedItems).Concat(layout.Containers.SelectMany(c => c.Items));
+
+        CollectibleDefinition MakeCollectible(string id)
+        {
+            var c = Make<CollectibleDefinition>();
+            c.Id = id;
+            c.Rarity = ItemRarity.Rare;
+            return c;
+        }
 
         [Test]
         public void ItemCountPerCategory_EqualsShelfSlots()
@@ -90,6 +99,47 @@ namespace SortingGame.Tests
             var second = SectionLayoutGenerator.Generate(section, c => items[c], 99);
 
             CollectionAssert.AreEqual(AllItems(first).Select(i => i.Id).ToList(), AllItems(second).Select(i => i.Id).ToList());
+        }
+    
+
+        [Test]
+        public void WithDirt_SomeItemsAreBuried_AndStillCounted()
+        {
+            var (section, items) = MakeSection(10, 10, 2, 20, 0.2f);
+            section.DirtCoverage = 0.5f;
+            section.BuriedItemRatio = 0.25f;
+
+            var layout = SectionLayoutGenerator.Generate(section, c => items[c], 3);
+
+            Assert.AreEqual(5, layout.BuriedItems.Count);
+            Assert.AreEqual(20, layout.TotalItems);
+        }
+
+        [Test]
+        public void WithoutDirt_NothingIsBuried()
+        {
+            var (section, items) = MakeSection(10, 10, 2, 20, 0.2f);
+            section.BuriedItemRatio = 0.5f;
+
+            var layout = SectionLayoutGenerator.Generate(section, c => items[c], 3);
+
+            Assert.IsEmpty(layout.BuriedItems);
+            Assert.IsEmpty(layout.BuriedCollectibles);
+        }
+
+        [Test]
+        public void Collectibles_AreHidden_AndNotCountedInTotal()
+        {
+            var (section, items) = MakeSection(6, 6, 2, 20, 0.2f);
+            section.DirtCoverage = 0.5f;
+            section.Collectibles.AddRange(new[] { MakeCollectible("r1"), MakeCollectible("r2"), MakeCollectible("r3"), MakeCollectible("r4") });
+
+            var layout = SectionLayoutGenerator.Generate(section, c => items[c], 11);
+
+            var hidden = layout.BuriedCollectibles.Count + layout.Containers.Sum(c => c.Collectibles.Count);
+            Assert.AreEqual(4, hidden, "Collectibles go into boxes or under the dirt, never in plain sight.");
+            Assert.IsEmpty(layout.LooseCollectibles);
+            Assert.AreEqual(12, layout.TotalItems);
         }
     }
 }

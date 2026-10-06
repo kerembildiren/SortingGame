@@ -11,7 +11,9 @@ namespace SortingGame.Section
         Physics,   // tumbling after a spill or a drop
         Dragging,
         Flying,    // animating to a slot or back to the floor
-        Placed     // on a shelf, final
+        Placed,    // on a shelf, final
+        Buried,    // hidden under the dirt layer until swept free
+        Found      // collectible taken by the player
     }
 
     /// <summary>A single sortable item in the section.</summary>
@@ -26,15 +28,31 @@ namespace SortingGame.Section
         FeelConfig _feel;
         Rigidbody _body;
         Collider[] _colliders;
+        Renderer[] _renderers;
+        RareGlow _glow;
         Vector3 _pickupPosition;
         Quaternion _pickupRotation;
         float _restTimer;
         float _physicsTimer;
         Coroutine _motion;
 
-        public bool CanPick => State is ItemState.Resting or ItemState.Physics;
+        public bool IsCollectible => Definition.IsCollectible;
 
-        public static ItemView Create(ItemDefinition definition, PlaceholderFactory factory, FeelConfig feel, Transform parent)
+        /// <summary>Common items are dragged; collectibles are tapped (GDD 7.1).</summary>
+        public bool CanPick => !IsCollectible && State is ItemState.Resting or ItemState.Physics;
+        public bool CanTapToFind => IsCollectible && State is ItemState.Resting or ItemState.Physics;
+
+        /// <summary>Largest placeholder dimension, used to scale the rare-find presentation.</summary>
+        public float VisualSize
+        {
+            get
+            {
+                var s = Definition.Placeholder.Size;
+                return Mathf.Max(s.x, Mathf.Max(s.y, s.z));
+            }
+        }
+
+        public static ItemView Create(ItemDefinition definition, PlaceholderFactory factory, FeelConfig feel, Transform parent, Fx fx = null, Color glowColor = default)
         {
             var go = new GameObject($"Item_{definition.Id}");
             go.transform.SetParent(parent, false);
@@ -45,6 +63,8 @@ namespace SortingGame.Section
             view._body = body;
 
             if (definition.Prefab != null) Instantiate(definition.Prefab, go.transform, false);
+            else if (definition.Rarity == ItemRarity.Mascot && definition is CollectibleDefinition mascot)
+                factory.CreateMascot(definition.Placeholder, mascot.CostumeColor, go.transform);
             else factory.CreateShape(definition.Placeholder, go.transform);
 
             _physicsMaterial ??= new PhysicsMaterial("Item")
@@ -55,6 +75,9 @@ namespace SortingGame.Section
                 bounceCombine = PhysicsMaterialCombine.Minimum
             };
             view._colliders = go.GetComponentsInChildren<Collider>();
+            view._renderers = go.GetComponentsInChildren<Renderer>();
+            if (definition.IsCollectible && fx != null)
+                view._glow = RareGlow.Attach(view, factory, fx, glowColor);
             foreach (var c in view._colliders) c.sharedMaterial = _physicsMaterial;
 
             body.mass = 0.3f;
@@ -175,6 +198,46 @@ namespace SortingGame.Section
                 transform.localScale = Vector3.one * (1f + (_feel.PlacePunchScale - 1f) * Ease.Pulse(t)));
         }
 
+        /// <summary>Hidden under the dirt: invisible and not touchable until revealed.</summary>
+        public void Bury(Vector3 position, Quaternion rotation)
+        {
+            SetResting(position, rotation);
+            SetVisible(false);
+            SetCollidersEnabled(false);
+            State = ItemState.Buried;
+        }
+
+        /// <summary>Swept free: pops out of the dust.</summary>
+        public void Reveal()
+        {
+            if (State != ItemState.Buried) return;
+            SetVisible(true);
+            SetCollidersEnabled(true);
+            State = ItemState.Resting;
+            var restPosition = transform.position;
+            _motion = Tween.Run(this, 0.35f, t =>
+            {
+                transform.localScale = Vector3.one * Ease.OutBack(t);
+                transform.position = restPosition + Vector3.up * (Ease.Pulse(t) * 0.12f);
+            }, null, () => transform.position = restPosition);
+        }
+
+        /// <summary>Collectible picked up by the player; the presenter now owns its motion.</summary>
+        public void MarkFound()
+        {
+            StopMotion();
+            SetPhysics(false);
+            SetCollidersEnabled(false);
+            State = ItemState.Found;
+            if (_glow != null) _glow.SetGlowing(false);
+        }
+
+        void SetVisible(bool visible)
+        {
+            foreach (var r in _renderers) if (r != null) r.enabled = visible;
+            if (_glow != null) _glow.SetGlowing(visible);
+        }
+
         void Update()
         {
             if (State != ItemState.Physics) return;
@@ -213,6 +276,9 @@ namespace SortingGame.Section
                 _body.angularVelocity = Vector3.zero;
             }
             _body.isKinematic = !on;
+            // Interpolation would keep pulling the rendered pose towards the old physics pose while
+            // tweens/parenting move the transform (seen as the rare item drifting behind the light rays).
+            _body.interpolation = on ? RigidbodyInterpolation.Interpolate : RigidbodyInterpolation.None;
         }
 
         void SetCollidersEnabled(bool on)

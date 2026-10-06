@@ -9,17 +9,33 @@ namespace SortingGame.Data
         [Header("Materials (shaders must be referenced by an asset to be included in builds)")]
         public Material LitMaterial;
         public Material GhostMaterial;
+        [Tooltip("Lit + transparent, for the dirt layer.")]
+        public Material DirtMaterial;
+        [Tooltip("URP Particles/Unlit, for dust and sparkles.")]
+        public Material ParticleMaterial;
 
-        [Header("Room")]
+        [Header("Room: dirty")]
         public Color FloorColor = new(0.42f, 0.36f, 0.30f);
         public Color WallColor = new(0.30f, 0.27f, 0.26f);
         public Color BackgroundColor = new(0.10f, 0.09f, 0.09f);
+
+        [Header("Room: clean (after 100%)")]
+        public Color FloorColorClean = new(0.78f, 0.62f, 0.44f);
+        public Color WallColorClean = new(0.93f, 0.85f, 0.72f);
+        public Color BackgroundColorClean = new(0.22f, 0.18f, 0.15f);
+
+        [Header("Dirt")]
+        public Color DirtColor = new(0.30f, 0.25f, 0.19f);
+        public Color DirtSpeckColor = new(0.78f, 0.72f, 0.60f);
 
         [Header("Props")]
         public Color WoodColor = new(0.62f, 0.42f, 0.24f);
         public Color SignColor = new(0.96f, 0.89f, 0.76f);
         public Color CardboardColor = new(0.74f, 0.56f, 0.36f);
         public Color SlotGhostColor = new(1f, 0.97f, 0.9f, 0.55f);
+
+        [Header("Rare items")]
+        public Color RareGlowColor = new(1f, 0.82f, 0.3f, 0.75f);
 
         [Header("Mood: dirty -> clean")]
         public Color LightColor = new(1f, 0.86f, 0.68f);

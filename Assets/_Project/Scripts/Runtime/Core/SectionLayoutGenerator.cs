@@ -11,16 +11,21 @@ namespace SortingGame.Core
         {
             public ContainerDefinition Container;
             public readonly List<ItemDefinition> Items = new();
+            public readonly List<CollectibleDefinition> Collectibles = new();
         }
 
         public readonly List<ContainerContent> Containers = new();
         public readonly List<ItemDefinition> LooseItems = new();
+        public readonly List<ItemDefinition> BuriedItems = new();
+        public readonly List<CollectibleDefinition> BuriedCollectibles = new();
+        public readonly List<CollectibleDefinition> LooseCollectibles = new();
 
+        /// <summary>Common items only: these are what the section % counts (collectibles are a bonus, GDD 5.6).</summary>
         public int TotalItems
         {
             get
             {
-                var total = LooseItems.Count;
+                var total = LooseItems.Count + BuriedItems.Count;
                 foreach (var c in Containers) total += c.Items.Count;
                 return total;
             }
@@ -29,7 +34,7 @@ namespace SortingGame.Core
 
     /// <summary>
     /// Creates exactly one item per shelf slot (so a section can always reach 100%),
-    /// then spreads them over containers and the floor. Same seed = same layout.
+    /// then spreads them over containers, the floor and under the dirt. Same seed = same layout.
     /// </summary>
     public static class SectionLayoutGenerator
     {
@@ -65,31 +70,53 @@ namespace SortingGame.Core
                 for (var i = 0; i < entry.Count; i++)
                     layout.Containers.Add(new SectionLayout.ContainerContent { Container = entry.Container });
 
+            var hasDirt = section.DirtCoverage > 0f;
+            var buriedCount = hasDirt ? (int)Math.Round(all.Count * section.BuriedItemRatio) : 0;
             var looseCount = (int)Math.Round(all.Count * section.LooseItemRatio);
-            if (layout.Containers.Count == 0) looseCount = all.Count;
+            if (layout.Containers.Count == 0) looseCount = all.Count - buriedCount;
 
             var index = 0;
-            for (; index < looseCount && index < all.Count; index++)
+            for (var n = 0; n < buriedCount && index < all.Count; n++, index++)
+                layout.BuriedItems.Add(all[index]);
+            for (var n = 0; n < looseCount && index < all.Count; n++, index++)
                 layout.LooseItems.Add(all[index]);
 
             // Round-robin into containers, respecting capacity. Overflow lands on the floor.
             var containerIndex = 0;
             for (; index < all.Count; index++)
             {
-                var placed = false;
-                for (var attempt = 0; attempt < layout.Containers.Count; attempt++)
-                {
-                    var target = layout.Containers[(containerIndex + attempt) % layout.Containers.Count];
-                    if (target.Items.Count >= target.Container.Capacity) continue;
-                    target.Items.Add(all[index]);
-                    containerIndex = (containerIndex + attempt + 1) % layout.Containers.Count;
-                    placed = true;
-                    break;
-                }
-                if (!placed) layout.LooseItems.Add(all[index]);
+                var target = NextWithSpace(layout.Containers, ref containerIndex);
+                if (target != null) target.Items.Add(all[index]);
+                else layout.LooseItems.Add(all[index]);
+            }
+
+            // Collectibles: hidden in a box or under the dirt, never just lying in plain sight.
+            foreach (var collectible in section.Collectibles)
+            {
+                if (collectible == null) continue;
+                var canBury = hasDirt;
+                var canBox = layout.Containers.Count > 0;
+                if (canBury && (!canBox || random.NextDouble() < 0.5))
+                    layout.BuriedCollectibles.Add(collectible);
+                else if (canBox)
+                    layout.Containers[random.Next(layout.Containers.Count)].Collectibles.Add(collectible);
+                else
+                    layout.LooseCollectibles.Add(collectible);
             }
 
             return layout;
+        }
+
+        static SectionLayout.ContainerContent NextWithSpace(List<SectionLayout.ContainerContent> containers, ref int start)
+        {
+            for (var attempt = 0; attempt < containers.Count; attempt++)
+            {
+                var candidate = containers[(start + attempt) % containers.Count];
+                if (candidate.Items.Count >= candidate.Container.Capacity) continue;
+                start = (start + attempt + 1) % containers.Count;
+                return candidate;
+            }
+            return null;
         }
 
         static void Shuffle<T>(List<T> list, Random random)

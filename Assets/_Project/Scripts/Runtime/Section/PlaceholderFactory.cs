@@ -75,6 +75,63 @@ namespace SortingGame.Section
             return go;
         }
 
+        /// <summary>
+        /// Placeholder Chubby (GDD 9.2): round body, big eyes, costume mask + cape in <paramref name="costume"/> colour.
+        /// Only the body has a collider.
+        /// </summary>
+        public GameObject CreateMascot(PlaceholderVisual visual, Color costume, Transform parent)
+        {
+            var size = visual.Size;
+            var body = CreateShape(new PlaceholderVisual(PlaceholderShape.Sphere, visual.Color, size), parent);
+            body.name = "Body";
+
+            var white = new Color(0.98f, 0.98f, 0.98f);
+            var black = new Color(0.08f, 0.08f, 0.1f);
+            var eye = size.x * 0.26f;
+            for (var side = -1; side <= 1; side += 2)
+            {
+                var eyeBall = CreateBox("Eye", parent, Vector3.zero, Vector3.one, white, false);
+                ReplaceMesh(eyeBall, PrimitiveType.Sphere);
+                eyeBall.transform.localPosition = new Vector3(side * size.x * 0.17f, size.y * 0.12f, -size.z * 0.42f);
+                eyeBall.transform.localScale = new Vector3(eye, eye * 1.15f, eye * 0.5f);
+
+                var pupil = CreateBox("Pupil", parent, Vector3.zero, Vector3.one, black, false);
+                ReplaceMesh(pupil, PrimitiveType.Sphere);
+                pupil.transform.localPosition = new Vector3(side * size.x * 0.17f, size.y * 0.12f, -size.z * 0.48f);
+                pupil.transform.localScale = new Vector3(eye * 0.5f, eye * 0.6f, eye * 0.25f);
+            }
+
+            // Hero mask band across the eyes and a small cape behind.
+            CreateBox("Mask", parent, new Vector3(0f, size.y * 0.12f, -size.z * 0.36f), new Vector3(size.x * 0.75f, size.y * 0.16f, size.z * 0.12f), costume, false);
+            var cape = CreateBox("Cape", parent, new Vector3(0f, -size.y * 0.05f, size.z * 0.45f), new Vector3(size.x * 0.8f, size.y * 0.75f, size.z * 0.05f), costume, false);
+            cape.transform.localRotation = Quaternion.Euler(-12f, 0f, 0f);
+            return body;
+        }
+
+        static void ReplaceMesh(GameObject target, PrimitiveType type)
+        {
+            var temp = GameObject.CreatePrimitive(type);
+            target.GetComponent<MeshFilter>().sharedMesh = temp.GetComponent<MeshFilter>().sharedMesh;
+            Object.DestroyImmediate(temp);
+        }
+
+        /// <summary>Camera-facing soft sprite on a quad (halos, rays, dimmer, broom cursor).</summary>
+        public MeshRenderer CreateSoftQuad(string name, Transform parent, Color color, Texture texture)
+        {
+            var go = GameObject.CreatePrimitive(PrimitiveType.Quad);
+            go.name = name;
+            Object.DestroyImmediate(go.GetComponent<Collider>());
+            go.transform.SetParent(parent, false);
+            var renderer = go.GetComponent<MeshRenderer>();
+            var material = new Material(_ghost);
+            if (texture != null) material.SetTexture("_BaseMap", texture);
+            material.SetColor("_BaseColor", color);
+            renderer.sharedMaterial = material;
+            renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+            renderer.receiveShadows = false;
+            return renderer;
+        }
+
         /// <summary>Dashed outline for an empty shelf slot (concept 02_section_garage).</summary>
         public MeshRenderer CreateSlotGhost(Transform parent, Vector3 localCenter, Vector2 size, Color color)
         {

@@ -223,3 +223,136 @@
 
 .primary-button { background-color: rgb(245, 196, 67); }
 .secondary-button { background-color: rgb(233, 228, 220); }
+
+/* ---------- Collection Book button (second row, left of coins) ---------- */
+.coin-row { align-items: center; }
+
+.book-button {
+    height: 84px;
+    margin: 0 16px 0 0;
+    padding: 0 30px;
+    border-width: 0;
+    border-radius: 42px;
+    background-color: rgb(255, 248, 236);
+    flex-direction: row;
+    align-items: center;
+    transition-property: scale;
+    transition-duration: 0.12s;
+}
+
+.book-button.pulse { scale: 1.2 1.2; }
+
+.book-button-text {
+    font-size: 36px;
+    -unity-font-style: bold;
+    margin: 0; padding: 0;
+}
+
+.book-badge {
+    position: absolute;
+    top: -10px; right: -10px;
+    width: 44px; height: 44px;
+    border-radius: 22px;
+    background-color: rgb(232, 76, 61);
+    color: rgb(255, 255, 255);
+    font-size: 30px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    padding: 0; margin: 0;
+}
+
+/* ---------- Rare find card (GDD 9.3, concept 03 minus the sell button) ---------- */
+.rare-card-layer {
+    position: absolute;
+    left: 0; right: 0; bottom: 120px;
+    align-items: center;
+}
+
+.rare-card {
+    width: 82%;
+    padding: 70px 48px 44px 48px;
+    border-radius: 56px;
+    background-color: rgb(255, 248, 236);
+    align-items: center;
+}
+
+.rare-tab {
+    position: absolute;
+    top: -46px;
+    padding: 14px 64px;
+    border-radius: 46px;
+    background-color: rgb(245, 196, 67);
+}
+
+.rare-tab-text {
+    font-size: 52px;
+    -unity-font-style: bold;
+    margin: 0; padding: 0;
+}
+
+.rare-name {
+    font-size: 56px;
+    -unity-font-style: bold;
+}
+
+.rare-description {
+    margin-top: 12px;
+    font-size: 36px;
+    color: rgb(130, 112, 92);
+    white-space: normal;
+    -unity-text-align: middle-center;
+}
+
+/* ---------- Collection Book page ---------- */
+.book-card { width: 88%; }
+
+.book-count {
+    font-size: 40px;
+    color: rgb(130, 112, 92);
+    margin-bottom: 20px;
+}
+
+.book-grid {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.book-entry {
+    width: 260px;
+    margin: 14px;
+    padding: 20px 10px;
+    border-radius: 36px;
+    background-color: rgb(246, 238, 224);
+    align-items: center;
+}
+
+.book-entry--mascot { background-color: rgb(255, 236, 180); }
+
+.book-icon {
+    width: 140px; height: 140px;
+    border-radius: 70px;
+    border-width: 6px;
+    border-color: rgb(230, 170, 30);
+    align-items: center;
+    justify-content: center;
+}
+
+.book-icon--missing {
+    background-color: rgb(214, 206, 192);
+    border-color: rgb(190, 180, 164);
+}
+
+.book-icon-text {
+    font-size: 70px;
+    -unity-font-style: bold;
+    color: rgb(255, 255, 255);
+}
+
+.book-entry-name {
+    margin-top: 12px;
+    font-size: 30px;
+    -unity-font-style: bold;
+    white-space: normal;
+    -unity-text-align: middle-center;
+}

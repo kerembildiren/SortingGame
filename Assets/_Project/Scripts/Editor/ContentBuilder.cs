@@ -45,6 +45,8 @@ namespace SortingGame.EditorTools
             var visuals = ProjectSetup.LoadOrCreate<SectionVisuals>(VisualsPath);
             visuals.LitMaterial = lit;
             visuals.GhostMaterial = ghost;
+            visuals.DirtMaterial = DirtMaterial();
+            visuals.ParticleMaterial = ParticleMaterial();
             EditorUtility.SetDirty(visuals);
 
             // ---- Categories (GDD 8.2: recognisable at a glance) ----
@@ -80,6 +82,14 @@ namespace SortingGame.EditorTools
 
             var box = Container("cardboard_box", 10, overwrite);
 
+            // ---- Collectibles (GDD 9): one mascot + rare items for the garage page ----
+            var chubby = Collectible("captain_chubby", ItemRarity.Mascot, PlaceholderShape.Sphere, new Color(0.30f, 0.50f, 0.95f), new Vector3(0.30f, 0.30f, 0.28f), 150, overwrite);
+            var robot = Collectible("golden_robot", ItemRarity.Rare, PlaceholderShape.Capsule, new Color(1.00f, 0.80f, 0.25f), new Vector3(0.18f, 0.36f, 0.18f), 60, overwrite);
+            var firstIssue = Collectible("first_issue", ItemRarity.Rare, PlaceholderShape.Book, new Color(0.98f, 0.78f, 0.35f), new Vector3(0.29f, 0.39f, 0.05f), 60, overwrite);
+            var luckyWrench = Collectible("lucky_wrench", ItemRarity.Rare, PlaceholderShape.Rod, new Color(1.00f, 0.84f, 0.30f), new Vector3(0.09f, 0.40f, 0.09f), 60, overwrite);
+            var collectibles = new List<CollectibleDefinition> { chubby, robot, firstIssue, luckyWrench };
+            items.AddRange(collectibles);
+
             // ---- Section + venue ----
             var section = Load<SectionDefinition>(StartSectionPath, out var isNew);
             if (isNew || overwrite)
@@ -95,7 +105,9 @@ namespace SortingGame.EditorTools
                 };
                 section.Containers = new List<SectionDefinition.ContainerEntry> { new() { Container = box, Count = 3 } };
                 section.LooseItemRatio = 0.25f;
-                section.DirtCoverage = 0f; // dirt arrives in M2
+                section.DirtCoverage = 0.55f;
+                section.BuriedItemRatio = 0.15f;
+                section.Collectibles = new List<CollectibleDefinition>(collectibles);
                 section.Seed = 1;
                 EditorUtility.SetDirty(section);
             }
@@ -107,6 +119,7 @@ namespace SortingGame.EditorTools
                 venue.DisplayNameKey = "venue.garage";
                 venue.ThemeId = "garage";
                 venue.Sections = new List<SectionDefinition> { section };
+                venue.CollectionPage = new List<CollectibleDefinition>(collectibles);
                 EditorUtility.SetDirty(venue);
             }
 
@@ -148,6 +161,22 @@ namespace SortingGame.EditorTools
             item.Placeholder = new PlaceholderVisual(shape, color, size);
             EditorUtility.SetDirty(item);
             return item;
+        }
+
+        static CollectibleDefinition Collectible(string id, ItemRarity rarity, PlaceholderShape shape, Color color, Vector3 size, int duplicateValue, bool overwrite)
+        {
+            var collectible = Load<CollectibleDefinition>($"{ContentFolder}/Collectible_{id}.asset", out var isNew);
+            if (!isNew && !overwrite) return collectible;
+            collectible.Id = id;
+            collectible.DisplayNameKey = $"collectible.{id}";
+            collectible.DescriptionKey = $"collectible.{id}.desc";
+            collectible.Rarity = rarity;
+            collectible.Category = null;
+            collectible.DuplicateSellValue = duplicateValue;
+            collectible.Placeholder = new PlaceholderVisual(shape, color, size);
+            collectible.CostumeColor = new Color(0.90f, 0.22f, 0.22f);
+            EditorUtility.SetDirty(collectible);
+            return collectible;
         }
 
         static ContainerDefinition Container(string id, int capacity, bool overwrite)
@@ -193,6 +222,44 @@ namespace SortingGame.EditorTools
             material.renderQueue = (int)RenderQueue.Transparent;
             AssetDatabase.CreateAsset(material, path);
             return material;
+        }
+
+        static Material DirtMaterial()
+        {
+            var path = MaterialsFolder + "/Placeholder_Dirt.mat";
+            var material = AssetDatabase.LoadAssetAtPath<Material>(path);
+            if (material != null) return material;
+            material = new Material(Shader.Find("Universal Render Pipeline/Lit"));
+            MakeTransparent(material);
+            material.SetFloat("_Smoothness", 0f);
+            AssetDatabase.CreateAsset(material, path);
+            return material;
+        }
+
+        static Material ParticleMaterial()
+        {
+            var path = MaterialsFolder + "/Placeholder_Particle.mat";
+            var material = AssetDatabase.LoadAssetAtPath<Material>(path);
+            if (material != null) return material;
+            material = new Material(Shader.Find("Universal Render Pipeline/Particles/Unlit"));
+            MakeTransparent(material);
+            AssetDatabase.CreateAsset(material, path);
+            return material;
+        }
+
+        /// <summary>URP alpha-blended transparency, same property set for Lit, Unlit and Particles shaders.</summary>
+        static void MakeTransparent(Material material)
+        {
+            material.SetFloat("_Surface", 1f);
+            material.SetFloat("_Blend", 0f);
+            material.SetFloat("_SrcBlend", (float)BlendMode.SrcAlpha);
+            material.SetFloat("_DstBlend", (float)BlendMode.OneMinusSrcAlpha);
+            material.SetFloat("_SrcBlendAlpha", (float)BlendMode.One);
+            material.SetFloat("_DstBlendAlpha", (float)BlendMode.OneMinusSrcAlpha);
+            material.SetFloat("_ZWrite", 0f);
+            material.SetOverrideTag("RenderType", "Transparent");
+            material.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");
+            material.renderQueue = (int)RenderQueue.Transparent;
         }
 
         static void CreatePanelSettings()

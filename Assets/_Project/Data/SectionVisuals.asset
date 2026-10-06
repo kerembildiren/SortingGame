@@ -14,13 +14,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: SortingGame.Runtime::SortingGame.Data.SectionVisuals
   LitMaterial: {fileID: 2100000, guid: 19bc1c1cc176454488224f64e40d92ba, type: 2}
   GhostMaterial: {fileID: 2100000, guid: ba9da0fff825b4d4a8e1add677d3bcd0, type: 2}
+  DirtMaterial: {fileID: 2100000, guid: 86e7aaa0bc00d864fb546246a15c7f9a, type: 2}
+  ParticleMaterial: {fileID: 2100000, guid: d409d6e34a1ed7b49bf4e98c74d99d06, type: 2}
   FloorColor: {r: 0.42, g: 0.36, b: 0.3, a: 1}
   WallColor: {r: 0.3, g: 0.27, b: 0.26, a: 1}
   BackgroundColor: {r: 0.1, g: 0.09, b: 0.09, a: 1}
+  FloorColorClean: {r: 0.78, g: 0.62, b: 0.44, a: 1}
+  WallColorClean: {r: 0.93, g: 0.85, b: 0.72, a: 1}
+  BackgroundColorClean: {r: 0.22, g: 0.18, b: 0.15, a: 1}
+  DirtColor: {r: 0.3, g: 0.25, b: 0.19, a: 1}
+  DirtSpeckColor: {r: 0.78, g: 0.72, b: 0.6, a: 1}
   WoodColor: {r: 0.62, g: 0.42, b: 0.24, a: 1}
   SignColor: {r: 0.96, g: 0.89, b: 0.76, a: 1}
   CardboardColor: {r: 0.74, g: 0.56, b: 0.36, a: 1}
   SlotGhostColor: {r: 1, g: 0.97, b: 0.9, a: 0.55}
+  RareGlowColor: {r: 1, g: 0.82, b: 0.3, a: 0.75}
   LightColor: {r: 1, g: 0.86, b: 0.68, a: 1}
   LightIntensityDirty: 0.9
   LightIntensityClean: 1.5

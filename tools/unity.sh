@@ -36,7 +36,7 @@ case "${1:-}" in
   compile)
     "$UNITY" -batchmode -quit -projectPath "$PROJECT" -logFile "$OUT/compile.log"
     code=$?
-    grep -E "error CS|warning CS" "$OUT/compile.log" | sort -u
+    grep -E "error CS|warning CS" "$OUT/compile.log" | awk '!seen[$0]++'
     exit $code ;;
   *)
     echo "usage: tools/unity.sh setup|test|playtest|android|compile"; exit 2 ;;

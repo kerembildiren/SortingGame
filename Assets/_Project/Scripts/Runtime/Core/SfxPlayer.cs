@@ -16,7 +16,14 @@ namespace SortingGame.Core
         Coin,
         Tip,
         ShelfFull,
-        SectionComplete
+        SectionComplete,
+        Reveal,
+        RareShimmer,
+        RareFanfare,
+        DuplicateSold,
+        BookStamp,
+        SweepLoop,
+        CleanAmbienceLoop
     }
 
     /// <summary>
@@ -30,6 +37,7 @@ namespace SortingGame.Core
 
         readonly Dictionary<Sfx, AudioClip> _clips = new();
         readonly List<AudioSource> _sources = new();
+        readonly Dictionary<Sfx, AudioSource> _loops = new();
         int _next;
 
         public static SfxPlayer Instance { get; private set; }
@@ -68,6 +76,25 @@ namespace SortingGame.Core
             _next = (_next + 1) % _sources.Count;
             source.pitch = 1f + Random.Range(-pitchVariance, pitchVariance);
             source.PlayOneShot(clip, Volume * volume);
+        }
+
+        /// <summary>Looping sound (sweeping, ambience). Volume 0 keeps it running silently.</summary>
+        public void SetLoop(Sfx sfx, float volume, float pitch = 1f)
+        {
+            if (!_loops.TryGetValue(sfx, out var source))
+            {
+                if (!_clips.TryGetValue(sfx, out var clip)) return;
+                source = gameObject.AddComponent<AudioSource>();
+                source.clip = clip;
+                source.loop = true;
+                source.playOnAwake = false;
+                source.volume = 0f;
+                _loops[sfx] = source;
+            }
+            source.volume = Volume * volume;
+            source.pitch = pitch;
+            if (volume > 0f && !source.isPlaying) source.Play();
+            else if (volume <= 0f && source.isPlaying) source.Stop();
         }
 
         /// <summary>Rising pitch for chains of quick placements feels rewarding.</summary>
@@ -126,6 +153,43 @@ namespace SortingGame.Core
                 return rumble + clatter * Mathf.Exp(-t * 4f);
             }, lowPass: 0.15f);
 
+            _clips[Sfx.Reveal] = Make("reveal", 0.16f, (t, i) =>
+                Mathf.Sin(2 * Mathf.PI * Mathf.Lerp(380f, 760f, t / 0.16f) * t) * Mathf.Exp(-t * 18f) * 0.45f);
+
+            // High twinkle that loops softly near a glowing rare item.
+            _clips[Sfx.RareShimmer] = Make("rare_shimmer", 0.6f, (t, i) =>
+            {
+                var sum = 0f;
+                float[] notes = { 2093f, 2637f, 3136f };
+                for (var n = 0; n < notes.Length; n++)
+                {
+                    var start = n * 0.12f;
+                    if (t < start) continue;
+                    sum += Mathf.Sin(2 * Mathf.PI * notes[n] * (t - start)) * Mathf.Exp(-(t - start) * 9f);
+                }
+                return sum * 0.12f;
+            });
+
+            _clips[Sfx.RareFanfare] = Arpeggio("rare_fanfare", new[] { 523f, 659f, 784f, 1047f, 1319f, 1568f, 2093f }, 0.07f);
+            _clips[Sfx.DuplicateSold] = Arpeggio("duplicate_sold", new[] { 1319f, 1568f, 1760f, 2093f }, 0.05f);
+
+            _clips[Sfx.BookStamp] = Make("book_stamp", 0.2f, (t, i) =>
+                (Mathf.Sin(2 * Mathf.PI * 110f * t) * 0.7f + Noise() * 0.3f) * Mathf.Exp(-t * 25f));
+
+            // Seamless brushing loop: band-limited noise with a slow swish.
+            _clips[Sfx.SweepLoop] = Make("sweep_loop", 1.0f, (t, i) =>
+                Noise() * (0.5f + 0.25f * Mathf.Sin(2 * Mathf.PI * 4f * t)) * 0.5f, lowPass: 0.35f, fadeEdges: false);
+
+            // Warm pad for clean rooms (GDD 14: "temizlenince sıcak bir müzik katmanı").
+            _clips[Sfx.CleanAmbienceLoop] = Make("clean_ambience", 4.0f, (t, i) =>
+            {
+                float[] chord = { 261.75f, 329.5f, 392f, 494f }; // whole cycles in 4 s, so the loop has no click
+                var sum = 0f;
+                foreach (var f in chord) sum += Mathf.Sin(2 * Mathf.PI * f * t) + 0.25f * Mathf.Sin(4 * Mathf.PI * f * t);
+                var swell = 0.75f + 0.25f * Mathf.Sin(2 * Mathf.PI * 0.25f * t);
+                return sum * swell * 0.05f;
+            }, fadeEdges: false);
+
             _clips[Sfx.ShelfFull] = Arpeggio("shelf_full", new[] { 784f, 988f, 1175f }, 0.08f);
             _clips[Sfx.SectionComplete] = Arpeggio("section_complete", new[] { 523f, 659f, 784f, 1047f, 1319f }, 0.11f);
         }
@@ -147,7 +211,7 @@ namespace SortingGame.Core
             });
         }
 
-        static AudioClip Make(string name, float seconds, Func<float, int, float> sample, float lowPass = 1f)
+        static AudioClip Make(string name, float seconds, Func<float, int, float> sample, float lowPass = 1f, bool fadeEdges = true)
         {
             var count = Mathf.CeilToInt(seconds * SampleRate);
             var data = new float[count];
@@ -156,8 +220,8 @@ namespace SortingGame.Core
             {
                 var value = sample((float)i / SampleRate, i);
                 previous += (value - previous) * lowPass; // one-pole low-pass, 1 = off
-                // Short fade-in avoids clicks.
-                var fadeIn = Mathf.Clamp01(i / 64f);
+                // Short fade-in avoids clicks. Loops skip it (frequencies are chosen to wrap cleanly).
+                var fadeIn = fadeEdges ? Mathf.Clamp01(i / 64f) : 1f;
                 data[i] = Mathf.Clamp(previous * fadeIn, -1f, 1f);
             }
             var clip = AudioClip.Create(name, count, 1, SampleRate, false);

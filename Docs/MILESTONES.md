@@ -6,7 +6,7 @@ Each milestone ends with a playtest by the user in the editor. Next one starts o
 |---|---|---|
 | M0 | Project skeleton: Unity 6 URP, portrait, Input System, folders, asmdefs, data layer, git, batchmode tooling | ✅ Approved 2026-10-06 |
 | M1 | Core loop in one grey-box section: shelves with dashed slots, tap-to-tip containers, drag & drop (correct = snap + coin, wrong = soft return + hint), section %, basic juice/haptics. Android build at the end. | ✅ Approved 2026-10-06 (editor/Simulator; device test deferred, no device yet) |
-| M2 | Broom + dirt layer, items under dirt, rare item glow, "Rare find!" moment, Collection Book data (first copy to book, duplicates sold), section 100% before/after | ⏳ |
+| M2 | Broom + dirt layer, items under dirt, rare item glow, "Rare find!" moment, Collection Book data (first copy to book, duplicates sold), section 100% before/after | ✅ Approved 2026-10-06 |
 | M3 | Tools (Magnet, Magnifier, Hand upgrade), Category Mastery auto-fly, coin upgrades, JSON save (sorted stays sorted) | ⏳ |
 | M4 | Venue structure: isometric overview of 4-section warehouse, zoom transition, section locks, venue sale, 3 venues as data | ⏳ |
 | M5 | Helpers, offline progress, ad/IAP interfaces with fake providers, localisation infrastructure | ⏳ |
@@ -23,3 +23,11 @@ Each milestone ends with a playtest by the user in the editor. Next one starts o
 | 2026-10-06 | Placeholder sounds are synthesised in code (`SfxPlayer`), category sets the placement sound | GDD 7.4 says feedback is not postponed; no audio assets needed yet |
 | 2026-10-06 | HUD built with UI Toolkit in code + USS | Text-authorable, no scene editing needed |
 | 2026-10-06 | "Play again" / Restart reshuffles the layout (new seed) | Prototype convenience only |
+| 2026-10-06 | Android APK build check is part of every milestone (`tools/unity.sh android`); on-device test deferred until a device is available (before end of M3 at the latest) | No device yet; build problems still caught early |
+| 2026-10-06 | Section % = items (80%) + dirt (20%); collectibles are NOT counted | GDD 5.6: finding every rare item is not required to finish |
+| 2026-10-06 | Collectibles are hidden in boxes or under dirt, never lying in plain sight; tapping (any tool) finds them, they cannot be dragged | Keeps the "treasure" feeling (principle 5) |
+| 2026-10-06 | Dirt auto-finishes at 93% cleaned | Nobody should hunt the last speck (principle 2) |
+| 2026-10-06 | Mood brightens a little with progress (up to 35% of the clean look), full renovation at 100% | Principle 1: every action visibly improves the place |
+| 2026-10-06 | 100% "before/after" = dust fades, floor/walls recolour, lights + background warm up, sparkle wave, warm music pad; no split-screen wipe yet | Cheap and clear; a real before/after wipe can come with art |
+| 2026-10-06 | Rare find moment: no blur, a 3D dimmer behind the item instead | Blur needs post-processing on mobile; dim reads the same |
+| 2026-10-06 | Collection Book is in-memory until M3 (save) | Save system is M3 scope |
