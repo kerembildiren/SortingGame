@@ -86,3 +86,10 @@ MonoBehaviour:
   Helpers:
   - {fileID: 11400000, guid: 5d0ac2c0e18ee564488693a2469dc71c, type: 2}
   - {fileID: 11400000, guid: fb150f656aef57046bbbc485c71449e8, type: 2}
+  Languages:
+  - Code: en
+    NativeName: English
+    Table: {fileID: 4900000, guid: 1a6501aa64b47044ba4a780f8aeef871, type: 3}
+  - Code: tr
+    NativeName: "T\xFCrk\xE7e"
+    Table: {fileID: 4900000, guid: 36177ddef0b79fb43b3bf556db32c21a, type: 3}

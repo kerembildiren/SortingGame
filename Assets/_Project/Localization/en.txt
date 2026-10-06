@@ -1,0 +1,142 @@
+# Chubby's Clutter - English. This is the reference table: every other language needs exactly these keys.
+# Format: key = text. Lines starting with # are comments. {0}, {1:N0} ... are filled in by the game.
+
+# ---- Content names ----
+category.comics = Comics
+category.toys = Toys
+category.tools = Tools
+category.stationery = Stationery
+category.mugs = Mugs
+category.tyres = Tyres
+category.bottles = Bottles
+
+venue.comic_box = Comic Box
+venue.garage = Garage
+venue.warehouse = Warehouse
+section.comic_box = Comic Box
+section.garage = Garage
+section.wh_office = Office
+section.wh_dock = Loading Dock
+section.wh_aisle = Aisle
+section.wh_basement = Basement
+
+tool.hand = Hand
+tool.broom = Broom
+tool.magnet = Magnet
+tool.hand.effect = carry {0:0} items at once (any kind)
+tool.broom.effect = brush {0:0.##} m wide
+tool.magnet.effect = pulls up to {1:0} same items within {0:0.##} m
+
+helper.pip = Pip
+helper.dot = Dot
+
+# Collectibles: original names only (GDD 13). One costumed Chubby per venue.
+collectible.captain_chubby = Captain Chubby
+collectible.captain_chubby.desc = A tiny hero in a homemade cape. Always ready to save the day, right after a nap.
+collectible.mechanic_chubby = Mechanic Chubby
+collectible.mechanic_chubby.desc = Overalls, a smudge of oil and a lot of confidence. Fixes nothing, cheers everyone up.
+collectible.night_guard_chubby = Night Guard Chubby
+collectible.night_guard_chubby.desc = Keeps watch over the warehouse. Mostly with his eyes closed.
+
+# Rare items (GDD 9.4): shelved like the rest of their category, worth a bit more.
+item.rare_first_issue = Sealed First Issue
+item.rare_golden_robot = Golden Robot
+item.rare_lucky_wrench = Lucky Wrench
+item.rare_brass_stapler = Brass Stapler
+item.rare_chrome_hubcap = Chrome Hubcap
+item.rare_message_bottle = Message in a Bottle
+
+# ---- General ----
+hud.close = Close
+hud.back = Back
+hud.continue = Continue
+hud.open = Open
+hud.on = On
+hud.off = Off
+hud.max = MAX
+hud.level = Lv {0}/{1}
+hud.locked = locked
+hud.next = Next
+hud.unlock = Unlock
+hud.unknown = ???
+hud.not_enough = Not enough coins yet
+
+# ---- Settings ----
+hud.settings = Settings
+hud.sound = Sound
+hud.haptics = Haptics
+hud.language = Language
+hud.restart = Restart section
+hud.reset_progress = Reset all progress
+
+# ---- Section ----
+hud.shelf_full = {0} shelf full!
+hud.section_complete = Section complete!
+hud.back_to_overview = Back to overview
+hud.stay_in_room = Stay and look around
+hud.inspect_tip = Tap a full shelf to see it up close
+hud.inspect_hint = Drag to look around  ·  Pinch to zoom  ·  Double-tap to reset
+hud.shiny_left = Almost done! Something shiny is still waiting to be picked up.
+hud.rare_item = Rare: {0}  +{1}
+
+# ---- Shop: tools and helpers ----
+hud.shop = Shop
+hud.shop_title = Shop
+hud.shop_tools = Tools
+hud.shop_helpers = Helpers
+hud.bought = {0} level {1}!
+hud.needs_max = Needs {0} at max level
+hud.helper_for_hire = for hire
+hud.helper_hire = Hire
+hud.helper_effect = carries {0:0} at a time, speed {1:0.0}
+hud.helper_needs_venue = Opens when {0} is fully restored
+hud.helper_needs_percent = Opens at {0}% of {1}
+hud.helper_hired = {0} joins you! Helpers work in whatever room you are in.
+hud.helper_available = A helper is waiting in the Shop: {0}
+
+# ---- Auto Sort boost and its store ----
+hud.auto_sort = Auto Sort
+hud.auto_ad = AD
+hud.auto_charges = x{0}
+hud.auto_used = used
+hud.auto_tag = {0}  AUTO
+hud.auto_title = Auto Sort
+hud.auto_text = Pick one shelf. Its items sort themselves until this room is finished. One shelf per room.
+hud.auto_left = {0:N0} to go
+hud.auto_watch_ad = Watch an ad
+hud.auto_use_charge = Use a charge  (you have {0:N0})
+hud.auto_get_charges = Get charges
+hud.auto_sort_on = {0} sort themselves in this room now!
+hud.auto_used_toast = Auto Sort is already on in this room
+hud.auto_room_done = This room is already finished
+hud.ad_failed = The ad did not finish, nothing was used
+hud.store_title = Auto Sort charges
+hud.store_owned = You have {0:N0}
+hud.store_pack = {0:N0} x Auto Sort
+hud.store_bought = +{0:N0} Auto Sort
+hud.store_test_note = Test store: nothing is charged.
+hud.purchase_failed = Purchase did not go through
+
+# ---- Collection book ----
+hud.book = Book
+hud.collection_book = Collection Book
+hud.album_title = Chubby album
+hud.album_progress = {0} joins the album!  {1} / {2}
+hud.album_complete = Every Chubby found! The album is complete.
+hud.rare_find = You found a Chubby!
+hud.view_hint = Drag to turn  ·  Pinch to zoom  ·  Two fingers to move  ·  Double-tap to reset
+
+# ---- Overview and map ----
+hud.items_count = {0:N0} / {1:N0} items
+hud.locked_room = Locked
+hud.map_title = Places
+hud.venue_rooms = Rooms: {0}
+hud.venue_locked = Restore {0} first
+hud.venue_restored = Fully restored
+hud.restored_tag = 100%
+hud.go_to_venue = Next place: {0}
+hud.venue_opened = All rooms restored! {0} is now open.
+hud.unlock_rule = Opens when the other rooms reach {0}% on average. Or open it now:
+hud.unlock_coins_only = Open it now:
+hud.unlock_now = Unlock  {0:N0} coins
+hud.room_unlocked = {0} is open!

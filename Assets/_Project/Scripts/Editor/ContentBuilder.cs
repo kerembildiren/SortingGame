@@ -52,6 +52,13 @@ namespace SortingGame.EditorTools
             }
             database.Feel = ProjectSetup.LoadOrCreate<FeelConfig>(FeelPath);
 
+            // GDD 15.6: string tables are plain text files; the game picks them up from here.
+            database.Languages = new List<GameDatabase.LanguageEntry>
+            {
+                Language("en", "English"),
+                Language("tr", "Türkçe"),
+            };
+
             var lit = LitMaterial();
             var ghost = GhostMaterial();
             var visuals = ProjectSetup.LoadOrCreate<SectionVisuals>(VisualsPath);
@@ -197,12 +204,14 @@ namespace SortingGame.EditorTools
             // ---- Helpers (GDD 10.3). Level 1 cost = hire price; levels are (cost, speed m/s, items per trip).
             // Slots follow venue progress and come sparingly: the first after the Garage, the second halfway
             // through the Warehouse. Not cheap on purpose: the game should stay playable for a long time.
+            // Balance pass (Docs/ECONOMY.md): hiring the second helper is cheaper than the first one's upgrade,
+            // so the content of the MVP is enough to meet both helpers.
             database.Helpers = new List<HelperDefinition>
             {
                 Helper("pip", overwrite, garage, 100, new Color(0.62f, 0.90f, 0.78f), new Color(1.00f, 0.62f, 0.45f),
-                    (400, 0.9f, 1), (700, 1.1f, 2), (1200, 1.3f, 3)),
+                    (400, 0.9f, 1), (800, 1.1f, 2), (1300, 1.3f, 3)),
                 Helper("dot", overwrite, warehouse, 50, new Color(1.00f, 0.80f, 0.62f), new Color(0.55f, 0.70f, 1.00f),
-                    (900, 0.9f, 1), (1300, 1.1f, 2), (2000, 1.3f, 3)),
+                    (750, 0.9f, 1), (1200, 1.1f, 2), (1900, 1.3f, 3)),
             };
             EditorUtility.SetDirty(database);
 
@@ -293,6 +302,13 @@ namespace SortingGame.EditorTools
             EditorUtility.SetDirty(tool);
             return tool;
         }
+
+        static GameDatabase.LanguageEntry Language(string code, string nativeName) => new()
+        {
+            Code = code,
+            NativeName = nativeName,
+            Table = AssetDatabase.LoadAssetAtPath<TextAsset>($"{Root}/Localization/{code}.txt")
+        };
 
         static HelperDefinition Helper(string id, bool overwrite, VenueDefinition requiredVenue, int requiredPercent, Color body, Color accent,
             params (int cost, float speed, int capacity)[] levels)

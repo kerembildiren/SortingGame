@@ -26,6 +26,7 @@ namespace SortingGame.UI
         public event Action<CollectibleDefinition> CollectibleViewRequested;
         public event Action ViewerClosed;
         public event Action ResetProgressRequested;
+        public event Action<string> LanguageChangeRequested;
         public event Action BackRequested;
         public event Action NextVenueRequested;
         public event Action<VenueDefinition> VenueOpenRequested;
@@ -65,6 +66,7 @@ namespace SortingGame.UI
         Label _inspectName;
         Button _soundToggle;
         Button _hapticsToggle;
+        Button _languageToggle;
         IVisualElementScheduledItem _toastHide;
         readonly Dictionary<ToolType, Button> _toolButtons = new();
 
@@ -671,7 +673,7 @@ namespace SortingGame.UI
                 var level = _ctx.Tools.LevelOf(tool);
                 var row = Add(_shopList, new VisualElement(), "shop-row");
                 var info = Add(row, new VisualElement(), "shop-info");
-                Add(info, new Label($"{Loc.Get(tool.DisplayNameKey)}  {(level == 0 ? Loc.Get("hud.locked") : $"Lv {level}/{tool.MaxLevel}")}"), "shop-name");
+                Add(info, new Label($"{Loc.Get(tool.DisplayNameKey)}  {(level == 0 ? Loc.Get("hud.locked") : Loc.Format("hud.level", level, tool.MaxLevel))}"), "shop-name");
 
                 var maxed = _ctx.Tools.IsMaxed(tool);
                 var shown = maxed ? tool.Stats(level) : tool.Stats(level + 1);
@@ -701,7 +703,7 @@ namespace SortingGame.UI
                 var open = level > 0 || _ctx.HelperSlotOpen(helper);
                 var row = Add(_shopList, new VisualElement(), "shop-row");
                 var info = Add(row, new VisualElement(), "shop-info");
-                var state = level > 0 ? $"Lv {level}/{helper.MaxLevel}" : Loc.Get(open ? "hud.helper_for_hire" : "hud.locked");
+                var state = level > 0 ? Loc.Format("hud.level", level, helper.MaxLevel) : Loc.Get(open ? "hud.helper_for_hire" : "hud.locked");
                 Add(info, new Label($"{Loc.Get(helper.DisplayNameKey)}  {state}"), "shop-name");
 
                 var maxed = _ctx.Helpers.IsMaxed(helper);
@@ -866,7 +868,7 @@ namespace SortingGame.UI
                     if (has) icon.style.backgroundColor = collectible.Placeholder.Color;
                     else icon.AddToClassList("book-icon--missing");
                     Add(icon, new Label(has ? "" : "?"), "book-icon-text");
-                    Add(entry, new Label(has ? Loc.Get(collectible.DisplayNameKey) : "???"), "book-entry-name");
+                    Add(entry, new Label(Loc.Get(has ? collectible.DisplayNameKey : "hud.unknown")), "book-entry-name");
                     var venue = _ctx.Database.VenueOf(collectible);
                     if (venue != null) Add(entry, new Label(Loc.Get(venue.DisplayNameKey)), "book-entry-venue");
                     if (!has) continue;
@@ -1117,6 +1119,12 @@ namespace SortingGame.UI
 
         public bool IsBannerVisible => !_banner.ClassListContains("hidden");
 
+        /// <summary>Texts currently on screen that tests look at.</summary>
+        public string TitleText => _title.text;
+
+        public void OpenSettings() => _settings.RemoveFromClassList("hidden");
+        public void CloseSettings() => _settings.AddToClassList("hidden");
+
         /// <summary>Banner choice: stay in the finished room to look around. The top bar "&lt;" leaves later.</summary>
         public void StayInRoom()
         {
@@ -1140,6 +1148,13 @@ namespace SortingGame.UI
                 Haptics.Enabled = !Haptics.Enabled;
                 RefreshSettings();
             }), "secondary-button");
+            // GDD 15.6: cycles through the languages that have a string table.
+            _languageToggle = Add(card, new Button(() =>
+            {
+                ToggleSettings();
+                LanguageChangeRequested?.Invoke(Loc.NextLanguage());
+            }), "secondary-button");
+            _languageToggle.style.display = Loc.Languages.Count > 1 ? DisplayStyle.Flex : DisplayStyle.None;
             Add(card, new Button(() =>
             {
                 ToggleSettings();
@@ -1158,6 +1173,7 @@ namespace SortingGame.UI
         {
             _soundToggle.text = $"{Loc.Get("hud.sound")}: {Loc.Get(AudioListener.volume > 0f ? "hud.on" : "hud.off")}";
             _hapticsToggle.text = $"{Loc.Get("hud.haptics")}: {Loc.Get(Haptics.Enabled ? "hud.on" : "hud.off")}";
+            _languageToggle.text = $"{Loc.Get("hud.language")}: {Loc.NativeNameOf(Loc.Language)}";
         }
 
         void ToggleSettings() => _settings.ToggleInClassList("hidden");

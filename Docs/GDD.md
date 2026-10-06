@@ -307,6 +307,15 @@ Yalnızca oyuncu isteyerek izler.
 ### 11.5 Dengeleme
 Tüm fiyat, ödül ve eşik değerleri koda gömülmez; veri dosyalarından okunur (bkz. 15.2) ve **[VARSAYILAN]** kabul edilir.
 
+Ekonominin kâğıt üstündeki hali içerikten otomatik hesaplanır ve `Docs/ECONOMY.md` dosyasına yazılır: her odanın kazandırdığı Coin, Shop'taki tüm fiyatlar ve "referans oyuncunun" (odaları sırayla oynayan, her an Shop'taki en ucuz şey için biriktiren oyuncu) neyi hangi odada alabildiği. Fiyat ya da içerik değişince rapor yeniden üretilir.
+
+Dengelemenin koruduğu hedefler **[KARAR]** (testlerle denetlenir):
+- İlk mekân daha bitmeden ilk yükseltme alınabilir.
+- Mıknatıs, El son seviyeye geldikten sonra ve MVP'nin son mekânında gelir; El'in toplamından pahalıdır.
+- MVP içeriği her aleti açmaya ve her yardımcıyı işe almaya yeter; ama Shop'taki her şeyi almaya yetmez (toplam fiyat, içeriğin kazandırdığının en az iki katıdır). Kalan yükseltmeler sonraki mekânlar içindir.
+- Yardımcılar tek tek gelir; ikinci yardımcıyı işe almak, ilkini yükseltmekten önce gelir.
+- Nadir eşya, kategorisinin sıradan eşyasından fazla ama en çok altı katı kadar eder.
+
 ---
 
 ## 12. Görsel yön
@@ -398,7 +407,12 @@ Bu bölüm önerilerdir **[VARSAYILAN]**; uygulama sırasında daha iyi bir yol 
 Reklam ağı, IAP (Unity IAP önerilir), analitik ve uzaktan yapılandırma (remote config) seçimleri henüz yapılmadı. Kod, bunları arayüzler (interface) arkasına alacak şekilde yazılmalı. MVP'de ödüllü reklam ve IAP sahte sağlayıcılarla çalışır; Oto Sort bu arayüzlerin ilk kullanıcısıdır.
 
 ### 15.6 Dil
-Arayüz dili İngilizce **[VARSAYILAN]**. Türkçe sonradan eklenecek; tüm metinler baştan yerelleştirme sistemi üzerinden yazılır (koda gömülü metin yok).
+- Arayüz dili varsayılan olarak İngilizce **[VARSAYILAN]**. Koda gömülü metin yoktur; tüm metinler yerelleştirme sistemi üzerinden gelir.
+- Her dil için tek bir düz metin dosyası vardır (`Assets/_Project/Localization/en.txt`, `tr.txt`; satır biçimi `anahtar = metin`). İngilizce dosya referanstır: bir dilde eksik kalan metin İngilizce gösterilir. Yeni dil eklemek = yeni bir dosya + `GameDatabase.Languages` listesine bir satır.
+- Dil, Ayarlar'dan değiştirilir ve cihaza kaydedilir (kayıt dosyasının parçası değildir; ilerleme sıfırlansa da kalır). Cihaz diline göre otomatik seçim **[AÇIK]**.
+- Sayı biçimi dile uyar (İngilizce `1,234`, Türkçe `1.234`).
+- Türkçe dosya taslak çeviridir; altyapıyı kanıtlamak için eklendi, son hali MVP sonrasına bırakıldı.
+- Hazır bir yerelleştirme paketi yerine bu hafif yapı seçildi **[VARSAYILAN]**: metin dosyaları elle ve sürüm kontrolünde kolay düzenlenir, ek paket ve bağımlılık getirmez. İleride çoğul biçimleri veya çevirmen araçları gerekirse değiştirilebilir; kodun geri kalanı yalnızca `Loc.Get` / `Loc.Format` çağırır.
 
 ---
 
@@ -424,7 +438,7 @@ Arayüz dili İngilizce **[VARSAYILAN]**. Türkçe sonradan eklenecek; tüm meti
 - Kalıcı Kategori Ustalığı (kaldırıldı, bkz. 10.2).
 - Bulut kayıt, sosyal özellikler, sıralamalar.
 - Etkinlikler (event) ve sezonluk içerik.
-- Türkçe yerelleştirme (altyapı hazır olur, çeviri sonra).
+- Türkçe çevirinin son hali (altyapı ve taslak çeviri hazır, bkz. 15.6).
 
 ### 16.3 MVP başarı kriteri [VARSAYILAN]
 İlk 3 mekân, yeni bir oyuncu tarafından takılmadan bitirilebilmeli ve test oyuncuları özellikle şu üç anı "tatmin edici" bulmalı: rafın dolması, bölümün %100 olması, Chubby bulma anı. Ayrıca büyük odalar yardımcılarla birlikte "uzun ama keyifli" hissettirmeli; ne kendi kendine bitmeli ne de angaryaya dönmeli.
@@ -508,3 +522,6 @@ Arayüz dili İngilizce **[VARSAYILAN]**. Türkçe sonradan eklenecek; tüm meti
 | 2026-10-06 | Koleksiyon yalnızca Chubby'ler: mekân başına tek Chubby, kitap tek albüm. Eski altın nadir eşyalar mavi parlayan "nadir eşya"ya dönüştü: rafa konur, biraz daha fazla Coin verir, kitaba girmez, her odada bulunmaz. 8.1, 9 yeniden yazıldı; set bonusları [AÇIK] oldu. | Oyun sahibi kararı: koleksiyon parçası bulmak nadirleşsin ve değerlensin. |
 | 2026-10-06 | Kilitler mekân ilerlemesine bağlı; ayrı bir oyuncu seviyesi / XP sistemi yok. | Oyun sahibi kararı; yeni bir sistem kurmadan dozu mekân merdiveniyle ayarlamak. |
 | 2026-10-06 | 5.1, 5.2, 5.6, 4 ve 11, daha önce alınan "mekân satışı yok" kararına göre güncellendi. | Belge ile oyunun güncel hali arasındaki fark kapatıldı. |
+| 2026-10-07 | Yerelleştirme: dil başına bir düz metin dosyası, Ayarlar'dan dil seçimi, İngilizce yedek. Hazır paket yerine hafif, projeye özel yapı. Türkçe taslak çeviri eklendi. | Metinler elle ve sürüm kontrolünde kolay düzenlenir; ek paket yok. İkinci dil altyapıyı kanıtlar. |
+| 2026-10-07 | Dengeleme hedefleri yazıldı ve testlere bağlandı (11.5); ekonomi raporu içerikten üretilir (`Docs/ECONOMY.md`). | Sayılar değiştikçe tasarımın istediği tempo bozulmasın. |
+| 2026-10-07 | Yardımcı fiyatları modele göre ayarlandı: Pip 400 / 800 / 1300, Dot 750 / 1200 / 1900. | Eski fiyatlarla referans oyuncu MVP içinde ikinci yardımcıya ulaşamıyordu; yeni yardımcıyla tanışmak eskisini yükseltmekten önce gelmeli. |

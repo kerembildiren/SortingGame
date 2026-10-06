@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace SortingGame.Data
 {
@@ -15,6 +17,20 @@ namespace SortingGame.Data
         public List<ContainerDefinition> Containers = new();
         public List<ToolDefinition> Tools = new();
         public List<HelperDefinition> Helpers = new();
+
+        [Serializable]
+        public struct LanguageEntry
+        {
+            [Tooltip("Two-letter code, also used for number formatting (en, tr...).")]
+            public string Code;
+            [Tooltip("Shown in Settings, written in that language.")]
+            public string NativeName;
+            [Tooltip("'key = text' file from Assets/_Project/Localization.")]
+            public TextAsset Table;
+        }
+
+        [Tooltip("GDD 15.6. English first: it is the reference table and the fallback.")]
+        public List<LanguageEntry> Languages = new();
 
         public ToolDefinition ToolFor(ToolType type) => Tools.Find(t => t != null && t.Type == type);
 
@@ -54,6 +70,9 @@ namespace SortingGame.Data
             var errors = new List<string>();
             if (Balance == null) errors.Add("No BalanceConfig assigned.");
             if (Feel == null) errors.Add("No FeelConfig assigned.");
+            if (!Languages.Exists(l => l.Code == "en")) errors.Add("No English string table.");
+            foreach (var language in Languages)
+                if (language.Table == null) errors.Add($"Language '{language.Code}' has no string table.");
             CheckUniqueIds(Categories, c => c.Id, "Category", errors);
             CheckUniqueIds(Items, i => i.Id, "Item", errors);
             CheckUniqueIds(Containers, c => c.Id, "Container", errors);
@@ -93,7 +112,7 @@ namespace SortingGame.Data
             return errors;
         }
 
-        static void CheckUniqueIds<T>(List<T> list, System.Func<T, string> id, string label, List<string> errors) where T : Object
+        static void CheckUniqueIds<T>(List<T> list, Func<T, string> id, string label, List<string> errors) where T : Object
         {
             var seen = new HashSet<string>();
             foreach (var entry in list)

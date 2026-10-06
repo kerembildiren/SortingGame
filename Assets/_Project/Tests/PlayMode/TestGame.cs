@@ -16,6 +16,7 @@ namespace SortingGame.Tests
         public static void UseTestSave()
         {
             SaveSystem.FileName = SaveFile;
+            Loc.OverrideLanguage = Loc.DefaultLanguage; // never the language picked on this machine
             new FileSaveStorage(SaveFile).Delete();
         }
 
@@ -23,6 +24,7 @@ namespace SortingGame.Tests
         {
             new FileSaveStorage(SaveFile).Delete();
             SaveSystem.FileName = "save.json";
+            Loc.OverrideLanguage = null;
         }
 
         public static GameBootstrap Boot { get; private set; }
@@ -34,6 +36,16 @@ namespace SortingGame.Tests
             yield return null;
             Boot = Object.FindFirstObjectByType<GameBootstrap>();
             Assert.IsNotNull(Boot, "GameBootstrap missing from Main scene.");
+        }
+
+        /// <summary>The game reloaded its scene by itself (language switch): pick up the new bootstrap.</summary>
+        public static IEnumerator AfterReload()
+        {
+            yield return null;
+            yield return null;
+            Boot = Object.FindFirstObjectByType<GameBootstrap>();
+            Assert.IsNotNull(Boot, "GameBootstrap missing after the reload.");
+            yield return null;
         }
 
         public static VenueDefinition Venue(string id) => Boot.Context.Database.Venues.First(v => v.Id == id);

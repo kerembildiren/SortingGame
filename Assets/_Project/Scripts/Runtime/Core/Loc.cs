@@ -1,148 +1,145 @@
+using System;
 using System.Collections.Generic;
+using System.Globalization;
+using UnityEngine;
 
 namespace SortingGame.Core
 {
     /// <summary>
-    /// GDD 15.6: no hard-coded UI text. Every string goes through Loc.Get(key).
-    /// Temporary English table; M7 swaps this for the Unity Localization package without touching call sites.
+    /// GDD 15.6: no hard-coded UI text. Every string goes through <see cref="Get"/> / <see cref="Format"/>.
+    /// The texts live in one plain "key = text" file per language (Assets/_Project/Localization), listed in the
+    /// GameDatabase. English is the reference table and the fallback for anything a language is missing.
+    /// The chosen language is a device setting (PlayerPrefs), not part of the save.
     /// </summary>
     public static class Loc
     {
-        static readonly Dictionary<string, string> English = new()
+        public const string DefaultLanguage = "en";
+        const string PrefKey = "language";
+
+        public readonly struct LanguageInfo
         {
-            ["category.comics"] = "Comics",
-            ["category.toys"] = "Toys",
-            ["category.tools"] = "Tools",
-            ["category.stationery"] = "Stationery",
-            ["category.mugs"] = "Mugs",
-            ["category.tyres"] = "Tyres",
-            ["category.bottles"] = "Bottles",
+            public readonly string Code;
+            public readonly string NativeName;
 
-            ["section.comic_box"] = "Comic Box",
-            ["section.garage"] = "Garage",
-            ["section.wh_office"] = "Office",
-            ["section.wh_dock"] = "Loading Dock",
-            ["section.wh_aisle"] = "Aisle",
-            ["section.wh_basement"] = "Basement",
-            ["venue.comic_box"] = "Comic Box",
-            ["venue.garage"] = "Garage",
-            ["venue.warehouse"] = "Warehouse",
-            ["container.cardboard_box"] = "Box",
+            public LanguageInfo(string code, string nativeName)
+            {
+                Code = code;
+                NativeName = nativeName;
+            }
+        }
 
-            ["tool.hand"] = "Hand",
-            ["tool.broom"] = "Broom",
-            ["tool.magnet"] = "Magnet",
-            ["tool.hand.effect"] = "carry {0:0} items at once (any kind)",
-            ["tool.broom.effect"] = "brush {0:0.##} m wide",
-            ["tool.magnet.effect"] = "pulls up to {1:0} same items within {0:0.##} m",
+        static readonly List<LanguageInfo> _languages = new();
+        static readonly Dictionary<string, Dictionary<string, string>> _tables = new();
+        static Dictionary<string, string> _current = new();
+        static Dictionary<string, string> _fallback = new();
 
-            ["hud.section_complete"] = "Section complete!",
-            ["hud.shelf_full"] = "{0} shelf full!",
-            ["hud.play_again"] = "Play again",
-            ["hud.overview_soon"] = "Overview arrives in M4",
-            ["hud.settings"] = "Settings",
-            ["hud.sound"] = "Sound",
-            ["hud.haptics"] = "Haptics",
-            ["hud.restart"] = "Restart section",
-            ["hud.close"] = "Close",
-            ["hud.on"] = "On",
-            ["hud.off"] = "Off",
-            ["hud.book"] = "Book",
-            ["hud.collection_book"] = "Collection Book",
-            ["hud.rare_find"] = "You found a Chubby!",
-            ["hud.continue"] = "Continue",
-            ["hud.rare_item"] = "Rare: {0}  +{1}",
-            ["hud.shop"] = "Shop",
-            ["hud.shop_title"] = "Shop",
-            ["hud.shop_tools"] = "Tools",
-            ["hud.shop_helpers"] = "Helpers",
-            ["hud.helper_for_hire"] = "for hire",
-            ["hud.helper_hire"] = "Hire",
-            ["hud.helper_effect"] = "carries {0:0} at a time, speed {1:0.0}",
-            ["hud.helper_needs_venue"] = "Opens when {0} is fully restored",
-            ["hud.helper_needs_percent"] = "Opens at {0}% of {1}",
-            ["hud.helper_hired"] = "{0} joins you! Helpers work in whatever room you are in.",
-            ["hud.helper_available"] = "A helper is waiting in the Shop: {0}",
-            ["helper.pip"] = "Pip",
-            ["helper.dot"] = "Dot",
-            ["hud.locked"] = "locked",
-            ["hud.unlock"] = "Unlock",
-            ["hud.next"] = "Next",
-            ["hud.max"] = "MAX",
-            ["hud.bought"] = "{0} level {1}!",
-            ["hud.not_enough"] = "Not enough coins yet",
-            ["hud.needs_max"] = "Needs {0} at max level",
+        /// <summary>Tests pin the language here so they never depend on what the player chose on this machine.</summary>
+        public static string OverrideLanguage;
 
-            ["hud.auto_sort"] = "Auto Sort",
-            ["hud.auto_ad"] = "AD",
-            ["hud.auto_charges"] = "x{0}",
-            ["hud.auto_used"] = "used",
-            ["hud.auto_tag"] = "{0}  AUTO",
-            ["hud.auto_title"] = "Auto Sort",
-            ["hud.auto_text"] = "Pick one shelf. Its items sort themselves until this room is finished. One shelf per room.",
-            ["hud.auto_left"] = "{0:N0} to go",
-            ["hud.auto_watch_ad"] = "Watch an ad",
-            ["hud.auto_use_charge"] = "Use a charge  (you have {0:N0})",
-            ["hud.auto_get_charges"] = "Get charges",
-            ["hud.auto_sort_on"] = "{0} sort themselves in this room now!",
-            ["hud.auto_used_toast"] = "Auto Sort is already on in this room",
-            ["hud.auto_room_done"] = "This room is already finished",
-            ["hud.ad_failed"] = "The ad did not finish, nothing was used",
-            ["hud.store_title"] = "Auto Sort charges",
-            ["hud.store_owned"] = "You have {0:N0}",
-            ["hud.store_pack"] = "{0:N0} x Auto Sort",
-            ["hud.store_bought"] = "+{0:N0} Auto Sort",
-            ["hud.store_test_note"] = "Test store: nothing is charged.",
-            ["hud.purchase_failed"] = "Purchase did not go through",
-            ["hud.reset_progress"] = "Reset all progress",
-            ["hud.back_to_overview"] = "Back to overview",
-            ["hud.stay_in_room"] = "Stay and look around",
-            ["hud.inspect_tip"] = "Tap a full shelf to see it up close",
-            ["hud.inspect_hint"] = "Drag to look around  ·  Pinch to zoom  ·  Double-tap to reset",
-            ["hud.back"] = "Back",
-            ["hud.items_count"] = "{0:N0} / {1:N0} items",
-            ["hud.locked_room"] = "Locked",
-            ["hud.map_title"] = "Places",
-            ["hud.venue_rooms"] = "Rooms: {0}",
-            ["hud.venue_locked"] = "Restore {0} first",
-            ["hud.open"] = "Open",
-            ["hud.go_to_venue"] = "Next place: {0}",
-            ["hud.album_title"] = "Chubby album",
-            ["hud.album_progress"] = "{0} joins the album!  {1} / {2}",
-            ["hud.album_complete"] = "Every Chubby found! The album is complete.",
-            ["hud.venue_opened"] = "All rooms restored! {0} is now open.",
-            ["hud.venue_restored"] = "Fully restored",
-            ["hud.restored_tag"] = "100%",
-            ["hud.shiny_left"] = "Almost done! Something shiny is still waiting to be picked up.",
-            ["hud.unlock_rule"] = "Opens when the other rooms reach {0}% on average. Or open it now:",
-            ["hud.unlock_coins_only"] = "Open it now:",
-            ["hud.unlock_now"] = "Unlock  {0:N0} coins",
-            ["hud.room_unlocked"] = "{0} is open!",
-            ["hud.view_hint"] = "Drag to turn  ·  Pinch to zoom  ·  Two fingers to move  ·  Double-tap to reset",
+        public static string Language { get; private set; } = DefaultLanguage;
+        public static IReadOnlyList<LanguageInfo> Languages => _languages;
 
-            // Collectibles: original names only (GDD 13). One costumed Chubby per venue.
-            ["collectible.captain_chubby"] = "Captain Chubby",
-            ["collectible.captain_chubby.desc"] = "A tiny hero in a homemade cape. Always ready to save the day, right after a nap.",
-            ["collectible.mechanic_chubby"] = "Mechanic Chubby",
-            ["collectible.mechanic_chubby.desc"] = "Overalls, a smudge of oil and a lot of confidence. Fixes nothing, cheers everyone up.",
-            ["collectible.night_guard_chubby"] = "Night Guard Chubby",
-            ["collectible.night_guard_chubby.desc"] = "Keeps watch over the warehouse. Mostly with his eyes closed.",
+        /// <summary>Number formatting follows the UI language, not the device region.</summary>
+        public static CultureInfo Culture { get; private set; } = CultureInfo.InvariantCulture;
 
-            // Rare items (GDD 9.4): shelved like the rest of their category, worth a bit more.
-            ["item.rare_first_issue"] = "Sealed First Issue",
-            ["item.rare_golden_robot"] = "Golden Robot",
-            ["item.rare_lucky_wrench"] = "Lucky Wrench",
-            ["item.rare_brass_stapler"] = "Brass Stapler",
-            ["item.rare_chrome_hubcap"] = "Chrome Hubcap",
-            ["item.rare_message_bottle"] = "Message in a Bottle",
-        };
+        /// <summary>What the player picked in Settings; the default until they pick something.</summary>
+        public static string SavedLanguage =>
+            !string.IsNullOrEmpty(OverrideLanguage) ? OverrideLanguage : PlayerPrefs.GetString(PrefKey, DefaultLanguage);
 
-        /// <summary>Number formatting follows the UI language, not the device region (English for now).</summary>
-        public static readonly System.Globalization.CultureInfo Culture = System.Globalization.CultureInfo.InvariantCulture;
+        public static void SaveLanguage(string code)
+        {
+            if (!string.IsNullOrEmpty(OverrideLanguage))
+            {
+                OverrideLanguage = code; // tests: leave the player's own choice alone
+                return;
+            }
+            PlayerPrefs.SetString(PrefKey, code);
+            PlayerPrefs.Save();
+        }
 
-        public static string Get(string key) =>
-            !string.IsNullOrEmpty(key) && English.TryGetValue(key, out var value) ? value : key;
+        /// <summary>Replaces all tables. Call once at startup, then <see cref="SetLanguage"/>.</summary>
+        public static void Load(IEnumerable<(string code, string nativeName, string text)> tables)
+        {
+            _languages.Clear();
+            _tables.Clear();
+            foreach (var (code, nativeName, text) in tables)
+            {
+                if (string.IsNullOrEmpty(code) || _tables.ContainsKey(code)) continue;
+                _tables[code] = Parse(text);
+                _languages.Add(new LanguageInfo(code, nativeName));
+            }
+            _fallback = _tables.TryGetValue(DefaultLanguage, out var english) ? english : new Dictionary<string, string>();
+            SetLanguage(Language);
+        }
+
+        /// <summary>Unknown codes fall back to English.</summary>
+        public static void SetLanguage(string code)
+        {
+            if (string.IsNullOrEmpty(code) || !_tables.ContainsKey(code)) code = DefaultLanguage;
+            Language = code;
+            _current = _tables.TryGetValue(code, out var table) ? table : _fallback;
+            Culture = CultureFor(code);
+        }
+
+        /// <summary>The language after the current one in the list (Settings cycles through them).</summary>
+        public static string NextLanguage()
+        {
+            if (_languages.Count == 0) return Language;
+            var index = _languages.FindIndex(l => l.Code == Language);
+            return _languages[(index + 1) % _languages.Count].Code;
+        }
+
+        public static string NativeNameOf(string code)
+        {
+            var index = _languages.FindIndex(l => l.Code == code);
+            return index >= 0 ? _languages[index].NativeName : code;
+        }
+
+        /// <summary>The text for a key; English when the language lacks it; the key itself when nobody has it.</summary>
+        public static string Get(string key)
+        {
+            if (string.IsNullOrEmpty(key)) return key;
+            if (_current.TryGetValue(key, out var value)) return value;
+            return _fallback.TryGetValue(key, out value) ? value : key;
+        }
 
         public static string Format(string key, params object[] args) => string.Format(Culture, Get(key), args);
+
+        public static bool Has(string key, string language = null) =>
+            _tables.TryGetValue(language ?? Language, out var table) && table.ContainsKey(key);
+
+        /// <summary>
+        /// "key = text" per line. Blank lines and lines starting with # are skipped; the text keeps inner spaces
+        /// and may contain '='. Later duplicates of a key are ignored.
+        /// </summary>
+        public static Dictionary<string, string> Parse(string text)
+        {
+            var table = new Dictionary<string, string>();
+            if (string.IsNullOrEmpty(text)) return table;
+            foreach (var raw in text.Split('\n'))
+            {
+                var line = raw.Trim('\r', ' ', '\t', '﻿');
+                if (line.Length == 0 || line[0] == '#') continue;
+                var split = line.IndexOf('=');
+                if (split <= 0) continue;
+                var key = line.Substring(0, split).Trim();
+                var value = line.Substring(split + 1).Trim();
+                if (key.Length > 0 && !table.ContainsKey(key)) table[key] = value;
+            }
+            return table;
+        }
+
+        static CultureInfo CultureFor(string code)
+        {
+            if (code == DefaultLanguage) return CultureInfo.InvariantCulture;
+            try
+            {
+                return CultureInfo.GetCultureInfo(code);
+            }
+            catch (CultureNotFoundException)
+            {
+                return CultureInfo.InvariantCulture; // stripped culture data on a device: numbers stay readable
+            }
+        }
     }
 }

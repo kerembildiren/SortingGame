@@ -1,0 +1,143 @@
+# Chubby's Clutter - Türkçe. Anahtarlar en.txt ile birebir aynı olmalı (test bunu kontrol eder).
+# Biçim: anahtar = metin. # ile başlayan satırlar yorumdur. {0}, {1:N0} ... oyun tarafından doldurulur.
+# Taslak çeviri: metinleri bu dosyada serbestçe düzeltebilirsin.
+
+# ---- İçerik adları ----
+category.comics = Çizgi Roman
+category.toys = Oyuncak
+category.tools = Alet
+category.stationery = Kırtasiye
+category.mugs = Kupa
+category.tyres = Lastik
+category.bottles = Şişe
+
+venue.comic_box = Çizgi Roman Kutusu
+venue.garage = Garaj
+venue.warehouse = Depo
+section.comic_box = Çizgi Roman Kutusu
+section.garage = Garaj
+section.wh_office = Ofis
+section.wh_dock = Yükleme Alanı
+section.wh_aisle = Raf Koridoru
+section.wh_basement = Bodrum
+
+tool.hand = El
+tool.broom = Süpürge
+tool.magnet = Mıknatıs
+tool.hand.effect = aynı anda {0:0} eşya taşır (her türden)
+tool.broom.effect = {0:0.##} m genişliğinde süpürür
+tool.magnet.effect = {0:0.##} m içindeki aynı türden {1:0} eşyayı çeker
+
+helper.pip = Pip
+helper.dot = Dot
+
+# Koleksiyon parçaları: yalnızca özgün adlar (GDD 13). Mekân başına bir kostümlü Chubby.
+collectible.captain_chubby = Kaptan Chubby
+collectible.captain_chubby.desc = Ev yapımı pelerinli minik bir kahraman. Günü kurtarmaya her an hazır; şekerlemesinden hemen sonra.
+collectible.mechanic_chubby = Tamirci Chubby
+collectible.mechanic_chubby.desc = Tulum, bir damla yağ lekesi ve bolca özgüven. Hiçbir şeyi tamir etmez ama herkesi neşelendirir.
+collectible.night_guard_chubby = Gece Bekçisi Chubby
+collectible.night_guard_chubby.desc = Depoya göz kulak olur. Çoğunlukla gözleri kapalı.
+
+# Nadir eşyalar (GDD 9.4): kategorisinin geri kalanı gibi rafa dizilir, biraz daha fazla eder.
+item.rare_first_issue = Jelatinli İlk Sayı
+item.rare_golden_robot = Altın Robot
+item.rare_lucky_wrench = Şanslı Anahtar
+item.rare_brass_stapler = Pirinç Zımba
+item.rare_chrome_hubcap = Krom Jant Kapağı
+item.rare_message_bottle = Şişedeki Mesaj
+
+# ---- Genel ----
+hud.close = Kapat
+hud.back = Geri
+hud.continue = Devam
+hud.open = Aç
+hud.on = Açık
+hud.off = Kapalı
+hud.max = MAKS
+hud.level = Sv {0}/{1}
+hud.locked = kilitli
+hud.next = Sonraki
+hud.unlock = Kilidi aç
+hud.unknown = ???
+hud.not_enough = Henüz yeterli coin yok
+
+# ---- Ayarlar ----
+hud.settings = Ayarlar
+hud.sound = Ses
+hud.haptics = Titreşim
+hud.language = Dil
+hud.restart = Bölümü yeniden başlat
+hud.reset_progress = Tüm ilerlemeyi sıfırla
+
+# ---- Bölüm ----
+hud.shelf_full = {0} rafı doldu!
+hud.section_complete = Bölüm tamamlandı!
+hud.back_to_overview = Genel bakışa dön
+hud.stay_in_room = Kal ve etrafa bak
+hud.inspect_tip = Dolu bir rafa dokun, yakından bak
+hud.inspect_hint = Bakmak için sürükle  ·  Yakınlaştırmak için sıkıştır  ·  Sıfırlamak için çift dokun
+hud.shiny_left = Az kaldı! Parlayan bir şey hâlâ alınmayı bekliyor.
+hud.rare_item = Nadir: {0}  +{1}
+
+# ---- Dükkân: aletler ve yardımcılar ----
+hud.shop = Dükkân
+hud.shop_title = Dükkân
+hud.shop_tools = Aletler
+hud.shop_helpers = Yardımcılar
+hud.bought = {0} seviye {1}!
+hud.needs_max = Önce {0} son seviyede olmalı
+hud.helper_for_hire = işe alınabilir
+hud.helper_hire = İşe al
+hud.helper_effect = tek seferde {0:0} eşya taşır, hız {1:0.0}
+hud.helper_needs_venue = {0} tamamen bitince açılır
+hud.helper_needs_percent = {1} yüzde {0} olunca açılır
+hud.helper_hired = {0} sana katıldı! Yardımcılar hangi odadaysan orada çalışır.
+hud.helper_available = Dükkânda bir yardımcı bekliyor: {0}
+
+# ---- Oto Sort güçlendirmesi ve mağazası ----
+hud.auto_sort = Oto Sort
+hud.auto_ad = REKLAM
+hud.auto_charges = x{0}
+hud.auto_used = kullanıldı
+hud.auto_tag = {0}  OTO
+hud.auto_title = Oto Sort
+hud.auto_text = Bir raf seç. O rafın eşyaları bu oda bitene kadar kendiliğinden dizilir. Oda başına bir raf.
+hud.auto_left = {0:N0} eşya kaldı
+hud.auto_watch_ad = Reklam izle
+hud.auto_use_charge = Hak kullan  (elinde {0:N0} var)
+hud.auto_get_charges = Hak al
+hud.auto_sort_on = {0} bu odada artık kendiliğinden diziliyor!
+hud.auto_used_toast = Oto Sort bu odada zaten açık
+hud.auto_room_done = Bu oda zaten bitti
+hud.ad_failed = Reklam tamamlanmadı, hiçbir şey harcanmadı
+hud.store_title = Oto Sort hakları
+hud.store_owned = Elinde {0:N0} var
+hud.store_pack = {0:N0} x Oto Sort
+hud.store_bought = +{0:N0} Oto Sort
+hud.store_test_note = Test mağazası: ücret alınmaz.
+hud.purchase_failed = Satın alma tamamlanamadı
+
+# ---- Koleksiyon kitabı ----
+hud.book = Kitap
+hud.collection_book = Koleksiyon Kitabı
+hud.album_title = Chubby albümü
+hud.album_progress = {0} albüme katıldı!  {1} / {2}
+hud.album_complete = Bütün Chubby'ler bulundu! Albüm tamamlandı.
+hud.rare_find = Bir Chubby buldun!
+hud.view_hint = Çevirmek için sürükle  ·  Yakınlaştırmak için sıkıştır  ·  Kaydırmak için iki parmak  ·  Sıfırlamak için çift dokun
+
+# ---- Genel bakış ve harita ----
+hud.items_count = {0:N0} / {1:N0} eşya
+hud.locked_room = Kilitli
+hud.map_title = Mekânlar
+hud.venue_rooms = Oda sayısı: {0}
+hud.venue_locked = Önce {0} bitmeli
+hud.venue_restored = Tamamen yenilendi
+hud.restored_tag = %100
+hud.go_to_venue = Sıradaki mekân: {0}
+hud.venue_opened = Bütün odalar yenilendi! {0} artık açık.
+hud.unlock_rule = Diğer odalar ortalama yüzde {0} olunca açılır. Ya da şimdi aç:
+hud.unlock_coins_only = Şimdi aç:
+hud.unlock_now = Kilidi aç  {0:N0} coin
+hud.room_unlocked = {0} açıldı!

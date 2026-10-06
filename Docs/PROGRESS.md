@@ -4,12 +4,21 @@ Living notes so any session (any machine, any Claude account) can pick up where 
 Update this file at the end of every work chunk, before committing. Newest entry on top in the log.
 
 ## Current state
-- **Active milestone:** M6 (helpers, GDD 10.3) implemented, tests green (EditMode 57/57, PlayMode 17/17), screenshots reviewed. **Waiting for the user's playtest.** M5 was playtested and approved on 2026-10-06.
-- **Next concrete step:** apply M6 playtest feedback, then M7 (localisation infrastructure, economy / balance pass, device test).
-- **Blocking / waiting on user:** playtest of M6. This is also the point to judge the pacing of the big rooms (no mastery any more, helpers instead).
+- **Active milestone:** M7 (localisation infrastructure, balance pass) implemented, tests green (EditMode 69/69, PlayMode 18/18), screenshots reviewed, Android APK check: builds (41 MB, 0 errors). **Waiting for the user's playtest.** M6 was playtested and approved on 2026-10-07.
+- **Still open in M7:** the on-device test. There is no Android device yet. When one is there: `tools/unity.sh android`, install `Builds/Android/SortingGame.apk`, and check frame rate in a 300-item room, touch sizes, pinch in the shelf close-up and the collection viewer, haptics, Turkish letters with the device font, safe area.
+- **Next concrete step:** apply M7 playtest feedback. After that the planned milestones are done; what comes next is the user's call (real art and sound, more venues, real ad / store SDKs, the device test).
+- **Blocking / waiting on user:** playtest of M7.
 - **Known issue:** mouse-wheel zoom in the shelf close-up does not work in the editor (user: not important, test pinch on a device).
-- **Deferred:** on-device test (no Android device yet). 300-item rooms make this important now. APK builds fine.
 - **User intent:** mechanics first, limits/numbers later. Helpers and upgrades should not be cheap; the game should stay playable for a long time.
+
+## M7 architecture (quick map)
+- **Texts:** `Assets/_Project/Localization/<code>.txt`, one "key = text" line each; `en.txt` is the reference and the fallback. Listed in `GameDatabase.Languages` (filled by `ContentBuilder`). `Loc.Load` + `Loc.SetLanguage` in `GameBootstrap.Awake`; `Loc.Get` / `Loc.Format` everywhere else; `Loc.Culture` for numbers.
+- The language is a device setting (`PlayerPrefs`, key `language`), default English, not part of the save. Settings has a button that cycles the languages; `GameBootstrap.ChangeLanguage` saves and reloads the scene, and `GameFlow.Resume` brings the player back to the same place.
+- `Loc.OverrideLanguage` pins the language in tests (`TestGame.UseTestSave`), so they never depend on what was picked on the machine.
+- `LocTests` keep the tables honest: same keys and placeholders in every language, every key used in code (`"hud.x"` literals in `Scripts/Runtime`) and every content name exists, no dead keys. **Adding a text = add it to every `.txt`; adding a language = a new file + a line in `ContentBuilder.Build`, then `tools/unity.sh rebuild`.**
+- `tr.txt` is a draft translation that proves the infrastructure; the user may reword it freely.
+- **Economy:** `EconomyModel` (pure) computes room income, Shop totals and the reference player's purchase timeline from the content. `EconomyReport` writes `Docs/ECONOMY.md` (`tools/unity.sh economy`); regenerate after price or content changes. `EconomyTests` guard the pacing goals listed in GDD 11.5.
+- Helper prices after the pass: Pip 400 / 800 / 1300, Dot 750 / 1200 / 1900.
 
 ## M6 architecture (quick map)
 - Data: `HelperDefinition` (colours, `RequiredVenue` + `RequiredVenuePercent` for the Shop slot, `Levels` = cost / speed / capacity; level 1 cost = hire price), listed in `GameDatabase.Helpers`. Content: Pip (slot: Garage 100%) and Dot (slot: Warehouse 50%).
@@ -91,6 +100,13 @@ Update this file at the end of every work chunk, before committing. Newest entry
 - graphify setup on a new machine (once, in project root): `graphify hook install` (git hooks are not versioned) and `graphify claude install` (writes machine-local `.claude/settings.json`; rename it to `.claude/settings.local.json`, which is git-ignored, and revert any duplicate graphify section it adds to CLAUDE.md). `graphify-out/` itself is versioned.
 
 ## Session log
+### 2026-10-07 — M6 approved; M7 implemented (localisation, balance)
+- User playtested M6: approved as it is.
+- String tables in text files, language switch in Settings, Turkish draft table. Own small system instead of the Unity Localization package (decision in MILESTONES).
+- Economy model + generated report + guard tests; helper prices adjusted so the reference player meets both helpers inside the MVP content.
+- Android development APK build check: builds (41 MB, 0 errors). No device yet, so the on-device test stays open.
+- EditMode 69/69, PlayMode 18/18.
+
 ### 2026-10-06 — M5 approved; M6 implemented (helpers)
 - User playtested M5: approved as it is.
 - Helpers: data, rules, room behaviour, petting, Shop rows, slot announcement. Placeholder look: mint / peach blob with big eyes, cheeks, feet and a sprout.

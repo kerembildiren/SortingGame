@@ -61,6 +61,10 @@ namespace SortingGame.Core
             foreach (var error in _database.Validate())
                 Debug.LogError($"[GameDatabase] {error}");
 
+            // GDD 15.6: every text comes from the string tables; the language is a device setting.
+            Loc.Load(_database.Languages.Select(l => (l.Code, l.NativeName, l.Table != null ? l.Table.text : "")));
+            Loc.SetLanguage(Loc.SavedLanguage);
+
             _camera = Camera.main;
             _camera.clearFlags = CameraClearFlags.SolidColor;
 
@@ -128,6 +132,7 @@ namespace SortingGame.Core
             Hud.Init(_hudStyle);
             Hud.RestartRequested += Restart;
             Hud.ResetProgressRequested += ResetProgress;
+            Hud.LanguageChangeRequested += ChangeLanguage;
             Hud.ToolSelected += Drag.SetTool;
             Hud.RareCardClosed += RareFind.Dismiss;
             Hud.CollectibleViewRequested += Viewer.Open;
@@ -208,6 +213,19 @@ namespace SortingGame.Core
         {
             _suppressSave = true;
             _save.Delete();
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+
+        /// <summary>
+        /// Settings: switch the UI language. The HUD is built once with its texts, so the scene is reloaded;
+        /// the game comes back exactly where it was (GDD 15.4).
+        /// </summary>
+        public void ChangeLanguage(string code)
+        {
+            if (code == Loc.Language) return;
+            SaveNow();
+            _suppressSave = true;
+            Loc.SaveLanguage(code);
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
