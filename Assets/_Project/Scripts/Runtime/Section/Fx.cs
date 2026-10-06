@@ -8,6 +8,7 @@ namespace SortingGame.Section
     {
         static Texture2D _softDot;
         static Texture2D _rays;
+        static Texture2D _heart;
 
         // Statics survive Play sessions (domain reload is off) but the textures are destroyed on exit,
         // so these need Unity's null check: "??=" would hand back the destroyed texture.
@@ -46,6 +47,24 @@ namespace SortingGame.Section
             }
         }
 
+        /// <summary>Heart shape: floats up when a helper is petted (GDD 10.3).</summary>
+        public static Texture2D Heart
+        {
+            get
+            {
+                if (_heart == null)
+                    _heart = Make("Heart", 64, (u, v) =>
+                    {
+                        // Classic implicit heart curve; negative inside.
+                        var x = (u - 0.5f) * 2.6f;
+                        var y = (v - 0.45f) * 2.6f;
+                        var a = x * x + y * y - 1f;
+                        return Mathf.Clamp01(-(a * a * a - x * x * y * y * y) * 12f);
+                    });
+                return _heart;
+            }
+        }
+
         static Texture2D Make(string name, int size, System.Func<float, float, float> alpha)
         {
             var texture = new Texture2D(size, size, TextureFormat.RGBA32, true) { name = name, wrapMode = TextureWrapMode.Clamp };
@@ -63,11 +82,22 @@ namespace SortingGame.Section
     public class Fx
     {
         readonly Material _particle;
+        readonly Material _heartParticle;
 
         public Fx(SectionVisuals visuals)
         {
             _particle = new Material(visuals.ParticleMaterial);
             _particle.SetTexture("_BaseMap", ProceduralTextures.SoftDot);
+            _heartParticle = new Material(visuals.ParticleMaterial);
+            _heartParticle.SetTexture("_BaseMap", ProceduralTextures.Heart);
+        }
+
+        /// <summary>A few hearts floating up.</summary>
+        public ParticleSystem Hearts(Vector3 position, int count = 6)
+        {
+            var ps = Burst(position, new Color(1f, 0.42f, 0.58f), count, 0.45f, 0.16f, 1.1f, -0.3f);
+            ps.GetComponent<ParticleSystemRenderer>().sharedMaterial = _heartParticle;
+            return ps;
         }
 
         public ParticleSystem Burst(Vector3 position, Color color, int count, float speed, float size, float lifetime, float gravity = 0f)

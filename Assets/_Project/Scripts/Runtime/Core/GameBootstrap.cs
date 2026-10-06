@@ -35,6 +35,7 @@ namespace SortingGame.Core
         public GameFlow Flow { get; private set; }
         public ShelfShowcase Showcase { get; private set; }
         public ShelfInspector Inspector { get; private set; }
+        public HelperCrew Crew { get; private set; }
         public SaveData Data => _data;
 
         Camera _camera;
@@ -75,15 +76,20 @@ namespace SortingGame.Core
                 // Real ad network and store are not chosen yet (GDD 15.5).
                 Ads = new FakeAdProvider(),
                 Store = new FakeStoreProvider(),
-                Tools = new ToolProgress()
+                Tools = new ToolProgress(),
+                Helpers = new HelperProgress(),
+                Save = _data
             };
             // Older saves also listed rare items here; only Chubby figures are collectibles now (GDD 9.2).
             var album = new HashSet<string>(_database.Album.Select(c => c.Id));
             Context.Book.Restore(_data.Collection.Where(album.Contains));
             Context.Tools.Restore(_data.Tools.Select(t => new KeyValuePair<string, int>(t.Id, t.Count)));
+            Context.Helpers.Restore(_data.Helpers.Select(h => new KeyValuePair<string, int>(h.Id, h.Count)));
 
             new GameObject("Sfx").AddComponent<SfxPlayer>();
             Section = new GameObject("Section").AddComponent<SectionController>();
+            Crew = new GameObject("Helpers").AddComponent<HelperCrew>();
+            Crew.Init(Context, Section);
 
             var hudObject = new GameObject("HUD");
             var document = hudObject.AddComponent<UIDocument>();
@@ -139,6 +145,11 @@ namespace SortingGame.Core
             Wallet.Changed += (_, _) => MarkDirty();
             Context.Tools.Upgraded += (_, _) => MarkDirty();
             Context.AutoSort.Changed += _ => MarkDirty();
+            Context.Helpers.Changed += (_, _) =>
+            {
+                MarkDirty();
+                Crew.Sync(); // hired in this room: it shows up right away
+            };
 
             Flow.Init(this, Overview, _camera);
             Flow.Resume();
@@ -179,6 +190,7 @@ namespace SortingGame.Core
             if (!_camera.TryGetComponent<CameraFitter>(out var fitter)) fitter = _camera.gameObject.AddComponent<CameraFitter>();
             fitter.enabled = true;
             fitter.Frame(Section.ViewBounds, _database.Feel);
+            Crew.Sync(); // GDD 10.3: helpers work wherever the player is, no assignment (after framing: they spawn in view)
             Hud.Bind(Section, Context, venue, _camera);
             if (save != null && Section.IsComplete) Hud.ShowCompleteBanner();
             MarkDirty();
@@ -226,6 +238,7 @@ namespace SortingGame.Core
             _data.Collection = Book.FoundIds.ToList();
             _data.AutoSortCharges = Context.AutoSort.Charges;
             _data.Tools = Context.Tools.Export().Select(t => new IdCount(t.Key, t.Value)).ToList();
+            _data.Helpers = Context.Helpers.Export().Select(h => new IdCount(h.Key, h.Value)).ToList();
             if (Section.IsLoaded) _data.SetSection(Section.Capture());
             _save.Save(_data);
             _dirty = false;

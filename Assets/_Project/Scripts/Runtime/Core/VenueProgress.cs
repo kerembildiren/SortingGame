@@ -101,6 +101,17 @@ namespace SortingGame.Core
             return result;
         }
 
+        /// <summary>
+        /// GDD 10.3: a helper's Shop slot opens with venue progress (there is no player level).
+        /// 100% means every room finished; anything lower is the share of the venue's items already shelved.
+        /// </summary>
+        public static bool HelperSlotOpen(HelperDefinition helper, SaveData data)
+        {
+            if (helper.RequiredVenue == null) return true;
+            var status = Venue(helper.RequiredVenue, data);
+            return helper.RequiredVenuePercent >= 100 ? status.AllComplete : status.Fraction * 100f >= helper.RequiredVenuePercent;
+        }
+
         /// <summary>Linear ladder: the first venue is open; each next one opens when the previous is fully complete.</summary>
         public static VenueState State(IReadOnlyList<VenueDefinition> ladder, int index, SaveData data)
         {

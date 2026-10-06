@@ -130,6 +130,16 @@ namespace SortingGame.Section
             }, Ease.OutBack);
         }
 
+        /// <summary>A helper takes the item: off the floor and out of the player's reach, without the lift animation.</summary>
+        public void BeginCarry()
+        {
+            StopMotion();
+            if (State == ItemState.Resting || State == ItemState.Physics) RememberPose();
+            SetPhysics(false);
+            SetCollidersEnabled(false);
+            State = ItemState.Dragging;
+        }
+
         public void DragTowards(Vector3 target, float deltaTime)
         {
             var blend = 1f - Mathf.Exp(-_feel.DragFollowSharpness * deltaTime);

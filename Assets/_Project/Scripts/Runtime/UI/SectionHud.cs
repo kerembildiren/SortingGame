@@ -640,7 +640,7 @@ namespace SortingGame.UI
             _bigToastHide.ExecuteLater(2600);
         }
 
-        // ---------- Shop (GDD 10.1 coin upgrades) ----------
+        // ---------- Shop (GDD 10.1 tools, 10.3 helpers; coins only) ----------
 
         public void OpenShop()
         {
@@ -665,6 +665,7 @@ namespace SortingGame.UI
         {
             _shopList.Clear();
             if (_ctx == null) return;
+            Add(_shopList, new Label(Loc.Get("hud.shop_tools")), "shop-header");
             foreach (var tool in _ctx.Database.Tools)
             {
                 var level = _ctx.Tools.LevelOf(tool);
@@ -691,6 +692,68 @@ namespace SortingGame.UI
                 Add(buy, new Label(cost.ToString("N0", Loc.Culture)), "shop-cost");
                 buy.EnableInClassList("shop-buy--poor", gated || !_wallet.CanAfford(cost));
             }
+
+            if (_ctx.Database.Helpers.Count == 0) return;
+            Add(_shopList, new Label(Loc.Get("hud.shop_helpers")), "shop-header");
+            foreach (var helper in _ctx.Database.Helpers)
+            {
+                var level = _ctx.Helpers.LevelOf(helper);
+                var open = level > 0 || _ctx.HelperSlotOpen(helper);
+                var row = Add(_shopList, new VisualElement(), "shop-row");
+                var info = Add(row, new VisualElement(), "shop-info");
+                var state = level > 0 ? $"Lv {level}/{helper.MaxLevel}" : Loc.Get(open ? "hud.helper_for_hire" : "hud.locked");
+                Add(info, new Label($"{Loc.Get(helper.DisplayNameKey)}  {state}"), "shop-name");
+
+                var maxed = _ctx.Helpers.IsMaxed(helper);
+                var shown = maxed ? helper.Stats(level) : helper.Stats(level + 1);
+                var effect = Loc.Format("hud.helper_effect", shown.Capacity, shown.Speed);
+                Add(info, new Label(maxed ? effect : $"{(level == 0 ? Loc.Get("hud.helper_hire") : Loc.Get("hud.next"))}: {effect}"), "shop-effect");
+                if (!open) Add(info, new Label(HelperRequirementText(helper)), "shop-requirement");
+
+                if (maxed)
+                {
+                    Add(row, new Label(Loc.Get("hud.max")), "shop-max");
+                    continue;
+                }
+                var cost = _ctx.Helpers.NextCost(helper);
+                var hired = helper;
+                var buy = Add(row, new Button(() => BuyHelper(hired)), "shop-buy");
+                Add(buy, new VisualElement(), "coin-icon");
+                Add(buy, new Label(cost.ToString("N0", Loc.Culture)), "shop-cost");
+                buy.EnableInClassList("shop-buy--poor", !open || !_wallet.CanAfford(cost));
+            }
+        }
+
+        static string HelperRequirementText(HelperDefinition helper)
+        {
+            var venue = Loc.Get(helper.RequiredVenue.DisplayNameKey);
+            return helper.RequiredVenuePercent >= 100
+                ? Loc.Format("hud.helper_needs_venue", venue)
+                : Loc.Format("hud.helper_needs_percent", helper.RequiredVenuePercent, venue);
+        }
+
+        public void BuyHelper(HelperDefinition helper)
+        {
+            var hiring = !_ctx.Helpers.IsHired(helper);
+            if (hiring && !_ctx.HelperSlotOpen(helper))
+            {
+                SfxPlayer.Instance?.Play(Sfx.Wrong, 0f);
+                ShowToast(HelperRequirementText(helper));
+                return;
+            }
+            if (_ctx.Helpers.TryUpgrade(helper, _wallet, true))
+            {
+                SfxPlayer.Instance?.Play(hiring ? Sfx.HelperChirp : Sfx.Purchase, 0f);
+                Haptics.Medium();
+                var name = Loc.Get(helper.DisplayNameKey);
+                ShowToast(hiring ? Loc.Format("hud.helper_hired", name) : Loc.Format("hud.bought", name, _ctx.Helpers.LevelOf(helper)));
+            }
+            else
+            {
+                SfxPlayer.Instance?.Play(Sfx.Wrong, 0f);
+                ShowToast(Loc.Get("hud.not_enough"));
+            }
+            RefreshShop();
         }
 
         static string RequirementText(ToolDefinition tool) =>

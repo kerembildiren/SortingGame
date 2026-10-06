@@ -21,6 +21,10 @@ namespace SortingGame.Core
         /// <summary>Auto Sort uses bought with real money and not spent yet (GDD 10.2).</summary>
         public int AutoSortCharges;
         public List<IdCount> Tools = new();
+        /// <summary>Hired helpers and their levels (GDD 10.3).</summary>
+        public List<IdCount> Helpers = new();
+        /// <summary>Helpers whose Shop slot has already been announced to the player.</summary>
+        public List<string> AnnouncedHelpers = new();
         public List<SectionSave> Sections = new();
 
         // M4: where the player is and what they own.

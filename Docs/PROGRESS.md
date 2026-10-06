@@ -4,13 +4,23 @@ Living notes so any session (any machine, any Claude account) can pick up where 
 Update this file at the end of every work chunk, before committing. Newest entry on top in the log.
 
 ## Current state
-- **Active milestone:** M5 (new progression rules, GDD 0.2) implemented, tests green (EditMode 51/51, PlayMode 13/13), screenshots reviewed. **Waiting for the user's playtest.**
-- **Next concrete step:** apply M5 playtest feedback, then M6 (helpers), then M7 (localisation, balance, device test).
-- **Blocking / waiting on user:** playtest of M5.
-- **Expect in the playtest:** big rooms feel slow now (no mastery, no helpers until M6). Pacing is judged after M6.
+- **Active milestone:** M6 (helpers, GDD 10.3) implemented, tests green (EditMode 57/57, PlayMode 17/17), screenshots reviewed. **Waiting for the user's playtest.** M5 was playtested and approved on 2026-10-06.
+- **Next concrete step:** apply M6 playtest feedback, then M7 (localisation infrastructure, economy / balance pass, device test).
+- **Blocking / waiting on user:** playtest of M6. This is also the point to judge the pacing of the big rooms (no mastery any more, helpers instead).
 - **Known issue:** mouse-wheel zoom in the shelf close-up does not work in the editor (user: not important, test pinch on a device).
 - **Deferred:** on-device test (no Android device yet). 300-item rooms make this important now. APK builds fine.
 - **User intent:** mechanics first, limits/numbers later. Helpers and upgrades should not be cheap; the game should stay playable for a long time.
+
+## M6 architecture (quick map)
+- Data: `HelperDefinition` (colours, `RequiredVenue` + `RequiredVenuePercent` for the Shop slot, `Levels` = cost / speed / capacity; level 1 cost = hire price), listed in `GameDatabase.Helpers`. Content: Pip (slot: Garage 100%) and Dot (slot: Warehouse 50%).
+- Rules (pure): `HelperProgress` (levels, `TryUpgrade(helper, wallet, slotOpen)`), `VenueProgress.HelperSlotOpen` (100 = every room finished, lower = share of the venue's items shelved). `GameContext.HelperSlotOpen` reads `GameContext.Save`. Saved in `SaveData.Helpers`; `AnnouncedHelpers` remembers which slots were announced (`GameFlow.ShowOverviewNow`).
+- Room: `HelperCrew` (created by `GameBootstrap`, `Sync()` after a section is built and after hiring) spawns one `HelperView` per hired helper under `SectionController.Root`, so they leave with the room. No assignment, nothing on the overview, nothing offline.
+- `HelperView` is a small state machine: Idle -> ToItem -> Picking -> (more items while capacity and `FeelConfig.HelperChainRadius` allow) -> ToShelf -> Placing -> Idle; Wandering when there is nothing to do. It asks the room every time (`SectionController.FindHelperTarget`: resting, common, not auto-sorted, not in `HelperCrew.Taken`), so late items are found like any other. Carried items use `ItemView.BeginCarry` (state `Dragging`, saved at their floor pose). `HelperStandPoint` / `HelperPlace` put them on the shelf; `OnLanded(byHelper: true)` pays the same coins with quieter feedback.
+- Never touched: boxes, dirt, rare items, Chubby. Movement is a straight walk with a little steering around closed boxes; only a trigger collider (it must not push items).
+- Petting: `HelperView.Pet()` (hearts via `Fx.Hearts`, `Sfx.HelperChirp`). `DragController.HelperAt` + tap, only when the room is complete.
+- Shop: one list, headers "Tools" and "Helpers" (`SectionHud.RefreshShop`, `BuyHelper`).
+- `ShelfShowcase` now waits until the finger is up before it takes the camera (a helper can fill a shelf while the player is dragging).
+- Tests: time is sped up with `Time.timeScale` in `HelperTests`; reset in `TearDown`.
 
 ## M5 architecture (quick map)
 - **Auto Sort boost** replaces Category Mastery (`CategoryMastery` is gone). `AutoSortBoost` (pure) only keeps the charges bought with real money. The room keeps the rest: `SectionController.AutoSortCategory`, `CanStartAutoSort` (one shelf per room, not after 100%), `StartAutoSort(shelf)`. Saved as `SectionSave.AutoSortCategoryId`, charges as `SaveData.AutoSortCharges`.
@@ -81,6 +91,11 @@ Update this file at the end of every work chunk, before committing. Newest entry
 - graphify setup on a new machine (once, in project root): `graphify hook install` (git hooks are not versioned) and `graphify claude install` (writes machine-local `.claude/settings.json`; rename it to `.claude/settings.local.json`, which is git-ignored, and revert any duplicate graphify section it adds to CLAUDE.md). `graphify-out/` itself is versioned.
 
 ## Session log
+### 2026-10-06 — M5 approved; M6 implemented (helpers)
+- User playtested M5: approved as it is.
+- Helpers: data, rules, room behaviour, petting, Shop rows, slot announcement. Placeholder look: mint / peach blob with big eyes, cheeks, feet and a sprout.
+- Tests: `HelperProgressTests`, helper slot cases in `VenueProgressTests`, PlayMode `HelperTests` (works alone and finds late items, leaves boxes / dirt / rare / Chubby, level 3 carries several, two helpers, stroll + petting + reload, slots by venue progress). EditMode 57/57, PlayMode 17/17.
+
 ### 2026-10-06 — M5 implemented (new progression rules)
 - Category Mastery removed; Auto Sort boost (ad or store charge, one shelf per room) with fake providers, HUD card + store.
 - Magnet gated behind max Hand and repriced. Collectibles are the three Chubby figures; six former gold rares are blue rare items on shelves. Book is a single album.

@@ -114,6 +114,18 @@ namespace SortingGame.Core
                 _hud.ShowCelebration(Loc.Format("hud.room_unlocked", Loc.Get(section.DisplayNameKey)));
                 SfxPlayer.Instance?.Play(Sfx.Mastery, 0f);
             }
+
+            // GDD 10.3: a helper's Shop slot opened since the last look at an overview. Said once, after the other news.
+            var announced = newlyOpened || unlocked.Count > 0 ? 2.8f : 0.2f;
+            foreach (var helper in _ctx.Database.Helpers)
+            {
+                if (helper == null || Data.AnnouncedHelpers.Contains(helper.Id) || !VenueProgress.HelperSlotOpen(helper, Data)) continue;
+                Data.AnnouncedHelpers.Add(helper.Id);
+                if (_ctx.Helpers.IsHired(helper)) continue;
+                var text = Loc.Format("hud.helper_available", Loc.Get(helper.DisplayNameKey));
+                Tween.Delay(this, announced, () => _hud.ShowCelebration(text));
+                announced += 2.8f;
+            }
             _boot.MarkDirty();
         }
 

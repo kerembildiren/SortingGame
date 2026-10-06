@@ -149,6 +149,8 @@ namespace SortingGame.Section
         }
 
         public bool IsLoaded => Definition != null && _root != null;
+        /// <summary>Parent of everything in the room; what hangs here leaves with the room.</summary>
+        public Transform Root => _root;
 
         public void Clear()
         {
@@ -316,6 +318,61 @@ namespace SortingGame.Section
             AutoSortLoose(0f, 0.08f);
         }
 
+        // ---------- Helpers (GDD 10.3) ----------
+
+        /// <summary>
+        /// Nearest loose common item a helper may take: lying still, not rare, not already flying by itself
+        /// (Auto Sort) and not claimed by another helper. Scanned fresh every time, so items that turn up later
+        /// (a box opened, dirt swept, something dropped) are found like any other.
+        /// </summary>
+        public ItemView FindHelperTarget(Vector3 from, float maxDistance, ICollection<ItemView> taken)
+        {
+            ItemView best = null;
+            var bestDistance = maxDistance;
+            foreach (var item in _items)
+            {
+                if (item == null || item.State != ItemState.Resting || item.Definition.Rarity != ItemRarity.Common) continue;
+                if (IsAutoSorted(item.Definition) || taken.Contains(item)) continue;
+                var shelf = ShelfFor(item.Definition.Category);
+                if (shelf == null || !shelf.HasFreeSlot) continue;
+                var distance = FlatDistance(item.transform.position, from);
+                if (distance >= bestDistance) continue;
+                best = item;
+                bestDistance = distance;
+            }
+            return best;
+        }
+
+        /// <summary>Floor point in front of the shelf slot the item will go to.</summary>
+        public bool HelperStandPoint(ItemView item, Vector3 from, out Vector3 point)
+        {
+            point = default;
+            var shelf = ShelfFor(item.Definition.Category);
+            var slot = shelf != null ? shelf.NearestFreeSlot(from) : null;
+            if (slot == null) return false;
+            point = new Vector3(slot.WorldBase.x, 0f, shelf.transform.position.z - shelf.Size.z / 2f - 0.3f);
+            return true;
+        }
+
+        /// <summary>A helper puts the item it carries on its shelf. Same coins as the player (GDD 10.3), quieter feedback.</summary>
+        public bool HelperPlace(ItemView item)
+        {
+            if (item == null || item.State != ItemState.Dragging) return false;
+            var shelf = ShelfFor(item.Definition.Category);
+            var slot = shelf != null ? shelf.NearestFreeSlot(item.transform.position) : null;
+            if (slot == null) return false;
+            item.FlyToSlot(slot, () => OnLanded(item, shelf, true), 0.4f, 0.35f);
+            return true;
+        }
+
+        /// <summary>Somewhere on the free floor, for strolling.</summary>
+        public Vector3 RandomFloorPoint()
+        {
+            var free = FreeFloor();
+            var local = new Vector3(UnityEngine.Random.Range(free.xMin, free.xMax), 0f, UnityEngine.Random.Range(free.yMin, free.yMax));
+            return _root.TransformPoint(local);
+        }
+
         public ShelfView ShelfFor(CategoryDefinition category) => _shelves.FirstOrDefault(s => s.Category == category);
 
         public Vector3 ClampToRoom(Vector3 point)
@@ -327,17 +384,26 @@ namespace SortingGame.Section
             return point;
         }
 
-        void OnLanded(ItemView item, ShelfView shelf)
+        /// <param name="byHelper">Placed by a helper: quieter, no haptics, and it leaves the player's chain alone.</param>
+        void OnLanded(ItemView item, ShelfView shelf, bool byHelper = false)
         {
             var coins = item.Definition.CoinValue;
             _wallet.Add(coins);
 
-            // Quick chains climb in pitch: small reward for flow.
-            _placeStreak = Time.time - _lastPlaceTime < 1.5f ? Mathf.Min(_placeStreak + 1, 8) : 0;
-            _lastPlaceTime = Time.time;
-            SfxPlayer.Instance?.PlayPitched(SfxPlayer.PlaceSoundFor(shelf.Category.PlaceSound), 1f + _placeStreak * 0.04f);
-            SfxPlayer.Instance?.Play(Sfx.Coin, 0.03f, 0.6f);
-            Haptics.Light();
+            if (byHelper)
+            {
+                SfxPlayer.Instance?.PlayPitched(SfxPlayer.PlaceSoundFor(shelf.Category.PlaceSound), 1.15f, 0.45f);
+                SfxPlayer.Instance?.Play(Sfx.Coin, 0.03f, 0.25f);
+            }
+            else
+            {
+                // Quick chains climb in pitch: small reward for flow.
+                _placeStreak = Time.time - _lastPlaceTime < 1.5f ? Mathf.Min(_placeStreak + 1, 8) : 0;
+                _lastPlaceTime = Time.time;
+                SfxPlayer.Instance?.PlayPitched(SfxPlayer.PlaceSoundFor(shelf.Category.PlaceSound), 1f + _placeStreak * 0.04f);
+                SfxPlayer.Instance?.Play(Sfx.Coin, 0.03f, 0.6f);
+                Haptics.Light();
+            }
 
             if (item.IsRare)
             {

@@ -111,5 +111,47 @@ namespace SortingGame.Tests
             SetSection(data, "dock", 10, 20);
             Assert.IsEmpty(VenueProgress.NewlyUnlockable(_ladder[1], data));
         }
+
+        HelperDefinition MakeHelper(VenueDefinition venue, int percent)
+        {
+            var helper = ScriptableObject.CreateInstance<HelperDefinition>();
+            _created.Add(helper);
+            helper.RequiredVenue = venue;
+            helper.RequiredVenuePercent = percent;
+            return helper;
+        }
+
+        [Test]
+        public void HelperSlot_OpensWhenItsVenueIsFullyRestored()
+        {
+            var helper = MakeHelper(_ladder[0], 100);
+            var data = new SaveData();
+            Assert.IsFalse(VenueProgress.HelperSlotOpen(helper, data));
+
+            SetSection(data, "box_room", 12, 12);
+            Assert.IsFalse(VenueProgress.HelperSlotOpen(helper, data), "Every item shelved is not yet 'finished' (a Chubby may be left).");
+
+            SetSection(data, "box_room", 12, 12, completed: true);
+            Assert.IsTrue(VenueProgress.HelperSlotOpen(helper, data));
+        }
+
+        [Test]
+        public void HelperSlot_CanOpenPartWayThroughAVenue()
+        {
+            // Warehouse: 20 + 20 + 10 items; half of it is 25.
+            var helper = MakeHelper(_ladder[1], 50);
+            var data = new SaveData();
+            SetSection(data, "office", 20, 20, completed: true);
+            Assert.IsFalse(VenueProgress.HelperSlotOpen(helper, data));
+
+            SetSection(data, "dock", 5, 20);
+            Assert.IsTrue(VenueProgress.HelperSlotOpen(helper, data));
+        }
+
+        [Test]
+        public void HelperWithoutVenue_IsOpenFromTheStart()
+        {
+            Assert.IsTrue(VenueProgress.HelperSlotOpen(MakeHelper(null, 100), new SaveData()));
+        }
     }
 }

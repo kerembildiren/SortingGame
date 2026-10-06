@@ -472,6 +472,13 @@
 /* ---------- M3: shop ---------- */
 .shop-list { width: 100%; }
 
+.shop-header {
+    font-size: 30px;
+    -unity-font-style: bold;
+    color: rgb(130, 112, 92);
+    margin: 14px 0 0 12px; padding: 0;
+}
+
 .shop-row {
     flex-direction: row;
     align-items: center;

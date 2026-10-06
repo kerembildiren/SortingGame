@@ -14,6 +14,7 @@ namespace SortingGame.Data
         public List<ItemDefinition> Items = new();
         public List<ContainerDefinition> Containers = new();
         public List<ToolDefinition> Tools = new();
+        public List<HelperDefinition> Helpers = new();
 
         public ToolDefinition ToolFor(ToolType type) => Tools.Find(t => t != null && t.Type == type);
 
@@ -60,6 +61,9 @@ namespace SortingGame.Data
             CheckUniqueIds(Tools, t => t.Id, "Tool", errors);
             foreach (var tool in Tools)
                 if (tool != null && tool.Levels.Count == 0) errors.Add($"Tool '{tool.Id}' has no levels.");
+            CheckUniqueIds(Helpers, h => h.Id, "Helper", errors);
+            foreach (var helper in Helpers)
+                if (helper != null && helper.Levels.Count == 0) errors.Add($"Helper '{helper.Id}' has no levels.");
 
             foreach (var item in Items)
                 if (item != null && !item.IsCollectible && item.Category == null)

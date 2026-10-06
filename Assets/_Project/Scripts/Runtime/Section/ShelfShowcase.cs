@@ -60,6 +60,8 @@ namespace SortingGame.Section
 
         IEnumerator Run()
         {
+            // A helper or the Auto Sort boost can fill a shelf while the player is busy: wait for the finger to lift.
+            while (Pointer.current != null && Pointer.current.press.isPressed) yield return null;
             _skip = false;
             _setInput?.Invoke(false);
             var fitter = _camera.GetComponent<CameraFitter>();

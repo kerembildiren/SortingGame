@@ -9,7 +9,7 @@ namespace SortingGame.EditorTools
 {
     /// <summary>
     /// Creates the placeholder content: 3 venues (Comic Box, Garage, Warehouse with 4 sections), 7 categories,
-    /// one costumed Chubby per venue, a few blue rare items, tools, Auto Sort packs.
+    /// one costumed Chubby per venue, a few blue rare items, tools, helpers, Auto Sort packs.
     /// "Create" only fills in what is missing, so inspector edits survive.
     /// "Rebuild" overwrites the sample assets with the values below.
     /// </summary>
@@ -193,6 +193,17 @@ namespace SortingGame.EditorTools
             var magnet = Tool("magnet", ToolType.Magnet, overwrite, hand, (500, 0.35f, 2f), (900, 0.45f, 4f), (1600, 0.55f, 6f));
             database.Tools = new List<ToolDefinition> { hand, broom, magnet };
             database.Venues = new List<VenueDefinition> { comicBox, garage, warehouse };
+
+            // ---- Helpers (GDD 10.3). Level 1 cost = hire price; levels are (cost, speed m/s, items per trip).
+            // Slots follow venue progress and come sparingly: the first after the Garage, the second halfway
+            // through the Warehouse. Not cheap on purpose: the game should stay playable for a long time.
+            database.Helpers = new List<HelperDefinition>
+            {
+                Helper("pip", overwrite, garage, 100, new Color(0.62f, 0.90f, 0.78f), new Color(1.00f, 0.62f, 0.45f),
+                    (400, 0.9f, 1), (700, 1.1f, 2), (1200, 1.3f, 3)),
+                Helper("dot", overwrite, warehouse, 50, new Color(1.00f, 0.80f, 0.62f), new Color(0.55f, 0.70f, 1.00f),
+                    (900, 0.9f, 1), (1300, 1.1f, 2), (2000, 1.3f, 3)),
+            };
             EditorUtility.SetDirty(database);
 
             CreatePanelSettings();
@@ -281,6 +292,24 @@ namespace SortingGame.EditorTools
                 tool.Levels.Add(new ToolDefinition.Level { Cost = cost, Primary = primary, Secondary = secondary });
             EditorUtility.SetDirty(tool);
             return tool;
+        }
+
+        static HelperDefinition Helper(string id, bool overwrite, VenueDefinition requiredVenue, int requiredPercent, Color body, Color accent,
+            params (int cost, float speed, int capacity)[] levels)
+        {
+            var helper = Load<HelperDefinition>($"{ContentFolder}/Helper_{id}.asset", out var isNew);
+            if (!isNew && !overwrite) return helper;
+            helper.Id = id;
+            helper.DisplayNameKey = $"helper.{id}";
+            helper.BodyColor = body;
+            helper.AccentColor = accent;
+            helper.RequiredVenue = requiredVenue;
+            helper.RequiredVenuePercent = requiredPercent;
+            helper.Levels = new List<HelperDefinition.Level>();
+            foreach (var (cost, speed, capacity) in levels)
+                helper.Levels.Add(new HelperDefinition.Level { Cost = cost, Speed = speed, Capacity = capacity });
+            EditorUtility.SetDirty(helper);
+            return helper;
         }
 
         const float LooseShare = 0.25f;

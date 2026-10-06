@@ -85,6 +85,23 @@ namespace SortingGame.Data
         public float InspectPitch = 8f;
         public float InspectFlyDuration = 0.5f;
 
+        [Header("Helpers (GDD 10.3). Speed and carry capacity come from the helper's level.")]
+        [Tooltip("Body width in metres. Small: they must not hide the items.")]
+        public float HelperSize = 0.34f;
+        public float HelperHopHeight = 0.09f;
+        public float HelperHopsPerMetre = 3.2f;
+        [Tooltip("Seconds bending over an item before it is in its arms.")]
+        public float HelperPickupPause = 0.3f;
+        [Tooltip("Seconds in front of the shelf per item put away.")]
+        public float HelperPlacePause = 0.35f;
+        [Tooltip("With room in its arms, a helper only goes for another item within this distance; otherwise it delivers first.")]
+        public float HelperChainRadius = 1.8f;
+        [Tooltip("Seconds between looks for new work while it has nothing to do.")]
+        public float HelperIdleRescan = 0.5f;
+        public float HelperWanderSpeed = 0.45f;
+        [Tooltip("Seconds standing still between two strolls (min, max).")]
+        public Vector2 HelperWanderPause = new(0.8f, 2.5f);
+
         [Header("Section 100% renovation (GDD 5.5)")]
         public float RenovationDuration = 2.2f;
         [Range(0f, 1f), Tooltip("How much of the clean look is already reached at 99% progress. Gives continuous 'getting nicer' feedback.")]

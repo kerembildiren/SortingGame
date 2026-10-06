@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 020f28a3154f1b147af4c12c575f6269, type: 3}
+  m_Name: Helper_dot
+  m_EditorClassIdentifier: SortingGame.Runtime::SortingGame.Data.HelperDefinition
+  Id: dot
+  DisplayNameKey: helper.dot
+  BodyColor: {r: 1, g: 0.8, b: 0.62, a: 1}
+  AccentColor: {r: 0.55, g: 0.7, b: 1, a: 1}
+  RequiredVenue: {fileID: 11400000, guid: 6ac1b3ad03349c746b104c297aba85d3, type: 2}
+  RequiredVenuePercent: 50
+  Levels:
+  - Cost: 900
+    Speed: 0.9
+    Capacity: 1
+  - Cost: 1300
+    Speed: 1.1
+    Capacity: 2
+  - Cost: 2000
+    Speed: 1.3
+    Capacity: 3

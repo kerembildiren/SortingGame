@@ -26,7 +26,8 @@ namespace SortingGame.Core
         CleanAmbienceLoop,
         Magnet,
         Mastery,
-        Purchase
+        Purchase,
+        HelperChirp
     }
 
     /// <summary>
@@ -205,6 +206,16 @@ namespace SortingGame.Core
                 var bell = Mathf.Sin(2 * Mathf.PI * 1568f * t) * Mathf.Exp(-t * 10f);
                 var second = t > 0.08f ? Mathf.Sin(2 * Mathf.PI * 2093f * (t - 0.08f)) * Mathf.Exp(-(t - 0.08f) * 10f) : 0f;
                 return (bell + second) * 0.25f;
+            });
+
+            // Helper being petted: two quick rising peeps.
+            _clips[Sfx.HelperChirp] = Make("helper_chirp", 0.3f, (t, i) =>
+            {
+                var second = t > 0.13f;
+                var local = second ? t - 0.13f : t;
+                var from = second ? 1500f : 1150f;
+                var f = Mathf.Lerp(from, from * 1.5f, Mathf.Clamp01(local / 0.12f));
+                return Mathf.Sin(2 * Mathf.PI * f * local) * Mathf.Exp(-local * 18f) * 0.35f;
             });
 
             _clips[Sfx.ShelfFull] = Arpeggio("shelf_full", new[] { 784f, 988f, 1175f }, 0.08f);

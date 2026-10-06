@@ -69,6 +69,8 @@ namespace SortingGame.Tests
 
             foreach (var item in Boot.Section.SortableItems.Where(i => i.State is SortingGame.Section.ItemState.Resting or SortingGame.Section.ItemState.Physics).ToList())
             {
+                // The list was taken a moment ago: a helper may have picked this one up since.
+                if (!item.CanPick) continue;
                 var shelf = Boot.Section.ShelfFor(item.Definition.Category);
                 Boot.Section.TryPlace(item, shelf, shelf.transform.position);
                 yield return null;

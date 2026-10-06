@@ -15,7 +15,7 @@ namespace SortingGame.Section
     /// in hand for the next shelf. Broom sweeps the dirt. With any tool, a tap opens a box or picks up a glowing collectible.
     /// Wide sections pan sideways: drag on empty floor (Hand/Magnet), two fingers (any tool), right mouse (editor),
     /// and the view scrolls by itself at the screen edges while carrying or sweeping (GDD 6.2).
-    /// Tapping a full shelf asks for a close-up (<see cref="FullShelfTapped"/>).
+    /// Tapping a full shelf asks for a close-up (<see cref="FullShelfTapped"/>). In a finished room a tap on a helper pets it.
     /// </summary>
     public class DragController : MonoBehaviour
     {
@@ -42,6 +42,7 @@ namespace SortingGame.Section
         ContainerView _tapContainer;
         ItemView _tapCollectible;
         ShelfView _tapShelf;
+        HelperView _tapHelper;
         Vector2 _pressPosition;
         Vector2 _lastPosition;
         bool _pressStartedOnUi;
@@ -113,6 +114,12 @@ namespace SortingGame.Section
 
             _pressPosition = screen;
             _lastPosition = screen;
+            if (_section.IsComplete)
+            {
+                // GDD 10.3: once the room is done, helpers are there to be petted.
+                _tapHelper = HelperAt(screen);
+                if (_tapHelper != null) return;
+            }
             var (item, collectible, container) = Pick(screen);
 
             if (collectible != null)
@@ -297,6 +304,7 @@ namespace SortingGame.Section
                 _tapContainer = null;
                 _tapCollectible = null;
                 _tapShelf = null;
+                _tapHelper = null;
                 _twoFingerPan = true;
                 _twoFingerGrabX = x;
                 Fitter.BeginPan();
@@ -372,7 +380,8 @@ namespace SortingGame.Section
             }
             else if (isTap && InputEnabled)
             {
-                if (_tapCollectible != null) _section.FindCollectible(_tapCollectible);
+                if (_tapHelper != null) _tapHelper.Pet();
+                else if (_tapCollectible != null) _section.FindCollectible(_tapCollectible);
                 else if (_tapContainer != null) _section.OpenContainer(_tapContainer);
                 else if (_tapShelf != null && _tapShelf.IsFull) FullShelfTapped?.Invoke(_tapShelf);
             }
@@ -380,6 +389,7 @@ namespace SortingGame.Section
             _tapCollectible = null;
             _tapContainer = null;
             _tapShelf = null;
+            _tapHelper = null;
         }
 
         void EndCarry()
@@ -457,6 +467,23 @@ namespace SortingGame.Section
             return best != null && best.IsFull ? best : null;
         }
 
+        /// <summary>The helper under the finger, if any. Helpers only have a trigger collider.</summary>
+        public HelperView HelperAt(Vector2 screen)
+        {
+            var ray = _camera.ScreenPointToRay(screen);
+            var count = Physics.RaycastNonAlloc(ray, _hits, 100f, ~0, QueryTriggerInteraction.Collide);
+            HelperView best = null;
+            var bestDistance = float.MaxValue;
+            for (var i = 0; i < count; i++)
+            {
+                var helper = _hits[i].collider.GetComponent<HelperView>();
+                if (helper == null || _hits[i].distance >= bestDistance) continue;
+                best = helper;
+                bestDistance = _hits[i].distance;
+            }
+            return best;
+        }
+
         ShelfView RaycastShelf(Ray ray, out Vector3 point)
         {
             point = default;
@@ -483,6 +510,7 @@ namespace SortingGame.Section
             _tapContainer = null;
             _tapCollectible = null;
             _tapShelf = null;
+            _tapHelper = null;
             StopSweeping();
             if (_panning || _twoFingerPan) Fitter?.EndPan();
             _panning = false;
