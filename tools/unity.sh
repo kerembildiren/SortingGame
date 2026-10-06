@@ -3,6 +3,7 @@
 #   tools/unity.sh setup   -> runs ProjectSetup.RunFullSetup (settings, data, scenes)
 #   tools/unity.sh test    -> runs EditMode tests, prints summary
 #   tools/unity.sh playtest -> runs PlayMode tests (end-to-end loop, screenshots in Logs/batch/*.png)
+#   tools/unity.sh android  -> development APK in Builds/Android (per-milestone build check)
 #   tools/unity.sh compile -> opens the project once to compile, prints C# errors
 set -u
 UNITY="${UNITY:-C:/Program Files/Unity/Hub/Editor/6000.6.3f1/Editor/Unity.exe}"
@@ -26,11 +27,17 @@ case "${1:-}" in
     grep -oE '<test-run [^>]*>' "$OUT/results.xml" | grep -oE '(result|total|passed|failed)="[^"]*"' | tr '\n' ' '; echo
     grep -E '<test-case [^>]*result="Failed"' "$OUT/results.xml" | grep -oE 'fullname="[^"]*"'
     exit $code ;;
+  android)
+    "$UNITY" -batchmode -quit -projectPath "$PROJECT" \
+      -executeMethod SortingGame.EditorTools.BuildTools.BuildAndroid -logFile "$OUT/android.log"
+    code=$?
+    grep -E "error CS|\[BuildTools\]|Error building|BuildFailedException|FAILURE:|What went wrong" -A3 "$OUT/android.log" | head -40
+    exit $code ;;
   compile)
     "$UNITY" -batchmode -quit -projectPath "$PROJECT" -logFile "$OUT/compile.log"
     code=$?
     grep -E "error CS|warning CS" "$OUT/compile.log" | sort -u
     exit $code ;;
   *)
-    echo "usage: tools/unity.sh setup|test|playtest|compile"; exit 2 ;;
+    echo "usage: tools/unity.sh setup|test|playtest|android|compile"; exit 2 ;;
 esac

@@ -4,62 +4,23 @@
   "graph": {},
   "nodes": [
     {
-      "id": "assets_project_scripts_runtime_core_sectionlayoutgenerator_sortinggame_core_containercontent",
-      "label": "ContainerContent",
+      "id": "assets_project_scripts_runtime_data_balanceconfig_sortinggame_data_balanceconfig",
+      "label": "BalanceConfig",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
       "community": 0,
-      "community_name": "ItemDefinition",
+      "community_name": "GameDatabase",
       "file_type": "code",
       "metadata": {
-        "is_nested_type": true,
-        "namespace": "SortingGame.Core",
+        "namespace": "SortingGame.Data",
         "scope_chain": [
-          "s73"
+          "s20"
         ]
       },
-      "norm_label": "containercontent",
-      "source_file": "Assets/_Project/Scripts/Runtime/Core/SectionLayoutGenerator.cs",
-      "source_location": "L10"
-    },
-    {
-      "id": "assets_project_scripts_runtime_core_sectionlayoutgenerator_sortinggame_core_sectionlayout",
-      "label": "SectionLayout",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "ItemDefinition",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Core",
-        "scope_chain": [
-          "s73"
-        ]
-      },
-      "norm_label": "sectionlayout",
-      "source_file": "Assets/_Project/Scripts/Runtime/Core/SectionLayoutGenerator.cs",
-      "source_location": "L8"
-    },
-    {
-      "id": "assets_project_scripts_runtime_core_sectionlayoutgenerator_sortinggame_core_sectionlayoutgenerator",
-      "label": "SectionLayoutGenerator",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "ItemDefinition",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Core",
-        "scope_chain": [
-          "s73"
-        ]
-      },
-      "norm_label": "sectionlayoutgenerator",
-      "source_file": "Assets/_Project/Scripts/Runtime/Core/SectionLayoutGenerator.cs",
-      "source_location": "L34"
+      "norm_label": "balanceconfig",
+      "source_file": "Assets/_Project/Scripts/Runtime/Data/BalanceConfig.cs",
+      "source_location": "L6"
     },
     {
       "id": "assets_project_scripts_runtime_data_categorydefinition_sortinggame_data_categorydefinition",
@@ -68,7 +29,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "community": 0,
-      "community_name": "ItemDefinition",
+      "community_name": "GameDatabase",
       "file_type": "code",
       "metadata": {
         "namespace": "SortingGame.Data",
@@ -81,13 +42,32 @@
       "source_location": "L14"
     },
     {
+      "id": "assets_project_scripts_runtime_data_categorydefinition_sortinggame_data_placesoundtype",
+      "label": "PlaceSoundType",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "GameDatabase",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Data",
+        "scope_chain": [
+          "s20"
+        ]
+      },
+      "norm_label": "placesoundtype",
+      "source_file": "Assets/_Project/Scripts/Runtime/Data/CategoryDefinition.cs",
+      "source_location": "L6"
+    },
+    {
       "id": "assets_project_scripts_runtime_data_collectibledefinition_sortinggame_data_collectibledefinition",
       "label": "CollectibleDefinition",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
       "community": 0,
-      "community_name": "ItemDefinition",
+      "community_name": "GameDatabase",
       "file_type": "code",
       "metadata": {
         "namespace": "SortingGame.Data",
@@ -106,7 +86,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "community": 0,
-      "community_name": "ItemDefinition",
+      "community_name": "GameDatabase",
       "file_type": "code",
       "metadata": {
         "namespace": "SortingGame.Data",
@@ -125,7 +105,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "community": 0,
-      "community_name": "ItemDefinition",
+      "community_name": "GameDatabase",
       "file_type": "code",
       "metadata": {
         "namespace": "SortingGame.Data",
@@ -144,7 +124,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "community": 0,
-      "community_name": "ItemDefinition",
+      "community_name": "GameDatabase",
       "file_type": "code",
       "metadata": {
         "namespace": "SortingGame.Data",
@@ -157,13 +137,32 @@
       "source_location": "L6"
     },
     {
+      "id": "assets_project_scripts_runtime_data_placeholdervisual_sortinggame_data_placeholdervisual",
+      "label": "PlaceholderVisual",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "GameDatabase",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Data",
+        "scope_chain": [
+          "s34"
+        ]
+      },
+      "norm_label": "placeholdervisual",
+      "source_file": "Assets/_Project/Scripts/Runtime/Data/PlaceholderVisual.cs",
+      "source_location": "L9"
+    },
+    {
       "id": "assets_project_scripts_runtime_data_sectiondefinition_sortinggame_data_containerentry",
       "label": "ContainerEntry",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
       "community": 0,
-      "community_name": "ItemDefinition",
+      "community_name": "GameDatabase",
       "file_type": "code",
       "metadata": {
         "is_nested_type": true,
@@ -183,7 +182,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "community": 0,
-      "community_name": "ItemDefinition",
+      "community_name": "GameDatabase",
       "file_type": "code",
       "metadata": {
         "namespace": "SortingGame.Data",
@@ -202,7 +201,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "community": 0,
-      "community_name": "ItemDefinition",
+      "community_name": "GameDatabase",
       "file_type": "code",
       "metadata": {
         "is_nested_type": true,
@@ -222,7 +221,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "community": 0,
-      "community_name": "ItemDefinition",
+      "community_name": "GameDatabase",
       "file_type": "code",
       "metadata": {
         "namespace": "SortingGame.Data",
@@ -241,7 +240,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "community": 0,
-      "community_name": "ItemDefinition",
+      "community_name": "GameDatabase",
       "file_type": "code",
       "metadata": {
         "namespace": "SortingGame.Tests",
@@ -252,25 +251,6 @@
       "norm_label": "gamedatabasetests",
       "source_file": "Assets/_Project/Tests/EditMode/GameDatabaseTests.cs",
       "source_location": "L8"
-    },
-    {
-      "id": "assets_project_tests_editmode_sectionlayoutgeneratortests_sortinggame_tests_sectionlayoutgeneratortests",
-      "label": "SectionLayoutGeneratorTests",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "ItemDefinition",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Tests",
-        "scope_chain": [
-          "s144"
-        ]
-      },
-      "norm_label": "sectionlayoutgeneratortests",
-      "source_file": "Assets/_Project/Tests/EditMode/SectionLayoutGeneratorTests.cs",
-      "source_location": "L10"
     },
     {
       "id": "assets_project_scripts_runtime_section_placeholderfactory_sortinggame_section_placeholderfactory",
@@ -368,25 +348,6 @@
       "source_location": "L15"
     },
     {
-      "id": "assets_project_scripts_runtime_data_sectionvisuals_sortinggame_data_sectionvisuals",
-      "label": "SectionVisuals",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "SectionController",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Data",
-        "scope_chain": [
-          "s20"
-        ]
-      },
-      "norm_label": "sectionvisuals",
-      "source_file": "Assets/_Project/Scripts/Runtime/Data/SectionVisuals.cs",
-      "source_location": "L6"
-    },
-    {
       "id": "assets_project_scripts_runtime_section_sectioncontroller_sortinggame_section_sectioncontroller",
       "label": "SectionController",
       "_callable": true,
@@ -412,7 +373,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "community": 20,
-      "community_name": ".OnLanded",
+      "community_name": "ContainerView",
       "file_type": "code",
       "metadata": {
         "namespace": "SortingGame.Core",
@@ -431,7 +392,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "community": 20,
-      "community_name": ".OnLanded",
+      "community_name": "ContainerView",
       "file_type": "code",
       "metadata": {
         "namespace": "SortingGame.Core",
@@ -442,6 +403,25 @@
       "norm_label": "ease",
       "source_file": "Assets/_Project/Scripts/Runtime/Core/Tween.cs",
       "source_location": "L8"
+    },
+    {
+      "id": "assets_project_scripts_runtime_section_containerview_sortinggame_section_containerview",
+      "label": "ContainerView",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ContainerView",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Section",
+        "scope_chain": [
+          "s177"
+        ]
+      },
+      "norm_label": "containerview",
+      "source_file": "Assets/_Project/Scripts/Runtime/Section/ContainerView.cs",
+      "source_location": "L15"
     },
     {
       "id": "assets_project_scripts_runtime_core_sectionprogress_sortinggame_core_sectionprogress",
@@ -482,13 +462,51 @@
       "source_location": "L6"
     },
     {
+      "id": "assets_project_scripts_runtime_data_feelconfig_sortinggame_data_feelconfig",
+      "label": "FeelConfig",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 22,
+      "community_name": "FeelConfig",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Data",
+        "scope_chain": [
+          "s20"
+        ]
+      },
+      "norm_label": "feelconfig",
+      "source_file": "Assets/_Project/Scripts/Runtime/Data/FeelConfig.cs",
+      "source_location": "L9"
+    },
+    {
+      "id": "assets_project_scripts_runtime_section_camerafitter_sortinggame_section_camerafitter",
+      "label": "CameraFitter",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 22,
+      "community_name": "FeelConfig",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Section",
+        "scope_chain": [
+          "s44"
+        ]
+      },
+      "norm_label": "camerafitter",
+      "source_file": "Assets/_Project/Scripts/Runtime/Section/CameraFitter.cs",
+      "source_location": "L10"
+    },
+    {
       "id": "assets_project_tests_playmode_corelooptests_sortinggame_tests_corelooptests",
       "label": "CoreLoopTests",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
       "community": 22,
-      "community_name": ".Snapshot",
+      "community_name": "FeelConfig",
       "file_type": "code",
       "metadata": {
         "namespace": "SortingGame.Tests",
@@ -499,6 +517,140 @@
       "norm_label": "corelooptests",
       "source_file": "Assets/_Project/Tests/PlayMode/CoreLoopTests.cs",
       "source_location": "L18"
+    },
+    {
+      "id": "assets_project_scripts_runtime_core_sectionlayoutgenerator_sortinggame_core_containercontent",
+      "label": "ContainerContent",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 27,
+      "community_name": ".Generate",
+      "file_type": "code",
+      "metadata": {
+        "is_nested_type": true,
+        "namespace": "SortingGame.Core",
+        "scope_chain": [
+          "s73"
+        ]
+      },
+      "norm_label": "containercontent",
+      "source_file": "Assets/_Project/Scripts/Runtime/Core/SectionLayoutGenerator.cs",
+      "source_location": "L10"
+    },
+    {
+      "id": "assets_project_scripts_runtime_core_sectionlayoutgenerator_sortinggame_core_sectionlayout",
+      "label": "SectionLayout",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 27,
+      "community_name": ".Generate",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Core",
+        "scope_chain": [
+          "s73"
+        ]
+      },
+      "norm_label": "sectionlayout",
+      "source_file": "Assets/_Project/Scripts/Runtime/Core/SectionLayoutGenerator.cs",
+      "source_location": "L8"
+    },
+    {
+      "id": "assets_project_scripts_runtime_core_sectionlayoutgenerator_sortinggame_core_sectionlayoutgenerator",
+      "label": "SectionLayoutGenerator",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 27,
+      "community_name": ".Generate",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Core",
+        "scope_chain": [
+          "s73"
+        ]
+      },
+      "norm_label": "sectionlayoutgenerator",
+      "source_file": "Assets/_Project/Scripts/Runtime/Core/SectionLayoutGenerator.cs",
+      "source_location": "L34"
+    },
+    {
+      "id": "assets_project_tests_editmode_sectionlayoutgeneratortests_sortinggame_tests_sectionlayoutgeneratortests",
+      "label": "SectionLayoutGeneratorTests",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 27,
+      "community_name": ".Generate",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Tests",
+        "scope_chain": [
+          "s144"
+        ]
+      },
+      "norm_label": "sectionlayoutgeneratortests",
+      "source_file": "Assets/_Project/Tests/EditMode/SectionLayoutGeneratorTests.cs",
+      "source_location": "L10"
+    },
+    {
+      "id": "assets_project_scripts_runtime_data_enums_sortinggame_data_itemrarity",
+      "label": "ItemRarity",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 28,
+      "community_name": "PlaceholderShape",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Data",
+        "scope_chain": [
+          "s0"
+        ]
+      },
+      "norm_label": "itemrarity",
+      "source_file": "Assets/_Project/Scripts/Runtime/Data/Enums.cs",
+      "source_location": "L4"
+    },
+    {
+      "id": "assets_project_scripts_runtime_data_enums_sortinggame_data_placeholdershape",
+      "label": "PlaceholderShape",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 28,
+      "community_name": "PlaceholderShape",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Data",
+        "scope_chain": [
+          "s0"
+        ]
+      },
+      "norm_label": "placeholdershape",
+      "source_file": "Assets/_Project/Scripts/Runtime/Data/Enums.cs",
+      "source_location": "L12"
+    },
+    {
+      "id": "assets_project_scripts_runtime_section_itemview_sortinggame_section_itemstate",
+      "label": "ItemState",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 29,
+      "community_name": "ItemState",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Section",
+        "scope_chain": [
+          "s82"
+        ]
+      },
+      "norm_label": "itemstate",
+      "source_file": "Assets/_Project/Scripts/Runtime/Section/ItemView.cs",
+      "source_location": "L8"
     },
     {
       "id": "assets_project_scripts_editor_contentbuilder_sortinggame_editortools_contentbuilder",
@@ -539,8 +691,8 @@
       "source_location": "L14"
     },
     {
-      "id": "assets_project_scripts_runtime_data_balanceconfig_sortinggame_data_balanceconfig",
-      "label": "BalanceConfig",
+      "id": "assets_project_scripts_runtime_data_sectionvisuals_sortinggame_data_sectionvisuals",
+      "label": "SectionVisuals",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
@@ -553,66 +705,9 @@
           "s20"
         ]
       },
-      "norm_label": "balanceconfig",
-      "source_file": "Assets/_Project/Scripts/Runtime/Data/BalanceConfig.cs",
+      "norm_label": "sectionvisuals",
+      "source_file": "Assets/_Project/Scripts/Runtime/Data/SectionVisuals.cs",
       "source_location": "L6"
-    },
-    {
-      "id": "assets_project_scripts_runtime_data_enums_sortinggame_data_itemrarity",
-      "label": "ItemRarity",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": ".Build",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Data",
-        "scope_chain": [
-          "s0"
-        ]
-      },
-      "norm_label": "itemrarity",
-      "source_file": "Assets/_Project/Scripts/Runtime/Data/Enums.cs",
-      "source_location": "L4"
-    },
-    {
-      "id": "assets_project_scripts_runtime_data_enums_sortinggame_data_placeholdershape",
-      "label": "PlaceholderShape",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": ".Build",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Data",
-        "scope_chain": [
-          "s0"
-        ]
-      },
-      "norm_label": "placeholdershape",
-      "source_file": "Assets/_Project/Scripts/Runtime/Data/Enums.cs",
-      "source_location": "L12"
-    },
-    {
-      "id": "assets_project_scripts_runtime_data_placeholdervisual_sortinggame_data_placeholdervisual",
-      "label": "PlaceholderVisual",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": ".Build",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Data",
-        "scope_chain": [
-          "s34"
-        ]
-      },
-      "norm_label": "placeholdervisual",
-      "source_file": "Assets/_Project/Scripts/Runtime/Data/PlaceholderVisual.cs",
-      "source_location": "L9"
     },
     {
       "id": "assets_project_scripts_runtime_core_tween_sortinggame_core_tween",
@@ -634,8 +729,8 @@
       "source_location": "L27"
     },
     {
-      "id": "assets_project_scripts_runtime_section_itemview_sortinggame_section_itemstate",
-      "label": "ItemState",
+      "id": "assets_project_scripts_runtime_core_tween_sortinggame_core_tweenrunner",
+      "label": "TweenRunner",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
@@ -643,14 +738,15 @@
       "community_name": "ItemView",
       "file_type": "code",
       "metadata": {
-        "namespace": "SortingGame.Section",
+        "is_nested_type": true,
+        "namespace": "SortingGame.Core",
         "scope_chain": [
-          "s82"
+          "s95"
         ]
       },
-      "norm_label": "itemstate",
-      "source_file": "Assets/_Project/Scripts/Runtime/Section/ItemView.cs",
-      "source_location": "L8"
+      "norm_label": "tweenrunner",
+      "source_file": "Assets/_Project/Scripts/Runtime/Core/Tween.cs",
+      "source_location": "L72"
     },
     {
       "id": "assets_project_scripts_runtime_section_itemview_sortinggame_section_itemview",
@@ -710,25 +806,6 @@
       "source_location": "L26"
     },
     {
-      "id": "assets_project_scripts_runtime_data_categorydefinition_sortinggame_data_placesoundtype",
-      "label": "PlaceSoundType",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "SfxPlayer",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Data",
-        "scope_chain": [
-          "s20"
-        ]
-      },
-      "norm_label": "placesoundtype",
-      "source_file": "Assets/_Project/Scripts/Runtime/Data/CategoryDefinition.cs",
-      "source_location": "L6"
-    },
-    {
       "id": "assets_project_scripts_runtime_core_gamebootstrap_sortinggame_core_gamebootstrap",
       "label": "GameBootstrap",
       "_callable": true,
@@ -746,83 +823,6 @@
       "norm_label": "gamebootstrap",
       "source_file": "Assets/_Project/Scripts/Runtime/Core/GameBootstrap.cs",
       "source_location": "L10"
-    },
-    {
-      "id": "assets_project_scripts_runtime_core_tween_sortinggame_core_tweenrunner",
-      "label": "TweenRunner",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "GameBootstrap",
-      "file_type": "code",
-      "metadata": {
-        "is_nested_type": true,
-        "namespace": "SortingGame.Core",
-        "scope_chain": [
-          "s95"
-        ]
-      },
-      "norm_label": "tweenrunner",
-      "source_file": "Assets/_Project/Scripts/Runtime/Core/Tween.cs",
-      "source_location": "L72"
-    },
-    {
-      "id": "assets_project_scripts_runtime_data_feelconfig_sortinggame_data_feelconfig",
-      "label": "FeelConfig",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "GameBootstrap",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Data",
-        "scope_chain": [
-          "s20"
-        ]
-      },
-      "norm_label": "feelconfig",
-      "source_file": "Assets/_Project/Scripts/Runtime/Data/FeelConfig.cs",
-      "source_location": "L9"
-    },
-    {
-      "id": "assets_project_scripts_runtime_section_camerafitter_sortinggame_section_camerafitter",
-      "label": "CameraFitter",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "GameBootstrap",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Section",
-        "scope_chain": [
-          "s44"
-        ]
-      },
-      "norm_label": "camerafitter",
-      "source_file": "Assets/_Project/Scripts/Runtime/Section/CameraFitter.cs",
-      "source_location": "L10"
-    },
-    {
-      "id": "assets_project_scripts_runtime_section_containerview_sortinggame_section_containerview",
-      "label": "ContainerView",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "GameBootstrap",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Section",
-        "scope_chain": [
-          "s177"
-        ]
-      },
-      "norm_label": "containerview",
-      "source_file": "Assets/_Project/Scripts/Runtime/Section/ContainerView.cs",
-      "source_location": "L15"
     },
     {
       "id": "assets_project_scripts_runtime_section_dragcontroller_sortinggame_section_dragcontroller",
@@ -882,82 +882,12 @@
       "source_location": "L6"
     },
     {
-      "id": "assets_project_scripts_runtime_core_sectionlayoutgenerator_sortinggame_core_sectionlayoutgenerator_generate",
-      "label": ".Generate()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "ItemDefinition",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Core",
-        "scope_chain": [
-          "s73"
-        ],
-        "unresolved_calls": [
-          {
-            "callee": "AddRange",
-            "receiver_type": "List",
-            "lang": "csharp",
-            "line": "L53"
-          },
-          {
-            "callee": "Add",
-            "receiver_type": "List",
-            "lang": "csharp",
-            "line": "L56"
-          },
-          {
-            "callee": "RemoveAt",
-            "receiver_type": "List",
-            "lang": "csharp",
-            "line": "L57"
-          },
-          {
-            "callee": "Round",
-            "receiver_type": "Math",
-            "lang": "csharp",
-            "line": "L68"
-          }
-        ]
-      },
-      "norm_label": ".generate()",
-      "source_file": "Assets/_Project/Scripts/Runtime/Core/SectionLayoutGenerator.cs",
-      "source_location": "L36"
-    },
-    {
-      "id": "assets_project_scripts_runtime_core_sectionlayoutgenerator_sortinggame_core_sectionlayoutgenerator_shuffle",
-      "label": ".Shuffle()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "ItemDefinition",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Core",
-        "scope_chain": [
-          "s73"
-        ],
-        "unresolved_calls": [
-          {
-            "callee": "Next",
-            "receiver_type": "Random",
-            "lang": "csharp",
-            "line": "L99"
-          }
-        ]
-      },
-      "norm_label": ".shuffle()",
-      "source_file": "Assets/_Project/Scripts/Runtime/Core/SectionLayoutGenerator.cs",
-      "source_location": "L95"
-    },
-    {
       "id": "assets_project_scripts_runtime_data_collectibledefinition_sortinggame_data_collectibledefinition_reset",
       "label": ".Reset()",
       "_callable": true,
       "_origin": "ast",
       "community": 0,
-      "community_name": "ItemDefinition",
+      "community_name": "GameDatabase",
       "file_type": "code",
       "metadata": {
         "namespace": "SortingGame.Data",
@@ -975,7 +905,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 0,
-      "community_name": "ItemDefinition",
+      "community_name": "GameDatabase",
       "file_type": "code",
       "metadata": {
         "namespace": "SortingGame.Data",
@@ -1007,7 +937,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 0,
-      "community_name": "ItemDefinition",
+      "community_name": "GameDatabase",
       "file_type": "code",
       "metadata": {
         "namespace": "SortingGame.Data",
@@ -1025,7 +955,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 0,
-      "community_name": "ItemDefinition",
+      "community_name": "GameDatabase",
       "file_type": "code",
       "metadata": {
         "namespace": "SortingGame.Data",
@@ -1051,7 +981,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 0,
-      "community_name": "ItemDefinition",
+      "community_name": "GameDatabase",
       "file_type": "code",
       "metadata": {
         "namespace": "SortingGame.Section",
@@ -1077,7 +1007,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 0,
-      "community_name": "ItemDefinition",
+      "community_name": "GameDatabase",
       "file_type": "code",
       "metadata": {
         "namespace": "SortingGame.Tests",
@@ -1115,7 +1045,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 0,
-      "community_name": "ItemDefinition",
+      "community_name": "GameDatabase",
       "file_type": "code",
       "metadata": {
         "namespace": "SortingGame.Tests",
@@ -1153,7 +1083,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 0,
-      "community_name": "ItemDefinition",
+      "community_name": "GameDatabase",
       "file_type": "code",
       "metadata": {
         "namespace": "SortingGame.Tests",
@@ -1184,224 +1114,6 @@
       "norm_label": ".validate_reportsduplicateids()",
       "source_file": "Assets/_Project/Tests/EditMode/GameDatabaseTests.cs",
       "source_location": "L22"
-    },
-    {
-      "id": "assets_project_tests_editmode_sectionlayoutgeneratortests_sortinggame_tests_sectionlayoutgeneratortests_allitems",
-      "label": ".AllItems()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "ItemDefinition",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Tests",
-        "scope_chain": [
-          "s144"
-        ]
-      },
-      "norm_label": ".allitems()",
-      "source_file": "Assets/_Project/Tests/EditMode/SectionLayoutGeneratorTests.cs",
-      "source_location": "L46"
-    },
-    {
-      "id": "assets_project_tests_editmode_sectionlayoutgeneratortests_sortinggame_tests_sectionlayoutgeneratortests_containercapacity_isrespected_overflowgoestofloor",
-      "label": ".ContainerCapacity_IsRespected_OverflowGoesToFloor()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "ItemDefinition",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Tests",
-        "scope_chain": [
-          "s144"
-        ],
-        "unresolved_calls": [
-          {
-            "callee": "That",
-            "receiver_type": "Assert",
-            "lang": "csharp",
-            "line": "L79"
-          },
-          {
-            "callee": "AreEqual",
-            "receiver_type": "Assert",
-            "lang": "csharp",
-            "line": "L80"
-          }
-        ]
-      },
-      "norm_label": ".containercapacity_isrespected_overflowgoestofloor()",
-      "source_file": "Assets/_Project/Tests/EditMode/SectionLayoutGeneratorTests.cs",
-      "source_location": "L72"
-    },
-    {
-      "id": "assets_project_tests_editmode_sectionlayoutgeneratortests_sortinggame_tests_sectionlayoutgeneratortests_everyvariantappears_beforeanyrepeats",
-      "label": ".EveryVariantAppears_BeforeAnyRepeats()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "ItemDefinition",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Tests",
-        "scope_chain": [
-          "s144"
-        ],
-        "unresolved_calls": [
-          {
-            "callee": "AreEqual",
-            "receiver_type": "Assert",
-            "lang": "csharp",
-            "line": "L69"
-          }
-        ]
-      },
-      "norm_label": ".everyvariantappears_beforeanyrepeats()",
-      "source_file": "Assets/_Project/Tests/EditMode/SectionLayoutGeneratorTests.cs",
-      "source_location": "L62"
-    },
-    {
-      "id": "assets_project_tests_editmode_sectionlayoutgeneratortests_sortinggame_tests_sectionlayoutgeneratortests_itemcountpercategory_equalsshelfslots",
-      "label": ".ItemCountPerCategory_EqualsShelfSlots()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "ItemDefinition",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Tests",
-        "scope_chain": [
-          "s144"
-        ],
-        "unresolved_calls": [
-          {
-            "callee": "AreEqual",
-            "receiver_type": "Assert",
-            "lang": "csharp",
-            "line": "L57"
-          }
-        ]
-      },
-      "norm_label": ".itemcountpercategory_equalsshelfslots()",
-      "source_file": "Assets/_Project/Tests/EditMode/SectionLayoutGeneratorTests.cs",
-      "source_location": "L49"
-    },
-    {
-      "id": "assets_project_tests_editmode_sectionlayoutgeneratortests_sortinggame_tests_sectionlayoutgeneratortests_make",
-      "label": ".Make()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "ItemDefinition",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Tests",
-        "scope_chain": [
-          "s144"
-        ],
-        "unresolved_calls": [
-          {
-            "callee": "CreateInstance",
-            "receiver_type": "ScriptableObject",
-            "lang": "csharp",
-            "line": "L23"
-          },
-          {
-            "callee": "Add",
-            "receiver_type": "List",
-            "lang": "csharp",
-            "line": "L24"
-          }
-        ]
-      },
-      "norm_label": ".make()",
-      "source_file": "Assets/_Project/Tests/EditMode/SectionLayoutGeneratorTests.cs",
-      "source_location": "L21"
-    },
-    {
-      "id": "assets_project_tests_editmode_sectionlayoutgeneratortests_sortinggame_tests_sectionlayoutgeneratortests_makesection",
-      "label": ".MakeSection()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "ItemDefinition",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Tests",
-        "scope_chain": [
-          "s144"
-        ],
-        "unresolved_calls": [
-          {
-            "callee": "Range",
-            "receiver_type": "Enumerable",
-            "lang": "csharp",
-            "line": "L34"
-          }
-        ]
-      },
-      "norm_label": ".makesection()",
-      "source_file": "Assets/_Project/Tests/EditMode/SectionLayoutGeneratorTests.cs",
-      "source_location": "L28"
-    },
-    {
-      "id": "assets_project_tests_editmode_sectionlayoutgeneratortests_sortinggame_tests_sectionlayoutgeneratortests_sameseed_samelayout",
-      "label": ".SameSeed_SameLayout()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "ItemDefinition",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Tests",
-        "scope_chain": [
-          "s144"
-        ],
-        "unresolved_calls": [
-          {
-            "callee": "AreEqual",
-            "receiver_type": "CollectionAssert",
-            "lang": "csharp",
-            "line": "L92"
-          }
-        ]
-      },
-      "norm_label": ".sameseed_samelayout()",
-      "source_file": "Assets/_Project/Tests/EditMode/SectionLayoutGeneratorTests.cs",
-      "source_location": "L84"
-    },
-    {
-      "id": "assets_project_tests_editmode_sectionlayoutgeneratortests_sortinggame_tests_sectionlayoutgeneratortests_teardown",
-      "label": ".TearDown()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "ItemDefinition",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Tests",
-        "scope_chain": [
-          "s144"
-        ],
-        "unresolved_calls": [
-          {
-            "callee": "DestroyImmediate",
-            "receiver_type": "Object",
-            "lang": "csharp",
-            "line": "L17"
-          },
-          {
-            "callee": "Clear",
-            "receiver_type": "List",
-            "lang": "csharp",
-            "line": "L18"
-          }
-        ]
-      },
-      "norm_label": ".teardown()",
-      "source_file": "Assets/_Project/Tests/EditMode/SectionLayoutGeneratorTests.cs",
-      "source_location": "L14"
     },
     {
       "id": "assets_project_scripts_runtime_section_placeholderfactory_sortinggame_section_placeholderfactory_createbox",
@@ -1544,6 +1256,32 @@
       "source_location": "L21"
     },
     {
+      "id": "assets_project_scripts_runtime_section_placeholderfactory_sortinggame_section_placeholderfactory_restpose",
+      "label": ".RestPose()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 17,
+      "community_name": "ShelfView",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Section",
+        "scope_chain": [
+          "s78"
+        ],
+        "unresolved_calls": [
+          {
+            "callee": "Euler",
+            "receiver_type": "Quaternion",
+            "lang": "csharp",
+            "line": "L134"
+          }
+        ]
+      },
+      "norm_label": ".restpose()",
+      "source_file": "Assets/_Project/Scripts/Runtime/Section/PlaceholderFactory.cs",
+      "source_location": "L128"
+    },
+    {
       "id": "assets_project_scripts_runtime_section_placeholderfactory_sortinggame_section_placeholderfactory_uniquelit",
       "label": ".UniqueLit()",
       "_callable": true,
@@ -1570,8 +1308,8 @@
       "source_location": "L31"
     },
     {
-      "id": "assets_project_scripts_runtime_section_sectioncontroller_sortinggame_section_sectioncontroller_buildshelves",
-      "label": ".BuildShelves()",
+      "id": "assets_project_scripts_runtime_section_shelfview_sortinggame_section_shelfslot_reserve",
+      "label": ".Reserve()",
       "_callable": true,
       "_origin": "ast",
       "community": 17,
@@ -1580,38 +1318,12 @@
       "metadata": {
         "namespace": "SortingGame.Section",
         "scope_chain": [
-          "s165"
-        ],
-        "unresolved_calls": [
-          {
-            "callee": "Max",
-            "receiver_type": "Mathf",
-            "lang": "csharp",
-            "line": "L203"
-          },
-          {
-            "callee": "LogWarning",
-            "receiver_type": "Debug",
-            "lang": "csharp",
-            "line": "L205"
-          },
-          {
-            "callee": "AddComponent",
-            "receiver_type": "GameObject",
-            "lang": "csharp",
-            "line": "L215"
-          },
-          {
-            "callee": "Add",
-            "receiver_type": "List",
-            "lang": "csharp",
-            "line": "L217"
-          }
+          "s102"
         ]
       },
-      "norm_label": ".buildshelves()",
-      "source_file": "Assets/_Project/Scripts/Runtime/Section/SectionController.cs",
-      "source_location": "L200"
+      "norm_label": ".reserve()",
+      "source_file": "Assets/_Project/Scripts/Runtime/Section/ShelfView.cs",
+      "source_location": "L27"
     },
     {
       "id": "assets_project_scripts_runtime_section_shelfview_sortinggame_section_shelfview_build",
@@ -2420,6 +2132,50 @@
       "source_location": "L174"
     },
     {
+      "id": "assets_project_scripts_runtime_section_sectioncontroller_sortinggame_section_sectioncontroller_buildshelves",
+      "label": ".BuildShelves()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 19,
+      "community_name": "SectionController",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Section",
+        "scope_chain": [
+          "s165"
+        ],
+        "unresolved_calls": [
+          {
+            "callee": "Max",
+            "receiver_type": "Mathf",
+            "lang": "csharp",
+            "line": "L203"
+          },
+          {
+            "callee": "LogWarning",
+            "receiver_type": "Debug",
+            "lang": "csharp",
+            "line": "L205"
+          },
+          {
+            "callee": "AddComponent",
+            "receiver_type": "GameObject",
+            "lang": "csharp",
+            "line": "L215"
+          },
+          {
+            "callee": "Add",
+            "receiver_type": "List",
+            "lang": "csharp",
+            "line": "L217"
+          }
+        ]
+      },
+      "norm_label": ".buildshelves()",
+      "source_file": "Assets/_Project/Scripts/Runtime/Section/SectionController.cs",
+      "source_location": "L200"
+    },
+    {
       "id": "assets_project_scripts_runtime_section_sectioncontroller_sortinggame_section_sectioncontroller_clamptoroom",
       "label": ".ClampToRoom()",
       "_callable": true,
@@ -2444,6 +2200,32 @@
       "norm_label": ".clamptoroom()",
       "source_file": "Assets/_Project/Scripts/Runtime/Section/SectionController.cs",
       "source_location": "L118"
+    },
+    {
+      "id": "assets_project_scripts_runtime_section_sectioncontroller_sortinggame_section_sectioncontroller_clear",
+      "label": ".Clear()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 19,
+      "community_name": "SectionController",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Section",
+        "scope_chain": [
+          "s165"
+        ],
+        "unresolved_calls": [
+          {
+            "callee": "Clear",
+            "receiver_type": "List",
+            "lang": "csharp",
+            "line": "L82"
+          }
+        ]
+      },
+      "norm_label": ".clear()",
+      "source_file": "Assets/_Project/Scripts/Runtime/Section/SectionController.cs",
+      "source_location": "L78"
     },
     {
       "id": "assets_project_scripts_runtime_section_sectioncontroller_sortinggame_section_sectioncontroller_findspot",
@@ -2638,12 +2420,38 @@
       "source_location": "L273"
     },
     {
+      "id": "assets_project_scripts_runtime_core_haptics_sortinggame_core_haptics_ensurepermissionisincluded",
+      "label": ".EnsurePermissionIsIncluded()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ContainerView",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Core",
+        "scope_chain": [
+          "s20"
+        ],
+        "unresolved_calls": [
+          {
+            "callee": "Vibrate",
+            "receiver_type": "Handheld",
+            "lang": "csharp",
+            "line": "L70"
+          }
+        ]
+      },
+      "norm_label": ".ensurepermissionisincluded()",
+      "source_file": "Assets/_Project/Scripts/Runtime/Core/Haptics.cs",
+      "source_location": "L68"
+    },
+    {
       "id": "assets_project_scripts_runtime_core_haptics_sortinggame_core_haptics_light",
       "label": ".Light()",
       "_callable": true,
       "_origin": "ast",
       "community": 20,
-      "community_name": ".OnLanded",
+      "community_name": "ContainerView",
       "file_type": "code",
       "metadata": {
         "namespace": "SortingGame.Core",
@@ -2661,7 +2469,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 20,
-      "community_name": ".OnLanded",
+      "community_name": "ContainerView",
       "file_type": "code",
       "metadata": {
         "namespace": "SortingGame.Core",
@@ -2679,7 +2487,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 20,
-      "community_name": ".OnLanded",
+      "community_name": "ContainerView",
       "file_type": "code",
       "metadata": {
         "namespace": "SortingGame.Core",
@@ -2697,7 +2505,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 20,
-      "community_name": ".OnLanded",
+      "community_name": "ContainerView",
       "file_type": "code",
       "metadata": {
         "namespace": "SortingGame.Core",
@@ -2735,7 +2543,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 20,
-      "community_name": ".OnLanded",
+      "community_name": "ContainerView",
       "file_type": "code",
       "metadata": {
         "namespace": "SortingGame.Core",
@@ -2761,7 +2569,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 20,
-      "community_name": ".OnLanded",
+      "community_name": "ContainerView",
       "file_type": "code",
       "metadata": {
         "namespace": "SortingGame.Core",
@@ -2779,7 +2587,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 20,
-      "community_name": ".OnLanded",
+      "community_name": "ContainerView",
       "file_type": "code",
       "metadata": {
         "namespace": "SortingGame.Core",
@@ -2797,7 +2605,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 20,
-      "community_name": ".OnLanded",
+      "community_name": "ContainerView",
       "file_type": "code",
       "metadata": {
         "namespace": "SortingGame.Core",
@@ -2823,7 +2631,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 20,
-      "community_name": ".OnLanded",
+      "community_name": "ContainerView",
       "file_type": "code",
       "metadata": {
         "namespace": "SortingGame.Core",
@@ -2849,7 +2657,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 20,
-      "community_name": ".OnLanded",
+      "community_name": "ContainerView",
       "file_type": "code",
       "metadata": {
         "namespace": "SortingGame.Core",
@@ -2862,12 +2670,56 @@
       "source_location": "L12"
     },
     {
+      "id": "assets_project_scripts_runtime_section_containerview_sortinggame_section_containerview_build",
+      "label": ".Build()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ContainerView",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Section",
+        "scope_chain": [
+          "s177"
+        ],
+        "unresolved_calls": [
+          {
+            "callee": "AddRange",
+            "receiver_type": "List",
+            "lang": "csharp",
+            "line": "L33"
+          }
+        ]
+      },
+      "norm_label": ".build()",
+      "source_file": "Assets/_Project/Scripts/Runtime/Section/ContainerView.cs",
+      "source_location": "L30"
+    },
+    {
+      "id": "assets_project_scripts_runtime_section_containerview_sortinggame_section_containerview_open",
+      "label": ".Open()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ContainerView",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Section",
+        "scope_chain": [
+          "s177"
+        ]
+      },
+      "norm_label": ".open()",
+      "source_file": "Assets/_Project/Scripts/Runtime/Section/ContainerView.cs",
+      "source_location": "L62"
+    },
+    {
       "id": "assets_project_scripts_runtime_section_containerview_sortinggame_section_containerview_tipandspill",
       "label": ".TipAndSpill()",
       "_callable": true,
       "_origin": "ast",
       "community": 20,
-      "community_name": ".OnLanded",
+      "community_name": "ContainerView",
       "file_type": "code",
       "metadata": {
         "namespace": "SortingGame.Section",
@@ -2935,7 +2787,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 20,
-      "community_name": ".OnLanded",
+      "community_name": "ContainerView",
       "file_type": "code",
       "metadata": {
         "namespace": "SortingGame.Section",
@@ -2974,12 +2826,30 @@
       "source_location": "L127"
     },
     {
+      "id": "assets_project_scripts_runtime_section_sectioncontroller_sortinggame_section_sectioncontroller_opencontainer",
+      "label": ".OpenContainer()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ContainerView",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Section",
+        "scope_chain": [
+          "s165"
+        ]
+      },
+      "norm_label": ".opencontainer()",
+      "source_file": "Assets/_Project/Scripts/Runtime/Section/SectionController.cs",
+      "source_location": "L110"
+    },
+    {
       "id": "assets_project_scripts_runtime_section_shelfview_sortinggame_section_shelfview_celebrate",
       "label": ".Celebrate()",
       "_callable": true,
       "_origin": "ast",
       "community": 20,
-      "community_name": ".OnLanded",
+      "community_name": "ContainerView",
       "file_type": "code",
       "metadata": {
         "namespace": "SortingGame.Section",
@@ -3198,12 +3068,136 @@
       "source_location": "L31"
     },
     {
+      "id": "assets_project_scripts_runtime_section_camerafitter_sortinggame_section_camerafitter_awake",
+      "label": ".Awake()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 22,
+      "community_name": "FeelConfig",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Section",
+        "scope_chain": [
+          "s44"
+        ]
+      },
+      "norm_label": ".awake()",
+      "source_file": "Assets/_Project/Scripts/Runtime/Section/CameraFitter.cs",
+      "source_location": "L19"
+    },
+    {
+      "id": "assets_project_scripts_runtime_section_camerafitter_sortinggame_section_camerafitter_fit",
+      "label": ".Fit()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 22,
+      "community_name": "FeelConfig",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Section",
+        "scope_chain": [
+          "s44"
+        ],
+        "unresolved_calls": [
+          {
+            "callee": "Euler",
+            "receiver_type": "Quaternion",
+            "lang": "csharp",
+            "line": "L40"
+          },
+          {
+            "callee": "Tan",
+            "receiver_type": "Mathf",
+            "lang": "csharp",
+            "line": "L62"
+          }
+        ]
+      },
+      "norm_label": ".fit()",
+      "source_file": "Assets/_Project/Scripts/Runtime/Section/CameraFitter.cs",
+      "source_location": "L36"
+    },
+    {
+      "id": "assets_project_scripts_runtime_section_camerafitter_sortinggame_section_camerafitter_fits",
+      "label": ".Fits()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 22,
+      "community_name": "FeelConfig",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Section",
+        "scope_chain": [
+          "s44"
+        ],
+        "unresolved_calls": [
+          {
+            "callee": "WorldToViewportPoint",
+            "receiver_type": "Camera",
+            "lang": "csharp",
+            "line": "L76"
+          },
+          {
+            "callee": "Min",
+            "receiver_type": "Mathf",
+            "lang": "csharp",
+            "line": "L78"
+          },
+          {
+            "callee": "Max",
+            "receiver_type": "Mathf",
+            "lang": "csharp",
+            "line": "L79"
+          }
+        ]
+      },
+      "norm_label": ".fits()",
+      "source_file": "Assets/_Project/Scripts/Runtime/Section/CameraFitter.cs",
+      "source_location": "L67"
+    },
+    {
+      "id": "assets_project_scripts_runtime_section_camerafitter_sortinggame_section_camerafitter_frame",
+      "label": ".Frame()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 22,
+      "community_name": "FeelConfig",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Section",
+        "scope_chain": [
+          "s44"
+        ]
+      },
+      "norm_label": ".frame()",
+      "source_file": "Assets/_Project/Scripts/Runtime/Section/CameraFitter.cs",
+      "source_location": "L21"
+    },
+    {
+      "id": "assets_project_scripts_runtime_section_camerafitter_sortinggame_section_camerafitter_lateupdate",
+      "label": ".LateUpdate()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 22,
+      "community_name": "FeelConfig",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Section",
+        "scope_chain": [
+          "s44"
+        ]
+      },
+      "norm_label": ".lateupdate()",
+      "source_file": "Assets/_Project/Scripts/Runtime/Section/CameraFitter.cs",
+      "source_location": "L29"
+    },
+    {
       "id": "assets_project_tests_playmode_corelooptests_sortinggame_tests_corelooptests_read",
       "label": ".Read()",
       "_callable": true,
       "_origin": "ast",
       "community": 22,
-      "community_name": ".Snapshot",
+      "community_name": "FeelConfig",
       "file_type": "code",
       "metadata": {
         "namespace": "SortingGame.Tests",
@@ -3235,7 +3229,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 22,
-      "community_name": ".Snapshot",
+      "community_name": "FeelConfig",
       "file_type": "code",
       "metadata": {
         "namespace": "SortingGame.Tests",
@@ -3291,7 +3285,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 22,
-      "community_name": ".Snapshot",
+      "community_name": "FeelConfig",
       "file_type": "code",
       "metadata": {
         "namespace": "SortingGame.Tests",
@@ -3352,6 +3346,294 @@
       "norm_label": ".sorteverything_reacheshundredpercent()",
       "source_file": "Assets/_Project/Tests/PlayMode/CoreLoopTests.cs",
       "source_location": "L20"
+    },
+    {
+      "id": "assets_project_scripts_runtime_core_sectionlayoutgenerator_sortinggame_core_sectionlayoutgenerator_generate",
+      "label": ".Generate()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 27,
+      "community_name": ".Generate",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Core",
+        "scope_chain": [
+          "s73"
+        ],
+        "unresolved_calls": [
+          {
+            "callee": "AddRange",
+            "receiver_type": "List",
+            "lang": "csharp",
+            "line": "L53"
+          },
+          {
+            "callee": "Add",
+            "receiver_type": "List",
+            "lang": "csharp",
+            "line": "L56"
+          },
+          {
+            "callee": "RemoveAt",
+            "receiver_type": "List",
+            "lang": "csharp",
+            "line": "L57"
+          },
+          {
+            "callee": "Round",
+            "receiver_type": "Math",
+            "lang": "csharp",
+            "line": "L68"
+          }
+        ]
+      },
+      "norm_label": ".generate()",
+      "source_file": "Assets/_Project/Scripts/Runtime/Core/SectionLayoutGenerator.cs",
+      "source_location": "L36"
+    },
+    {
+      "id": "assets_project_scripts_runtime_core_sectionlayoutgenerator_sortinggame_core_sectionlayoutgenerator_shuffle",
+      "label": ".Shuffle()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 27,
+      "community_name": ".Generate",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Core",
+        "scope_chain": [
+          "s73"
+        ],
+        "unresolved_calls": [
+          {
+            "callee": "Next",
+            "receiver_type": "Random",
+            "lang": "csharp",
+            "line": "L99"
+          }
+        ]
+      },
+      "norm_label": ".shuffle()",
+      "source_file": "Assets/_Project/Scripts/Runtime/Core/SectionLayoutGenerator.cs",
+      "source_location": "L95"
+    },
+    {
+      "id": "assets_project_tests_editmode_sectionlayoutgeneratortests_sortinggame_tests_sectionlayoutgeneratortests_allitems",
+      "label": ".AllItems()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 27,
+      "community_name": ".Generate",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Tests",
+        "scope_chain": [
+          "s144"
+        ]
+      },
+      "norm_label": ".allitems()",
+      "source_file": "Assets/_Project/Tests/EditMode/SectionLayoutGeneratorTests.cs",
+      "source_location": "L46"
+    },
+    {
+      "id": "assets_project_tests_editmode_sectionlayoutgeneratortests_sortinggame_tests_sectionlayoutgeneratortests_containercapacity_isrespected_overflowgoestofloor",
+      "label": ".ContainerCapacity_IsRespected_OverflowGoesToFloor()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 27,
+      "community_name": ".Generate",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Tests",
+        "scope_chain": [
+          "s144"
+        ],
+        "unresolved_calls": [
+          {
+            "callee": "That",
+            "receiver_type": "Assert",
+            "lang": "csharp",
+            "line": "L79"
+          },
+          {
+            "callee": "AreEqual",
+            "receiver_type": "Assert",
+            "lang": "csharp",
+            "line": "L80"
+          }
+        ]
+      },
+      "norm_label": ".containercapacity_isrespected_overflowgoestofloor()",
+      "source_file": "Assets/_Project/Tests/EditMode/SectionLayoutGeneratorTests.cs",
+      "source_location": "L72"
+    },
+    {
+      "id": "assets_project_tests_editmode_sectionlayoutgeneratortests_sortinggame_tests_sectionlayoutgeneratortests_everyvariantappears_beforeanyrepeats",
+      "label": ".EveryVariantAppears_BeforeAnyRepeats()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 27,
+      "community_name": ".Generate",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Tests",
+        "scope_chain": [
+          "s144"
+        ],
+        "unresolved_calls": [
+          {
+            "callee": "AreEqual",
+            "receiver_type": "Assert",
+            "lang": "csharp",
+            "line": "L69"
+          }
+        ]
+      },
+      "norm_label": ".everyvariantappears_beforeanyrepeats()",
+      "source_file": "Assets/_Project/Tests/EditMode/SectionLayoutGeneratorTests.cs",
+      "source_location": "L62"
+    },
+    {
+      "id": "assets_project_tests_editmode_sectionlayoutgeneratortests_sortinggame_tests_sectionlayoutgeneratortests_itemcountpercategory_equalsshelfslots",
+      "label": ".ItemCountPerCategory_EqualsShelfSlots()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 27,
+      "community_name": ".Generate",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Tests",
+        "scope_chain": [
+          "s144"
+        ],
+        "unresolved_calls": [
+          {
+            "callee": "AreEqual",
+            "receiver_type": "Assert",
+            "lang": "csharp",
+            "line": "L57"
+          }
+        ]
+      },
+      "norm_label": ".itemcountpercategory_equalsshelfslots()",
+      "source_file": "Assets/_Project/Tests/EditMode/SectionLayoutGeneratorTests.cs",
+      "source_location": "L49"
+    },
+    {
+      "id": "assets_project_tests_editmode_sectionlayoutgeneratortests_sortinggame_tests_sectionlayoutgeneratortests_make",
+      "label": ".Make()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 27,
+      "community_name": ".Generate",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Tests",
+        "scope_chain": [
+          "s144"
+        ],
+        "unresolved_calls": [
+          {
+            "callee": "CreateInstance",
+            "receiver_type": "ScriptableObject",
+            "lang": "csharp",
+            "line": "L23"
+          },
+          {
+            "callee": "Add",
+            "receiver_type": "List",
+            "lang": "csharp",
+            "line": "L24"
+          }
+        ]
+      },
+      "norm_label": ".make()",
+      "source_file": "Assets/_Project/Tests/EditMode/SectionLayoutGeneratorTests.cs",
+      "source_location": "L21"
+    },
+    {
+      "id": "assets_project_tests_editmode_sectionlayoutgeneratortests_sortinggame_tests_sectionlayoutgeneratortests_makesection",
+      "label": ".MakeSection()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 27,
+      "community_name": ".Generate",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Tests",
+        "scope_chain": [
+          "s144"
+        ],
+        "unresolved_calls": [
+          {
+            "callee": "Range",
+            "receiver_type": "Enumerable",
+            "lang": "csharp",
+            "line": "L34"
+          }
+        ]
+      },
+      "norm_label": ".makesection()",
+      "source_file": "Assets/_Project/Tests/EditMode/SectionLayoutGeneratorTests.cs",
+      "source_location": "L28"
+    },
+    {
+      "id": "assets_project_tests_editmode_sectionlayoutgeneratortests_sortinggame_tests_sectionlayoutgeneratortests_sameseed_samelayout",
+      "label": ".SameSeed_SameLayout()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 27,
+      "community_name": ".Generate",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Tests",
+        "scope_chain": [
+          "s144"
+        ],
+        "unresolved_calls": [
+          {
+            "callee": "AreEqual",
+            "receiver_type": "CollectionAssert",
+            "lang": "csharp",
+            "line": "L92"
+          }
+        ]
+      },
+      "norm_label": ".sameseed_samelayout()",
+      "source_file": "Assets/_Project/Tests/EditMode/SectionLayoutGeneratorTests.cs",
+      "source_location": "L84"
+    },
+    {
+      "id": "assets_project_tests_editmode_sectionlayoutgeneratortests_sortinggame_tests_sectionlayoutgeneratortests_teardown",
+      "label": ".TearDown()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 27,
+      "community_name": ".Generate",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Tests",
+        "scope_chain": [
+          "s144"
+        ],
+        "unresolved_calls": [
+          {
+            "callee": "DestroyImmediate",
+            "receiver_type": "Object",
+            "lang": "csharp",
+            "line": "L17"
+          },
+          {
+            "callee": "Clear",
+            "receiver_type": "List",
+            "lang": "csharp",
+            "line": "L18"
+          }
+        ]
+      },
+      "norm_label": ".teardown()",
+      "source_file": "Assets/_Project/Tests/EditMode/SectionLayoutGeneratorTests.cs",
+      "source_location": "L14"
     },
     {
       "id": "assets_project_scripts_editor_contentbuilder_sortinggame_editortools_contentbuilder_build",
@@ -3886,32 +4168,6 @@
       "source_location": "L24"
     },
     {
-      "id": "assets_project_scripts_runtime_section_placeholderfactory_sortinggame_section_placeholderfactory_restpose",
-      "label": ".RestPose()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": ".Build",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Section",
-        "scope_chain": [
-          "s78"
-        ],
-        "unresolved_calls": [
-          {
-            "callee": "Euler",
-            "receiver_type": "Quaternion",
-            "lang": "csharp",
-            "line": "L134"
-          }
-        ]
-      },
-      "norm_label": ".restpose()",
-      "source_file": "Assets/_Project/Scripts/Runtime/Section/PlaceholderFactory.cs",
-      "source_location": "L128"
-    },
-    {
       "id": "assets_project_scripts_runtime_core_tween_sortinggame_core_ease_pulse",
       "label": ".Pulse()",
       "_callable": true,
@@ -4350,32 +4606,6 @@
       "source_location": "L178"
     },
     {
-      "id": "assets_project_scripts_runtime_section_sectioncontroller_sortinggame_section_sectioncontroller_clear",
-      "label": ".Clear()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "ItemView",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Section",
-        "scope_chain": [
-          "s165"
-        ],
-        "unresolved_calls": [
-          {
-            "callee": "Clear",
-            "receiver_type": "List",
-            "lang": "csharp",
-            "line": "L82"
-          }
-        ]
-      },
-      "norm_label": ".clear()",
-      "source_file": "Assets/_Project/Scripts/Runtime/Section/SectionController.cs",
-      "source_location": "L78"
-    },
-    {
       "id": "assets_project_scripts_runtime_section_sectioncontroller_sortinggame_section_sectioncontroller_tryplace",
       "label": ".TryPlace()",
       "_callable": true,
@@ -4418,24 +4648,6 @@
       "norm_label": ".fill()",
       "source_file": "Assets/_Project/Scripts/Runtime/Section/ShelfView.cs",
       "source_location": "L29"
-    },
-    {
-      "id": "assets_project_scripts_runtime_section_shelfview_sortinggame_section_shelfslot_reserve",
-      "label": ".Reserve()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "ItemView",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Section",
-        "scope_chain": [
-          "s102"
-        ]
-      },
-      "norm_label": ".reserve()",
-      "source_file": "Assets/_Project/Scripts/Runtime/Section/ShelfView.cs",
-      "source_location": "L27"
     },
     {
       "id": "assets_project_scripts_runtime_section_shelfview_sortinggame_section_shelfview_flashhint",
@@ -4842,200 +5054,6 @@
       "source_location": "L60"
     },
     {
-      "id": "assets_project_scripts_runtime_core_haptics_sortinggame_core_haptics_ensurepermissionisincluded",
-      "label": ".EnsurePermissionIsIncluded()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "GameBootstrap",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Core",
-        "scope_chain": [
-          "s20"
-        ],
-        "unresolved_calls": [
-          {
-            "callee": "Vibrate",
-            "receiver_type": "Handheld",
-            "lang": "csharp",
-            "line": "L70"
-          }
-        ]
-      },
-      "norm_label": ".ensurepermissionisincluded()",
-      "source_file": "Assets/_Project/Scripts/Runtime/Core/Haptics.cs",
-      "source_location": "L68"
-    },
-    {
-      "id": "assets_project_scripts_runtime_section_camerafitter_sortinggame_section_camerafitter_awake",
-      "label": ".Awake()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "GameBootstrap",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Section",
-        "scope_chain": [
-          "s44"
-        ]
-      },
-      "norm_label": ".awake()",
-      "source_file": "Assets/_Project/Scripts/Runtime/Section/CameraFitter.cs",
-      "source_location": "L19"
-    },
-    {
-      "id": "assets_project_scripts_runtime_section_camerafitter_sortinggame_section_camerafitter_fit",
-      "label": ".Fit()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "GameBootstrap",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Section",
-        "scope_chain": [
-          "s44"
-        ],
-        "unresolved_calls": [
-          {
-            "callee": "Euler",
-            "receiver_type": "Quaternion",
-            "lang": "csharp",
-            "line": "L40"
-          },
-          {
-            "callee": "Tan",
-            "receiver_type": "Mathf",
-            "lang": "csharp",
-            "line": "L62"
-          }
-        ]
-      },
-      "norm_label": ".fit()",
-      "source_file": "Assets/_Project/Scripts/Runtime/Section/CameraFitter.cs",
-      "source_location": "L36"
-    },
-    {
-      "id": "assets_project_scripts_runtime_section_camerafitter_sortinggame_section_camerafitter_fits",
-      "label": ".Fits()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "GameBootstrap",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Section",
-        "scope_chain": [
-          "s44"
-        ],
-        "unresolved_calls": [
-          {
-            "callee": "WorldToViewportPoint",
-            "receiver_type": "Camera",
-            "lang": "csharp",
-            "line": "L76"
-          },
-          {
-            "callee": "Min",
-            "receiver_type": "Mathf",
-            "lang": "csharp",
-            "line": "L78"
-          },
-          {
-            "callee": "Max",
-            "receiver_type": "Mathf",
-            "lang": "csharp",
-            "line": "L79"
-          }
-        ]
-      },
-      "norm_label": ".fits()",
-      "source_file": "Assets/_Project/Scripts/Runtime/Section/CameraFitter.cs",
-      "source_location": "L67"
-    },
-    {
-      "id": "assets_project_scripts_runtime_section_camerafitter_sortinggame_section_camerafitter_frame",
-      "label": ".Frame()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "GameBootstrap",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Section",
-        "scope_chain": [
-          "s44"
-        ]
-      },
-      "norm_label": ".frame()",
-      "source_file": "Assets/_Project/Scripts/Runtime/Section/CameraFitter.cs",
-      "source_location": "L21"
-    },
-    {
-      "id": "assets_project_scripts_runtime_section_camerafitter_sortinggame_section_camerafitter_lateupdate",
-      "label": ".LateUpdate()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "GameBootstrap",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Section",
-        "scope_chain": [
-          "s44"
-        ]
-      },
-      "norm_label": ".lateupdate()",
-      "source_file": "Assets/_Project/Scripts/Runtime/Section/CameraFitter.cs",
-      "source_location": "L29"
-    },
-    {
-      "id": "assets_project_scripts_runtime_section_containerview_sortinggame_section_containerview_build",
-      "label": ".Build()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "GameBootstrap",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Section",
-        "scope_chain": [
-          "s177"
-        ],
-        "unresolved_calls": [
-          {
-            "callee": "AddRange",
-            "receiver_type": "List",
-            "lang": "csharp",
-            "line": "L33"
-          }
-        ]
-      },
-      "norm_label": ".build()",
-      "source_file": "Assets/_Project/Scripts/Runtime/Section/ContainerView.cs",
-      "source_location": "L30"
-    },
-    {
-      "id": "assets_project_scripts_runtime_section_containerview_sortinggame_section_containerview_open",
-      "label": ".Open()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "GameBootstrap",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Section",
-        "scope_chain": [
-          "s177"
-        ]
-      },
-      "norm_label": ".open()",
-      "source_file": "Assets/_Project/Scripts/Runtime/Section/ContainerView.cs",
-      "source_location": "L62"
-    },
-    {
       "id": "assets_project_scripts_runtime_section_dragcontroller_sortinggame_section_dragcontroller_canceldrag",
       "label": ".CancelDrag()",
       "_callable": true,
@@ -5196,24 +5214,6 @@
       "norm_label": ".update()",
       "source_file": "Assets/_Project/Scripts/Runtime/Section/DragController.cs",
       "source_location": "L43"
-    },
-    {
-      "id": "assets_project_scripts_runtime_section_sectioncontroller_sortinggame_section_sectioncontroller_opencontainer",
-      "label": ".OpenContainer()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "GameBootstrap",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Section",
-        "scope_chain": [
-          "s165"
-        ]
-      },
-      "norm_label": ".opencontainer()",
-      "source_file": "Assets/_Project/Scripts/Runtime/Section/SectionController.cs",
-      "source_location": "L110"
     },
     {
       "id": "assets_project_scripts_runtime_section_shelfview_sortinggame_section_shelfview_sethovered",
@@ -5408,72 +5408,22 @@
       "source_location": "L30"
     },
     {
-      "id": "assets_project_scripts_runtime_core_sectionlayoutgenerator_cs_func",
-      "label": "Func",
+      "id": "assets_project_scripts_runtime_data_categorydefinition",
+      "label": "CategoryDefinition.cs",
       "_origin": "ast",
       "community": 0,
-      "community_name": "ItemDefinition",
+      "community_name": "GameDatabase",
       "file_type": "code",
-      "norm_label": "func",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "assets_project_scripts_runtime_core_sectionlayoutgenerator_cs_ireadonlylist",
-      "label": "IReadOnlyList",
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "ItemDefinition",
-      "file_type": "code",
-      "norm_label": "ireadonlylist",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "assets_project_scripts_runtime_core_sectionlayoutgenerator_cs_list",
-      "label": "List",
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "ItemDefinition",
-      "file_type": "code",
-      "norm_label": "list",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "assets_project_scripts_runtime_core_sectionlayoutgenerator_cs_random",
-      "label": "Random",
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "ItemDefinition",
-      "file_type": "code",
-      "norm_label": "random",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "assets_project_scripts_runtime_core_sectionlayoutgenerator_sortinggame_core_sectionlayout_totalitems",
-      "label": "TotalItems",
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "ItemDefinition",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Core",
-        "scope_chain": [
-          "s73"
-        ]
-      },
-      "norm_label": "totalitems",
-      "source_file": "Assets/_Project/Scripts/Runtime/Core/SectionLayoutGenerator.cs",
-      "source_location": "L19"
+      "norm_label": "categorydefinition.cs",
+      "source_file": "Assets/_Project/Scripts/Runtime/Data/CategoryDefinition.cs",
+      "source_location": "L1"
     },
     {
       "id": "assets_project_scripts_runtime_data_categorydefinition_cs_color",
       "label": "Color",
       "_origin": "ast",
       "community": 0,
-      "community_name": "ItemDefinition",
+      "community_name": "GameDatabase",
       "file_type": "code",
       "norm_label": "color",
       "source_file": "",
@@ -5484,18 +5434,69 @@
       "label": "Vector3",
       "_origin": "ast",
       "community": 0,
-      "community_name": "ItemDefinition",
+      "community_name": "GameDatabase",
       "file_type": "code",
       "norm_label": "vector3",
       "source_file": "",
       "source_location": ""
     },
     {
+      "id": "assets_project_scripts_runtime_data_categorydefinition_sortinggame_data_placesoundtype_metal",
+      "label": "Metal",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "GameDatabase",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Data",
+        "scope_chain": [
+          "s20"
+        ]
+      },
+      "norm_label": "metal",
+      "source_file": "Assets/_Project/Scripts/Runtime/Data/CategoryDefinition.cs",
+      "source_location": "L10"
+    },
+    {
+      "id": "assets_project_scripts_runtime_data_categorydefinition_sortinggame_data_placesoundtype_paper",
+      "label": "Paper",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "GameDatabase",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Data",
+        "scope_chain": [
+          "s20"
+        ]
+      },
+      "norm_label": "paper",
+      "source_file": "Assets/_Project/Scripts/Runtime/Data/CategoryDefinition.cs",
+      "source_location": "L8"
+    },
+    {
+      "id": "assets_project_scripts_runtime_data_categorydefinition_sortinggame_data_placesoundtype_plastic",
+      "label": "Plastic",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "GameDatabase",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Data",
+        "scope_chain": [
+          "s20"
+        ]
+      },
+      "norm_label": "plastic",
+      "source_file": "Assets/_Project/Scripts/Runtime/Data/CategoryDefinition.cs",
+      "source_location": "L9"
+    },
+    {
       "id": "assets_project_scripts_runtime_data_collectibledefinition_sortinggame_data_collectibledefinition_ismascot",
       "label": "IsMascot",
       "_origin": "ast",
       "community": 0,
-      "community_name": "ItemDefinition",
+      "community_name": "GameDatabase",
       "file_type": "code",
       "metadata": {
         "namespace": "SortingGame.Data",
@@ -5512,9 +5513,20 @@
       "label": "GameObject",
       "_origin": "ast",
       "community": 0,
-      "community_name": "ItemDefinition",
+      "community_name": "GameDatabase",
       "file_type": "code",
       "norm_label": "gameobject",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "assets_project_scripts_runtime_data_gamedatabase_cs_containerdefinition",
+      "label": "ContainerDefinition",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "GameDatabase",
+      "file_type": "code",
+      "norm_label": "containerdefinition",
       "source_file": "",
       "source_location": ""
     },
@@ -5523,7 +5535,7 @@
       "label": "Func",
       "_origin": "ast",
       "community": 0,
-      "community_name": "ItemDefinition",
+      "community_name": "GameDatabase",
       "file_type": "code",
       "norm_label": "func",
       "source_file": "",
@@ -5534,9 +5546,20 @@
       "label": "IEnumerable",
       "_origin": "ast",
       "community": 0,
-      "community_name": "ItemDefinition",
+      "community_name": "GameDatabase",
       "file_type": "code",
       "norm_label": "ienumerable",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "assets_project_scripts_runtime_data_gamedatabase_cs_itemdefinition",
+      "label": "ItemDefinition",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "GameDatabase",
+      "file_type": "code",
+      "norm_label": "itemdefinition",
       "source_file": "",
       "source_location": ""
     },
@@ -5545,9 +5568,20 @@
       "label": "List",
       "_origin": "ast",
       "community": 0,
-      "community_name": "ItemDefinition",
+      "community_name": "GameDatabase",
       "file_type": "code",
       "norm_label": "list",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "assets_project_scripts_runtime_data_gamedatabase_cs_venuedefinition",
+      "label": "VenueDefinition",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "GameDatabase",
+      "file_type": "code",
+      "norm_label": "venuedefinition",
       "source_file": "",
       "source_location": ""
     },
@@ -5556,7 +5590,7 @@
       "label": "GameObject",
       "_origin": "ast",
       "community": 0,
-      "community_name": "ItemDefinition",
+      "community_name": "GameDatabase",
       "file_type": "code",
       "norm_label": "gameobject",
       "source_file": "",
@@ -5567,7 +5601,7 @@
       "label": "CoinValue",
       "_origin": "ast",
       "community": 0,
-      "community_name": "ItemDefinition",
+      "community_name": "GameDatabase",
       "file_type": "code",
       "metadata": {
         "namespace": "SortingGame.Data",
@@ -5584,7 +5618,7 @@
       "label": "IsCollectible",
       "_origin": "ast",
       "community": 0,
-      "community_name": "ItemDefinition",
+      "community_name": "GameDatabase",
       "file_type": "code",
       "metadata": {
         "namespace": "SortingGame.Data",
@@ -5597,11 +5631,33 @@
       "source_location": "L23"
     },
     {
+      "id": "assets_project_scripts_runtime_data_placeholdervisual_cs_color",
+      "label": "Color",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "GameDatabase",
+      "file_type": "code",
+      "norm_label": "color",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "assets_project_scripts_runtime_data_placeholdervisual_cs_vector3",
+      "label": "Vector3",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "GameDatabase",
+      "file_type": "code",
+      "norm_label": "vector3",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
       "id": "assets_project_scripts_runtime_data_sectiondefinition_cs_list",
       "label": "List",
       "_origin": "ast",
       "community": 0,
-      "community_name": "ItemDefinition",
+      "community_name": "GameDatabase",
       "file_type": "code",
       "norm_label": "list",
       "source_file": "",
@@ -5612,7 +5668,7 @@
       "label": "Vector2",
       "_origin": "ast",
       "community": 0,
-      "community_name": "ItemDefinition",
+      "community_name": "GameDatabase",
       "file_type": "code",
       "norm_label": "vector2",
       "source_file": "",
@@ -5623,7 +5679,7 @@
       "label": "TotalSlotCount",
       "_origin": "ast",
       "community": 0,
-      "community_name": "ItemDefinition",
+      "community_name": "GameDatabase",
       "file_type": "code",
       "metadata": {
         "namespace": "SortingGame.Data",
@@ -5640,7 +5696,7 @@
       "label": "List",
       "_origin": "ast",
       "community": 0,
-      "community_name": "ItemDefinition",
+      "community_name": "GameDatabase",
       "file_type": "code",
       "norm_label": "list",
       "source_file": "",
@@ -5651,75 +5707,9 @@
       "label": "Test",
       "_origin": "ast",
       "community": 0,
-      "community_name": "ItemDefinition",
+      "community_name": "GameDatabase",
       "file_type": "code",
       "norm_label": "test",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "assets_project_tests_editmode_sectionlayoutgeneratortests_cs_dictionary",
-      "label": "Dictionary",
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "ItemDefinition",
-      "file_type": "code",
-      "norm_label": "dictionary",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "assets_project_tests_editmode_sectionlayoutgeneratortests_cs_ienumerable",
-      "label": "IEnumerable",
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "ItemDefinition",
-      "file_type": "code",
-      "norm_label": "ienumerable",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "assets_project_tests_editmode_sectionlayoutgeneratortests_cs_list",
-      "label": "List",
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "ItemDefinition",
-      "file_type": "code",
-      "norm_label": "list",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "assets_project_tests_editmode_sectionlayoutgeneratortests_cs_object",
-      "label": "Object",
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "ItemDefinition",
-      "file_type": "code",
-      "norm_label": "object",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "assets_project_tests_editmode_sectionlayoutgeneratortests_cs_test",
-      "label": "Test",
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "ItemDefinition",
-      "file_type": "code",
-      "norm_label": "test",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "containercontent",
-      "label": "ContainerContent",
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "ItemDefinition",
-      "file_type": "code",
-      "norm_label": "containercontent",
       "source_file": "",
       "source_location": ""
     },
@@ -5728,7 +5718,7 @@
       "label": "ContainerEntry",
       "_origin": "ast",
       "community": 0,
-      "community_name": "ItemDefinition",
+      "community_name": "GameDatabase",
       "file_type": "code",
       "norm_label": "containerentry",
       "source_file": "",
@@ -5739,7 +5729,7 @@
       "label": "ScriptableObject",
       "_origin": "ast",
       "community": 0,
-      "community_name": "ItemDefinition",
+      "community_name": "GameDatabase",
       "file_type": "code",
       "norm_label": "scriptableobject",
       "source_file": "",
@@ -5750,7 +5740,7 @@
       "label": "ShelfEntry",
       "_origin": "ast",
       "community": 0,
-      "community_name": "ItemDefinition",
+      "community_name": "GameDatabase",
       "file_type": "code",
       "norm_label": "shelfentry",
       "source_file": "",
@@ -5761,29 +5751,102 @@
       "label": "Sprite",
       "_origin": "ast",
       "community": 0,
-      "community_name": "ItemDefinition",
+      "community_name": "GameDatabase",
       "file_type": "code",
       "norm_label": "sprite",
       "source_file": "",
       "source_location": ""
     },
     {
-      "id": "teardown",
-      "label": "TearDown",
+      "id": "claude",
+      "label": "CLAUDE.md",
       "_origin": "ast",
       "community": 0,
-      "community_name": "ItemDefinition",
-      "file_type": "code",
-      "norm_label": "teardown",
-      "source_file": "",
-      "source_location": ""
+      "community_name": "GameDatabase",
+      "file_type": "document",
+      "node_kind": "page",
+      "norm_label": "claude.md",
+      "source_file": "CLAUDE.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "claude_conventions",
+      "label": "Conventions",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "GameDatabase",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "conventions",
+      "source_file": "CLAUDE.md",
+      "source_location": "L18"
+    },
+    {
+      "id": "claude_git_rules",
+      "label": "Git rules",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "GameDatabase",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "git rules",
+      "source_file": "CLAUDE.md",
+      "source_location": "L15"
+    },
+    {
+      "id": "claude_graphify",
+      "label": "graphify",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "GameDatabase",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "graphify",
+      "source_file": "CLAUDE.md",
+      "source_location": "L36"
+    },
+    {
+      "id": "claude_session_routine",
+      "label": "Session routine",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "GameDatabase",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "session routine",
+      "source_file": "CLAUDE.md",
+      "source_location": "L10"
+    },
+    {
+      "id": "claude_sorting_game_working_title_chubby_s_clutter",
+      "label": "Sorting Game (working title: Chubby's Clutter)",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "GameDatabase",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "sorting game (working title: chubby's clutter)",
+      "source_file": "CLAUDE.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "claude_verifying_editor_must_be_closed_for_batchmode",
+      "label": "Verifying (editor must be closed for batchmode)",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "GameDatabase",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "verifying (editor must be closed for batchmode)",
+      "source_file": "CLAUDE.md",
+      "source_location": "L28"
     },
     {
       "id": "docs_gdd_15_2_veri_odakl\u0131_tasar\u0131m",
       "label": "15.2 Veri odakl\u0131 tasar\u0131m",
       "_origin": "ast",
       "community": 0,
-      "community_name": "ItemDefinition",
+      "community_name": "GameDatabase",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "15.2 veri odakl\u0131 tasar\u0131m",
@@ -5932,7 +5995,19 @@
       "node_kind": "heading",
       "norm_label": "2026-10-06 \u2014 m0 done, approved",
       "source_file": "Docs/PROGRESS.md",
-      "source_location": "L29"
+      "source_location": "L32"
+    },
+    {
+      "id": "docs_progress_2026_10_06_m1_implemented_and_approved_committed",
+      "label": "2026-10-06 \u2014 M1 implemented and approved (committed)",
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "Progress & Handoff",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "2026-10-06 \u2014 m1 implemented and approved (committed)",
+      "source_file": "Docs/PROGRESS.md",
+      "source_location": "L27"
     },
     {
       "id": "docs_progress_current_state",
@@ -5956,19 +6031,7 @@
       "node_kind": "heading",
       "norm_label": "environment notes",
       "source_file": "Docs/PROGRESS.md",
-      "source_location": "L23"
-    },
-    {
-      "id": "docs_progress_open_questions_for_the_user",
-      "label": "Open questions for the user",
-      "_origin": "ast",
-      "community": 10,
-      "community_name": "Progress & Handoff",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "open questions for the user",
-      "source_file": "Docs/PROGRESS.md",
-      "source_location": "L20"
+      "source_location": "L21"
     },
     {
       "id": "docs_progress_progress_handoff",
@@ -5992,7 +6055,7 @@
       "node_kind": "heading",
       "norm_label": "session log",
       "source_file": "Docs/PROGRESS.md",
-      "source_location": "L28"
+      "source_location": "L26"
     },
     {
       "id": "tools_unity",
@@ -6370,17 +6433,6 @@
       "source_location": ""
     },
     {
-      "id": "assets_project_scripts_runtime_section_placeholderfactory_cs_gameobject",
-      "label": "GameObject",
-      "_origin": "ast",
-      "community": 17,
-      "community_name": "ShelfView",
-      "file_type": "code",
-      "norm_label": "gameobject",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
       "id": "assets_project_scripts_runtime_section_placeholderfactory_cs_material",
       "label": "Material",
       "_origin": "ast",
@@ -6399,6 +6451,17 @@
       "community_name": "ShelfView",
       "file_type": "code",
       "norm_label": "meshrenderer",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "assets_project_scripts_runtime_section_placeholderfactory_cs_quaternion",
+      "label": "Quaternion",
+      "_origin": "ast",
+      "community": 17,
+      "community_name": "ShelfView",
+      "file_type": "code",
+      "norm_label": "quaternion",
       "source_file": "",
       "source_location": ""
     },
@@ -6733,6 +6796,28 @@
       "source_location": "L49"
     },
     {
+      "id": "gameobject",
+      "label": "GameObject",
+      "_origin": "ast",
+      "community": 17,
+      "community_name": "ShelfView",
+      "file_type": "code",
+      "norm_label": "gameobject",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "placeholdervisual",
+      "label": "PlaceholderVisual",
+      "_origin": "ast",
+      "community": 17,
+      "community_name": "ShelfView",
+      "file_type": "code",
+      "norm_label": "placeholdervisual",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
       "id": "assets_project_scripts_runtime_core_loc_cs_dictionary",
       "label": "Dictionary",
       "_origin": "ast",
@@ -6810,6 +6895,17 @@
       "source_location": ""
     },
     {
+      "id": "assets_project_scripts_runtime_ui_sectionhud_cs_wallet",
+      "label": "Wallet",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "SectionHud",
+      "file_type": "code",
+      "norm_label": "wallet",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
       "id": "assets_project_scripts_runtime_ui_sectionhud_sortinggame_ui_sectionhud_uiscale",
       "label": "UiScale",
       "_origin": "ast",
@@ -6871,28 +6967,6 @@
       "source_location": ""
     },
     {
-      "id": "assets_project_scripts_runtime_data_sectionvisuals_cs_color",
-      "label": "Color",
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "SectionController",
-      "file_type": "code",
-      "norm_label": "color",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "assets_project_scripts_runtime_data_sectionvisuals_cs_material",
-      "label": "Material",
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "SectionController",
-      "file_type": "code",
-      "norm_label": "material",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
       "id": "assets_project_scripts_runtime_section_sectioncontroller_cs_bounds",
       "label": "Bounds",
       "_origin": "ast",
@@ -6937,6 +7011,17 @@
       "source_location": ""
     },
     {
+      "id": "assets_project_scripts_runtime_section_sectioncontroller_cs_itemdefinition",
+      "label": "ItemDefinition",
+      "_origin": "ast",
+      "community": 19,
+      "community_name": "SectionController",
+      "file_type": "code",
+      "norm_label": "itemdefinition",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
       "id": "assets_project_scripts_runtime_section_sectioncontroller_cs_list",
       "label": "List",
       "_origin": "ast",
@@ -6970,6 +7055,17 @@
       "source_location": ""
     },
     {
+      "id": "assets_project_scripts_runtime_section_sectioncontroller_cs_sectiondefinition",
+      "label": "SectionDefinition",
+      "_origin": "ast",
+      "community": 19,
+      "community_name": "SectionController",
+      "file_type": "code",
+      "norm_label": "sectiondefinition",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
       "id": "assets_project_scripts_runtime_section_sectioncontroller_cs_transform",
       "label": "Transform",
       "_origin": "ast",
@@ -6999,6 +7095,17 @@
       "community_name": "SectionController",
       "file_type": "code",
       "norm_label": "vector3",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "assets_project_scripts_runtime_section_sectioncontroller_cs_wallet",
+      "label": "Wallet",
+      "_origin": "ast",
+      "community": 19,
+      "community_name": "SectionController",
+      "file_type": "code",
+      "norm_label": "wallet",
       "source_file": "",
       "source_location": ""
     },
@@ -7168,7 +7275,7 @@
       "label": "AndroidJavaObject",
       "_origin": "ast",
       "community": 20,
-      "community_name": ".OnLanded",
+      "community_name": "ContainerView",
       "file_type": "code",
       "norm_label": "androidjavaobject",
       "source_file": "",
@@ -7179,7 +7286,7 @@
       "label": "Vibrator",
       "_origin": "ast",
       "community": 20,
-      "community_name": ".OnLanded",
+      "community_name": "ContainerView",
       "file_type": "code",
       "metadata": {
         "namespace": "SortingGame.Core",
@@ -7192,15 +7299,137 @@
       "source_location": "L18"
     },
     {
+      "id": "assets_project_scripts_runtime_section_containerview_cs_boxcollider",
+      "label": "BoxCollider",
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ContainerView",
+      "file_type": "code",
+      "norm_label": "boxcollider",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "assets_project_scripts_runtime_section_containerview_cs_containerdefinition",
+      "label": "ContainerDefinition",
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ContainerView",
+      "file_type": "code",
+      "norm_label": "containerdefinition",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "assets_project_scripts_runtime_section_containerview_cs_func",
+      "label": "Func",
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ContainerView",
+      "file_type": "code",
+      "norm_label": "func",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "assets_project_scripts_runtime_section_containerview_cs_ienumerable",
+      "label": "IEnumerable",
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ContainerView",
+      "file_type": "code",
+      "norm_label": "ienumerable",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
       "id": "assets_project_scripts_runtime_section_containerview_cs_ienumerator",
       "label": "IEnumerator",
       "_origin": "ast",
       "community": 20,
-      "community_name": ".OnLanded",
+      "community_name": "ContainerView",
       "file_type": "code",
       "norm_label": "ienumerator",
       "source_file": "",
       "source_location": ""
+    },
+    {
+      "id": "assets_project_scripts_runtime_section_containerview_cs_itemdefinition",
+      "label": "ItemDefinition",
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ContainerView",
+      "file_type": "code",
+      "norm_label": "itemdefinition",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "assets_project_scripts_runtime_section_containerview_cs_list",
+      "label": "List",
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ContainerView",
+      "file_type": "code",
+      "norm_label": "list",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "assets_project_scripts_runtime_section_containerview_cs_quaternion",
+      "label": "Quaternion",
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ContainerView",
+      "file_type": "code",
+      "norm_label": "quaternion",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "assets_project_scripts_runtime_section_containerview_cs_vector3",
+      "label": "Vector3",
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ContainerView",
+      "file_type": "code",
+      "norm_label": "vector3",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "assets_project_scripts_runtime_section_containerview_sortinggame_section_containerview_definition",
+      "label": "Definition",
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ContainerView",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Section",
+        "scope_chain": [
+          "s177"
+        ]
+      },
+      "norm_label": "definition",
+      "source_file": "Assets/_Project/Scripts/Runtime/Section/ContainerView.cs",
+      "source_location": "L19"
+    },
+    {
+      "id": "assets_project_scripts_runtime_section_containerview_sortinggame_section_containerview_isopened",
+      "label": "IsOpened",
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "ContainerView",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Section",
+        "scope_chain": [
+          "s177"
+        ]
+      },
+      "norm_label": "isopened",
+      "source_file": "Assets/_Project/Scripts/Runtime/Section/ContainerView.cs",
+      "source_location": "L21"
     },
     {
       "id": "assets_project_scripts_runtime_core_sectionprogress_sortinggame_core_sectionprogress_dirtcleaned",
@@ -7333,11 +7562,44 @@
       "source_location": ""
     },
     {
+      "id": "assets_project_scripts_runtime_data_feelconfig_cs_vector2",
+      "label": "Vector2",
+      "_origin": "ast",
+      "community": 22,
+      "community_name": "FeelConfig",
+      "file_type": "code",
+      "norm_label": "vector2",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "assets_project_scripts_runtime_section_camerafitter_cs_bounds",
+      "label": "Bounds",
+      "_origin": "ast",
+      "community": 22,
+      "community_name": "FeelConfig",
+      "file_type": "code",
+      "norm_label": "bounds",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "assets_project_scripts_runtime_section_camerafitter_cs_camera",
+      "label": "Camera",
+      "_origin": "ast",
+      "community": 22,
+      "community_name": "FeelConfig",
+      "file_type": "code",
+      "norm_label": "camera",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
       "id": "assets_project_tests_playmode_corelooptests_cs_ienumerator",
       "label": "IEnumerator",
       "_origin": "ast",
       "community": 22,
-      "community_name": ".Snapshot",
+      "community_name": "FeelConfig",
       "file_type": "code",
       "norm_label": "ienumerator",
       "source_file": "",
@@ -7348,7 +7610,7 @@
       "label": "Texture2D",
       "_origin": "ast",
       "community": 22,
-      "community_name": ".Snapshot",
+      "community_name": "FeelConfig",
       "file_type": "code",
       "norm_label": "texture2d",
       "source_file": "",
@@ -7359,7 +7621,7 @@
       "label": "UIDocument",
       "_origin": "ast",
       "community": 22,
-      "community_name": ".Snapshot",
+      "community_name": "FeelConfig",
       "file_type": "code",
       "norm_label": "uidocument",
       "source_file": "",
@@ -7370,7 +7632,7 @@
       "label": "RenderTexture",
       "_origin": "ast",
       "community": 22,
-      "community_name": ".Snapshot",
+      "community_name": "FeelConfig",
       "file_type": "code",
       "norm_label": "rendertexture",
       "source_file": "",
@@ -7381,7 +7643,7 @@
       "label": "Timeout",
       "_origin": "ast",
       "community": 22,
-      "community_name": ".Snapshot",
+      "community_name": "FeelConfig",
       "file_type": "code",
       "norm_label": "timeout",
       "source_file": "",
@@ -7392,9 +7654,20 @@
       "label": "UnityTest",
       "_origin": "ast",
       "community": 22,
-      "community_name": ".Snapshot",
+      "community_name": "FeelConfig",
       "file_type": "code",
       "norm_label": "unitytest",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "vector2int",
+      "label": "Vector2Int",
+      "_origin": "ast",
+      "community": 22,
+      "community_name": "FeelConfig",
+      "file_type": "code",
+      "norm_label": "vector2int",
       "source_file": "",
       "source_location": ""
     },
@@ -7627,6 +7900,459 @@
       "source_location": "L131"
     },
     {
+      "id": "assets_project_scripts_runtime_core_sectionlayoutgenerator_cs_containerdefinition",
+      "label": "ContainerDefinition",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": ".Generate",
+      "file_type": "code",
+      "norm_label": "containerdefinition",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "assets_project_scripts_runtime_core_sectionlayoutgenerator_cs_func",
+      "label": "Func",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": ".Generate",
+      "file_type": "code",
+      "norm_label": "func",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "assets_project_scripts_runtime_core_sectionlayoutgenerator_cs_ireadonlylist",
+      "label": "IReadOnlyList",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": ".Generate",
+      "file_type": "code",
+      "norm_label": "ireadonlylist",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "assets_project_scripts_runtime_core_sectionlayoutgenerator_cs_itemdefinition",
+      "label": "ItemDefinition",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": ".Generate",
+      "file_type": "code",
+      "norm_label": "itemdefinition",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "assets_project_scripts_runtime_core_sectionlayoutgenerator_cs_list",
+      "label": "List",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": ".Generate",
+      "file_type": "code",
+      "norm_label": "list",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "assets_project_scripts_runtime_core_sectionlayoutgenerator_cs_random",
+      "label": "Random",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": ".Generate",
+      "file_type": "code",
+      "norm_label": "random",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "assets_project_scripts_runtime_core_sectionlayoutgenerator_cs_sectiondefinition",
+      "label": "SectionDefinition",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": ".Generate",
+      "file_type": "code",
+      "norm_label": "sectiondefinition",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "assets_project_scripts_runtime_core_sectionlayoutgenerator_sortinggame_core_sectionlayout_totalitems",
+      "label": "TotalItems",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": ".Generate",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Core",
+        "scope_chain": [
+          "s73"
+        ]
+      },
+      "norm_label": "totalitems",
+      "source_file": "Assets/_Project/Scripts/Runtime/Core/SectionLayoutGenerator.cs",
+      "source_location": "L19"
+    },
+    {
+      "id": "assets_project_tests_editmode_sectionlayoutgeneratortests_cs_containerdefinition",
+      "label": "ContainerDefinition",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": ".Generate",
+      "file_type": "code",
+      "norm_label": "containerdefinition",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "assets_project_tests_editmode_sectionlayoutgeneratortests_cs_dictionary",
+      "label": "Dictionary",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": ".Generate",
+      "file_type": "code",
+      "norm_label": "dictionary",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "assets_project_tests_editmode_sectionlayoutgeneratortests_cs_ienumerable",
+      "label": "IEnumerable",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": ".Generate",
+      "file_type": "code",
+      "norm_label": "ienumerable",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "assets_project_tests_editmode_sectionlayoutgeneratortests_cs_itemdefinition",
+      "label": "ItemDefinition",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": ".Generate",
+      "file_type": "code",
+      "norm_label": "itemdefinition",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "assets_project_tests_editmode_sectionlayoutgeneratortests_cs_list",
+      "label": "List",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": ".Generate",
+      "file_type": "code",
+      "norm_label": "list",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "assets_project_tests_editmode_sectionlayoutgeneratortests_cs_object",
+      "label": "Object",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": ".Generate",
+      "file_type": "code",
+      "norm_label": "object",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "assets_project_tests_editmode_sectionlayoutgeneratortests_cs_sectiondefinition",
+      "label": "SectionDefinition",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": ".Generate",
+      "file_type": "code",
+      "norm_label": "sectiondefinition",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "assets_project_tests_editmode_sectionlayoutgeneratortests_cs_test",
+      "label": "Test",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": ".Generate",
+      "file_type": "code",
+      "norm_label": "test",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "containercontent",
+      "label": "ContainerContent",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": ".Generate",
+      "file_type": "code",
+      "norm_label": "containercontent",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "teardown",
+      "label": "TearDown",
+      "_origin": "ast",
+      "community": 27,
+      "community_name": ".Generate",
+      "file_type": "code",
+      "norm_label": "teardown",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "assets_project_scripts_runtime_data_enums",
+      "label": "Enums.cs",
+      "_origin": "ast",
+      "community": 28,
+      "community_name": "PlaceholderShape",
+      "file_type": "code",
+      "norm_label": "enums.cs",
+      "source_file": "Assets/_Project/Scripts/Runtime/Data/Enums.cs",
+      "source_location": "L1"
+    },
+    {
+      "id": "assets_project_scripts_runtime_data_enums_sortinggame_data_itemrarity_common",
+      "label": "Common",
+      "_origin": "ast",
+      "community": 28,
+      "community_name": "PlaceholderShape",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Data",
+        "scope_chain": [
+          "s0"
+        ]
+      },
+      "norm_label": "common",
+      "source_file": "Assets/_Project/Scripts/Runtime/Data/Enums.cs",
+      "source_location": "L6"
+    },
+    {
+      "id": "assets_project_scripts_runtime_data_enums_sortinggame_data_itemrarity_mascot",
+      "label": "Mascot",
+      "_origin": "ast",
+      "community": 28,
+      "community_name": "PlaceholderShape",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Data",
+        "scope_chain": [
+          "s0"
+        ]
+      },
+      "norm_label": "mascot",
+      "source_file": "Assets/_Project/Scripts/Runtime/Data/Enums.cs",
+      "source_location": "L8"
+    },
+    {
+      "id": "assets_project_scripts_runtime_data_enums_sortinggame_data_itemrarity_rare",
+      "label": "Rare",
+      "_origin": "ast",
+      "community": 28,
+      "community_name": "PlaceholderShape",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Data",
+        "scope_chain": [
+          "s0"
+        ]
+      },
+      "norm_label": "rare",
+      "source_file": "Assets/_Project/Scripts/Runtime/Data/Enums.cs",
+      "source_location": "L7"
+    },
+    {
+      "id": "assets_project_scripts_runtime_data_enums_sortinggame_data_placeholdershape_book",
+      "label": "Book",
+      "_origin": "ast",
+      "community": 28,
+      "community_name": "PlaceholderShape",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Data",
+        "scope_chain": [
+          "s0"
+        ]
+      },
+      "norm_label": "book",
+      "source_file": "Assets/_Project/Scripts/Runtime/Data/Enums.cs",
+      "source_location": "L14"
+    },
+    {
+      "id": "assets_project_scripts_runtime_data_enums_sortinggame_data_placeholdershape_capsule",
+      "label": "Capsule",
+      "_origin": "ast",
+      "community": 28,
+      "community_name": "PlaceholderShape",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Data",
+        "scope_chain": [
+          "s0"
+        ]
+      },
+      "norm_label": "capsule",
+      "source_file": "Assets/_Project/Scripts/Runtime/Data/Enums.cs",
+      "source_location": "L17"
+    },
+    {
+      "id": "assets_project_scripts_runtime_data_enums_sortinggame_data_placeholdershape_cube",
+      "label": "Cube",
+      "_origin": "ast",
+      "community": 28,
+      "community_name": "PlaceholderShape",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Data",
+        "scope_chain": [
+          "s0"
+        ]
+      },
+      "norm_label": "cube",
+      "source_file": "Assets/_Project/Scripts/Runtime/Data/Enums.cs",
+      "source_location": "L15"
+    },
+    {
+      "id": "assets_project_scripts_runtime_data_enums_sortinggame_data_placeholdershape_cylinder",
+      "label": "Cylinder",
+      "_origin": "ast",
+      "community": 28,
+      "community_name": "PlaceholderShape",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Data",
+        "scope_chain": [
+          "s0"
+        ]
+      },
+      "norm_label": "cylinder",
+      "source_file": "Assets/_Project/Scripts/Runtime/Data/Enums.cs",
+      "source_location": "L18"
+    },
+    {
+      "id": "assets_project_scripts_runtime_data_enums_sortinggame_data_placeholdershape_rod",
+      "label": "Rod",
+      "_origin": "ast",
+      "community": 28,
+      "community_name": "PlaceholderShape",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Data",
+        "scope_chain": [
+          "s0"
+        ]
+      },
+      "norm_label": "rod",
+      "source_file": "Assets/_Project/Scripts/Runtime/Data/Enums.cs",
+      "source_location": "L19"
+    },
+    {
+      "id": "assets_project_scripts_runtime_data_enums_sortinggame_data_placeholdershape_sphere",
+      "label": "Sphere",
+      "_origin": "ast",
+      "community": 28,
+      "community_name": "PlaceholderShape",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Data",
+        "scope_chain": [
+          "s0"
+        ]
+      },
+      "norm_label": "sphere",
+      "source_file": "Assets/_Project/Scripts/Runtime/Data/Enums.cs",
+      "source_location": "L16"
+    },
+    {
+      "id": "assets_project_scripts_runtime_section_itemview_sortinggame_section_itemstate_dragging",
+      "label": "Dragging",
+      "_origin": "ast",
+      "community": 29,
+      "community_name": "ItemState",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Section",
+        "scope_chain": [
+          "s82"
+        ]
+      },
+      "norm_label": "dragging",
+      "source_file": "Assets/_Project/Scripts/Runtime/Section/ItemView.cs",
+      "source_location": "L12"
+    },
+    {
+      "id": "assets_project_scripts_runtime_section_itemview_sortinggame_section_itemstate_flying",
+      "label": "Flying",
+      "_origin": "ast",
+      "community": 29,
+      "community_name": "ItemState",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Section",
+        "scope_chain": [
+          "s82"
+        ]
+      },
+      "norm_label": "flying",
+      "source_file": "Assets/_Project/Scripts/Runtime/Section/ItemView.cs",
+      "source_location": "L13"
+    },
+    {
+      "id": "assets_project_scripts_runtime_section_itemview_sortinggame_section_itemstate_physics",
+      "label": "Physics",
+      "_origin": "ast",
+      "community": 29,
+      "community_name": "ItemState",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Section",
+        "scope_chain": [
+          "s82"
+        ]
+      },
+      "norm_label": "physics",
+      "source_file": "Assets/_Project/Scripts/Runtime/Section/ItemView.cs",
+      "source_location": "L11"
+    },
+    {
+      "id": "assets_project_scripts_runtime_section_itemview_sortinggame_section_itemstate_placed",
+      "label": "Placed",
+      "_origin": "ast",
+      "community": 29,
+      "community_name": "ItemState",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Section",
+        "scope_chain": [
+          "s82"
+        ]
+      },
+      "norm_label": "placed",
+      "source_file": "Assets/_Project/Scripts/Runtime/Section/ItemView.cs",
+      "source_location": "L14"
+    },
+    {
+      "id": "assets_project_scripts_runtime_section_itemview_sortinggame_section_itemstate_resting",
+      "label": "Resting",
+      "_origin": "ast",
+      "community": 29,
+      "community_name": "ItemState",
+      "file_type": "code",
+      "metadata": {
+        "namespace": "SortingGame.Section",
+        "scope_chain": [
+          "s82"
+        ]
+      },
+      "norm_label": "resting",
+      "source_file": "Assets/_Project/Scripts/Runtime/Section/ItemView.cs",
+      "source_location": "L10"
+    },
+    {
       "id": "assets_project_scripts_editor_contentbuilder",
       "label": "ContentBuilder.cs",
       "_origin": "ast",
@@ -7745,17 +8471,6 @@
       "file_type": "code",
       "norm_label": "balanceconfig.cs",
       "source_file": "Assets/_Project/Scripts/Runtime/Data/BalanceConfig.cs",
-      "source_location": "L1"
-    },
-    {
-      "id": "assets_project_scripts_runtime_data_categorydefinition",
-      "label": "CategoryDefinition.cs",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "unityengine",
-      "file_type": "code",
-      "norm_label": "categorydefinition.cs",
-      "source_file": "Assets/_Project/Scripts/Runtime/Data/CategoryDefinition.cs",
       "source_location": "L1"
     },
     {
@@ -8012,8 +8727,8 @@
         "namespace": "SortingGame.Tests"
       },
       "norm_label": "sortinggame.tests",
-      "source_file": "Assets/_Project/Tests/EditMode/GameDatabaseTests.cs",
-      "source_location": "L6",
+      "source_file": "Assets/_Project/Tests/EditMode/SectionLayoutGeneratorTests.cs",
+      "source_location": "L8",
       "type": "namespace"
     },
     {
@@ -8097,6 +8812,17 @@
       "type": "namespace"
     },
     {
+      "id": "assets_project_scripts_runtime_section_placeholderfactory_cs_gameobject",
+      "label": "GameObject",
+      "_origin": "ast",
+      "community": 30,
+      "community_name": "GameObject",
+      "file_type": "code",
+      "norm_label": "gameobject",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
       "id": "assets_project_scripts_editor_contentbuilder_cs_color",
       "label": "Color",
       "_origin": "ast",
@@ -8104,6 +8830,28 @@
       "community_name": ".Build",
       "file_type": "code",
       "norm_label": "color",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "assets_project_scripts_editor_contentbuilder_cs_containerdefinition",
+      "label": "ContainerDefinition",
+      "_origin": "ast",
+      "community": 4,
+      "community_name": ".Build",
+      "file_type": "code",
+      "norm_label": "containerdefinition",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "assets_project_scripts_editor_contentbuilder_cs_itemdefinition",
+      "label": "ItemDefinition",
+      "_origin": "ast",
+      "community": 4,
+      "community_name": ".Build",
+      "file_type": "code",
+      "norm_label": "itemdefinition",
       "source_file": "",
       "source_location": ""
     },
@@ -8141,6 +8889,17 @@
       "source_location": ""
     },
     {
+      "id": "assets_project_scripts_editor_contentbuilder_cs_sectiondefinition",
+      "label": "SectionDefinition",
+      "_origin": "ast",
+      "community": 4,
+      "community_name": ".Build",
+      "file_type": "code",
+      "norm_label": "sectiondefinition",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
       "id": "assets_project_scripts_editor_contentbuilder_cs_vector3",
       "label": "Vector3",
       "_origin": "ast",
@@ -8148,6 +8907,17 @@
       "community_name": ".Build",
       "file_type": "code",
       "norm_label": "vector3",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "assets_project_scripts_editor_contentbuilder_cs_venuedefinition",
+      "label": "VenueDefinition",
+      "_origin": "ast",
+      "community": 4,
+      "community_name": ".Build",
+      "file_type": "code",
+      "norm_label": "venuedefinition",
       "source_file": "",
       "source_location": ""
     },
@@ -8174,6 +8944,17 @@
       "source_location": ""
     },
     {
+      "id": "assets_project_scripts_editor_projectsetup_cs_sectiondefinition",
+      "label": "SectionDefinition",
+      "_origin": "ast",
+      "community": 4,
+      "community_name": ".Build",
+      "file_type": "code",
+      "norm_label": "sectiondefinition",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
       "id": "assets_project_scripts_editor_projectsetup_cs_stylesheet",
       "label": "StyleSheet",
       "_origin": "ast",
@@ -8185,171 +8966,7 @@
       "source_location": ""
     },
     {
-      "id": "assets_project_scripts_runtime_data_enums",
-      "label": "Enums.cs",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": ".Build",
-      "file_type": "code",
-      "norm_label": "enums.cs",
-      "source_file": "Assets/_Project/Scripts/Runtime/Data/Enums.cs",
-      "source_location": "L1"
-    },
-    {
-      "id": "assets_project_scripts_runtime_data_enums_sortinggame_data_itemrarity_common",
-      "label": "Common",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": ".Build",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Data",
-        "scope_chain": [
-          "s0"
-        ]
-      },
-      "norm_label": "common",
-      "source_file": "Assets/_Project/Scripts/Runtime/Data/Enums.cs",
-      "source_location": "L6"
-    },
-    {
-      "id": "assets_project_scripts_runtime_data_enums_sortinggame_data_itemrarity_mascot",
-      "label": "Mascot",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": ".Build",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Data",
-        "scope_chain": [
-          "s0"
-        ]
-      },
-      "norm_label": "mascot",
-      "source_file": "Assets/_Project/Scripts/Runtime/Data/Enums.cs",
-      "source_location": "L8"
-    },
-    {
-      "id": "assets_project_scripts_runtime_data_enums_sortinggame_data_itemrarity_rare",
-      "label": "Rare",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": ".Build",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Data",
-        "scope_chain": [
-          "s0"
-        ]
-      },
-      "norm_label": "rare",
-      "source_file": "Assets/_Project/Scripts/Runtime/Data/Enums.cs",
-      "source_location": "L7"
-    },
-    {
-      "id": "assets_project_scripts_runtime_data_enums_sortinggame_data_placeholdershape_book",
-      "label": "Book",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": ".Build",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Data",
-        "scope_chain": [
-          "s0"
-        ]
-      },
-      "norm_label": "book",
-      "source_file": "Assets/_Project/Scripts/Runtime/Data/Enums.cs",
-      "source_location": "L14"
-    },
-    {
-      "id": "assets_project_scripts_runtime_data_enums_sortinggame_data_placeholdershape_capsule",
-      "label": "Capsule",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": ".Build",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Data",
-        "scope_chain": [
-          "s0"
-        ]
-      },
-      "norm_label": "capsule",
-      "source_file": "Assets/_Project/Scripts/Runtime/Data/Enums.cs",
-      "source_location": "L17"
-    },
-    {
-      "id": "assets_project_scripts_runtime_data_enums_sortinggame_data_placeholdershape_cube",
-      "label": "Cube",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": ".Build",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Data",
-        "scope_chain": [
-          "s0"
-        ]
-      },
-      "norm_label": "cube",
-      "source_file": "Assets/_Project/Scripts/Runtime/Data/Enums.cs",
-      "source_location": "L15"
-    },
-    {
-      "id": "assets_project_scripts_runtime_data_enums_sortinggame_data_placeholdershape_cylinder",
-      "label": "Cylinder",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": ".Build",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Data",
-        "scope_chain": [
-          "s0"
-        ]
-      },
-      "norm_label": "cylinder",
-      "source_file": "Assets/_Project/Scripts/Runtime/Data/Enums.cs",
-      "source_location": "L18"
-    },
-    {
-      "id": "assets_project_scripts_runtime_data_enums_sortinggame_data_placeholdershape_rod",
-      "label": "Rod",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": ".Build",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Data",
-        "scope_chain": [
-          "s0"
-        ]
-      },
-      "norm_label": "rod",
-      "source_file": "Assets/_Project/Scripts/Runtime/Data/Enums.cs",
-      "source_location": "L19"
-    },
-    {
-      "id": "assets_project_scripts_runtime_data_enums_sortinggame_data_placeholdershape_sphere",
-      "label": "Sphere",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": ".Build",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Data",
-        "scope_chain": [
-          "s0"
-        ]
-      },
-      "norm_label": "sphere",
-      "source_file": "Assets/_Project/Scripts/Runtime/Data/Enums.cs",
-      "source_location": "L16"
-    },
-    {
-      "id": "assets_project_scripts_runtime_data_placeholdervisual_cs_color",
+      "id": "assets_project_scripts_runtime_data_sectionvisuals_cs_color",
       "label": "Color",
       "_origin": "ast",
       "community": 4,
@@ -8360,24 +8977,13 @@
       "source_location": ""
     },
     {
-      "id": "assets_project_scripts_runtime_data_placeholdervisual_cs_vector3",
-      "label": "Vector3",
+      "id": "assets_project_scripts_runtime_data_sectionvisuals_cs_material",
+      "label": "Material",
       "_origin": "ast",
       "community": 4,
       "community_name": ".Build",
       "file_type": "code",
-      "norm_label": "vector3",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "assets_project_scripts_runtime_section_placeholderfactory_cs_quaternion",
-      "label": "Quaternion",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": ".Build",
-      "file_type": "code",
-      "norm_label": "quaternion",
+      "norm_label": "material",
       "source_file": "",
       "source_location": ""
     },
@@ -8393,6 +8999,17 @@
       "source_location": ""
     },
     {
+      "id": "placeholdershape",
+      "label": "PlaceholderShape",
+      "_origin": "ast",
+      "community": 4,
+      "community_name": ".Build",
+      "file_type": "code",
+      "norm_label": "placeholdershape",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
       "id": "themestylesheet",
       "label": "ThemeStyleSheet",
       "_origin": "ast",
@@ -8402,90 +9019,6 @@
       "norm_label": "themestylesheet",
       "source_file": "",
       "source_location": ""
-    },
-    {
-      "id": "claude",
-      "label": "CLAUDE.md",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": ".Build",
-      "file_type": "document",
-      "node_kind": "page",
-      "norm_label": "claude.md",
-      "source_file": "CLAUDE.md",
-      "source_location": "L1"
-    },
-    {
-      "id": "claude_conventions",
-      "label": "Conventions",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": ".Build",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "conventions",
-      "source_file": "CLAUDE.md",
-      "source_location": "L18"
-    },
-    {
-      "id": "claude_git_rules",
-      "label": "Git rules",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": ".Build",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "git rules",
-      "source_file": "CLAUDE.md",
-      "source_location": "L15"
-    },
-    {
-      "id": "claude_graphify",
-      "label": "graphify",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": ".Build",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "graphify",
-      "source_file": "CLAUDE.md",
-      "source_location": "L36"
-    },
-    {
-      "id": "claude_session_routine",
-      "label": "Session routine",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": ".Build",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "session routine",
-      "source_file": "CLAUDE.md",
-      "source_location": "L10"
-    },
-    {
-      "id": "claude_sorting_game_working_title_chubby_s_clutter",
-      "label": "Sorting Game (working title: Chubby's Clutter)",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": ".Build",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "sorting game (working title: chubby's clutter)",
-      "source_file": "CLAUDE.md",
-      "source_location": "L1"
-    },
-    {
-      "id": "claude_verifying_editor_must_be_closed_for_batchmode",
-      "label": "Verifying (editor must be closed for batchmode)",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": ".Build",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "verifying (editor must be closed for batchmode)",
-      "source_file": "CLAUDE.md",
-      "source_location": "L28"
     },
     {
       "id": "docs_gdd_17_s\u00f6zl\u00fck",
@@ -8605,6 +9138,17 @@
       "source_location": ""
     },
     {
+      "id": "assets_project_scripts_runtime_section_itemview_cs_itemdefinition",
+      "label": "ItemDefinition",
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "ItemView",
+      "file_type": "code",
+      "norm_label": "itemdefinition",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
       "id": "assets_project_scripts_runtime_section_itemview_cs_quaternion",
       "label": "Quaternion",
       "_origin": "ast",
@@ -8636,91 +9180,6 @@
       "norm_label": "vector3",
       "source_file": "",
       "source_location": ""
-    },
-    {
-      "id": "assets_project_scripts_runtime_section_itemview_sortinggame_section_itemstate_dragging",
-      "label": "Dragging",
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "ItemView",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Section",
-        "scope_chain": [
-          "s82"
-        ]
-      },
-      "norm_label": "dragging",
-      "source_file": "Assets/_Project/Scripts/Runtime/Section/ItemView.cs",
-      "source_location": "L12"
-    },
-    {
-      "id": "assets_project_scripts_runtime_section_itemview_sortinggame_section_itemstate_flying",
-      "label": "Flying",
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "ItemView",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Section",
-        "scope_chain": [
-          "s82"
-        ]
-      },
-      "norm_label": "flying",
-      "source_file": "Assets/_Project/Scripts/Runtime/Section/ItemView.cs",
-      "source_location": "L13"
-    },
-    {
-      "id": "assets_project_scripts_runtime_section_itemview_sortinggame_section_itemstate_physics",
-      "label": "Physics",
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "ItemView",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Section",
-        "scope_chain": [
-          "s82"
-        ]
-      },
-      "norm_label": "physics",
-      "source_file": "Assets/_Project/Scripts/Runtime/Section/ItemView.cs",
-      "source_location": "L11"
-    },
-    {
-      "id": "assets_project_scripts_runtime_section_itemview_sortinggame_section_itemstate_placed",
-      "label": "Placed",
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "ItemView",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Section",
-        "scope_chain": [
-          "s82"
-        ]
-      },
-      "norm_label": "placed",
-      "source_file": "Assets/_Project/Scripts/Runtime/Section/ItemView.cs",
-      "source_location": "L14"
-    },
-    {
-      "id": "assets_project_scripts_runtime_section_itemview_sortinggame_section_itemstate_resting",
-      "label": "Resting",
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "ItemView",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Section",
-        "scope_chain": [
-          "s82"
-        ]
-      },
-      "norm_label": "resting",
-      "source_file": "Assets/_Project/Scripts/Runtime/Section/ItemView.cs",
-      "source_location": "L10"
     },
     {
       "id": "assets_project_scripts_runtime_section_itemview_sortinggame_section_itemview_canpick",
@@ -8774,6 +9233,17 @@
       "source_location": "L24"
     },
     {
+      "id": "monobehaviour",
+      "label": "MonoBehaviour",
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "ItemView",
+      "file_type": "code",
+      "norm_label": "monobehaviour",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
       "id": "physicsmaterial",
       "label": "PhysicsMaterial",
       "_origin": "ast",
@@ -8816,7 +9286,7 @@
       "node_kind": "heading",
       "norm_label": "m1 architecture (quick map)",
       "source_file": "Docs/PROGRESS.md",
-      "source_location": "L12"
+      "source_location": "L13"
     },
     {
       "id": "assets_project_scripts_runtime_core_sfxplayer_cs_dictionary",
@@ -9022,57 +9492,6 @@
       "source_location": "L35"
     },
     {
-      "id": "assets_project_scripts_runtime_data_categorydefinition_sortinggame_data_placesoundtype_metal",
-      "label": "Metal",
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "SfxPlayer",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Data",
-        "scope_chain": [
-          "s20"
-        ]
-      },
-      "norm_label": "metal",
-      "source_file": "Assets/_Project/Scripts/Runtime/Data/CategoryDefinition.cs",
-      "source_location": "L10"
-    },
-    {
-      "id": "assets_project_scripts_runtime_data_categorydefinition_sortinggame_data_placesoundtype_paper",
-      "label": "Paper",
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "SfxPlayer",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Data",
-        "scope_chain": [
-          "s20"
-        ]
-      },
-      "norm_label": "paper",
-      "source_file": "Assets/_Project/Scripts/Runtime/Data/CategoryDefinition.cs",
-      "source_location": "L8"
-    },
-    {
-      "id": "assets_project_scripts_runtime_data_categorydefinition_sortinggame_data_placesoundtype_plastic",
-      "label": "Plastic",
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "SfxPlayer",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Data",
-        "scope_chain": [
-          "s20"
-        ]
-      },
-      "norm_label": "plastic",
-      "source_file": "Assets/_Project/Scripts/Runtime/Data/CategoryDefinition.cs",
-      "source_location": "L9"
-    },
-    {
       "id": "audioclip",
       "label": "AudioClip",
       "_origin": "ast",
@@ -9153,6 +9572,17 @@
       "source_location": ""
     },
     {
+      "id": "assets_project_scripts_runtime_core_gamebootstrap_cs_sectiondefinition",
+      "label": "SectionDefinition",
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "GameBootstrap",
+      "file_type": "code",
+      "norm_label": "sectiondefinition",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
       "id": "assets_project_scripts_runtime_core_gamebootstrap_cs_stylesheet",
       "label": "StyleSheet",
       "_origin": "ast",
@@ -9171,6 +9601,17 @@
       "community_name": "GameBootstrap",
       "file_type": "code",
       "norm_label": "uidocument",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "assets_project_scripts_runtime_core_gamebootstrap_cs_wallet",
+      "label": "Wallet",
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "GameBootstrap",
+      "file_type": "code",
+      "norm_label": "wallet",
       "source_file": "",
       "source_location": ""
     },
@@ -9243,139 +9684,6 @@
       "source_location": "L18"
     },
     {
-      "id": "assets_project_scripts_runtime_data_feelconfig_cs_vector2",
-      "label": "Vector2",
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "GameBootstrap",
-      "file_type": "code",
-      "norm_label": "vector2",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "assets_project_scripts_runtime_section_camerafitter_cs_bounds",
-      "label": "Bounds",
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "GameBootstrap",
-      "file_type": "code",
-      "norm_label": "bounds",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "assets_project_scripts_runtime_section_camerafitter_cs_camera",
-      "label": "Camera",
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "GameBootstrap",
-      "file_type": "code",
-      "norm_label": "camera",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "assets_project_scripts_runtime_section_containerview_cs_boxcollider",
-      "label": "BoxCollider",
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "GameBootstrap",
-      "file_type": "code",
-      "norm_label": "boxcollider",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "assets_project_scripts_runtime_section_containerview_cs_func",
-      "label": "Func",
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "GameBootstrap",
-      "file_type": "code",
-      "norm_label": "func",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "assets_project_scripts_runtime_section_containerview_cs_ienumerable",
-      "label": "IEnumerable",
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "GameBootstrap",
-      "file_type": "code",
-      "norm_label": "ienumerable",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "assets_project_scripts_runtime_section_containerview_cs_list",
-      "label": "List",
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "GameBootstrap",
-      "file_type": "code",
-      "norm_label": "list",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "assets_project_scripts_runtime_section_containerview_cs_quaternion",
-      "label": "Quaternion",
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "GameBootstrap",
-      "file_type": "code",
-      "norm_label": "quaternion",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "assets_project_scripts_runtime_section_containerview_cs_vector3",
-      "label": "Vector3",
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "GameBootstrap",
-      "file_type": "code",
-      "norm_label": "vector3",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "assets_project_scripts_runtime_section_containerview_sortinggame_section_containerview_definition",
-      "label": "Definition",
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "GameBootstrap",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Section",
-        "scope_chain": [
-          "s177"
-        ]
-      },
-      "norm_label": "definition",
-      "source_file": "Assets/_Project/Scripts/Runtime/Section/ContainerView.cs",
-      "source_location": "L19"
-    },
-    {
-      "id": "assets_project_scripts_runtime_section_containerview_sortinggame_section_containerview_isopened",
-      "label": "IsOpened",
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "GameBootstrap",
-      "file_type": "code",
-      "metadata": {
-        "namespace": "SortingGame.Section",
-        "scope_chain": [
-          "s177"
-        ]
-      },
-      "norm_label": "isopened",
-      "source_file": "Assets/_Project/Scripts/Runtime/Section/ContainerView.cs",
-      "source_location": "L21"
-    },
-    {
       "id": "assets_project_scripts_runtime_section_dragcontroller_cs_camera",
       "label": "Camera",
       "_origin": "ast",
@@ -9437,17 +9745,6 @@
       "source_location": "L32"
     },
     {
-      "id": "monobehaviour",
-      "label": "MonoBehaviour",
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "GameBootstrap",
-      "file_type": "code",
-      "norm_label": "monobehaviour",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
       "id": "ray",
       "label": "Ray",
       "_origin": "ast",
@@ -9466,17 +9763,6 @@
       "community_name": "GameBootstrap",
       "file_type": "code",
       "norm_label": "raycasthit",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "vector2int",
-      "label": "Vector2Int",
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "GameBootstrap",
-      "file_type": "code",
-      "norm_label": "vector2int",
       "source_file": "",
       "source_location": ""
     },
@@ -9617,6 +9903,18 @@
       "type": "external"
     },
     {
+      "id": "system_collections",
+      "label": "system_collections",
+      "_origin": "semantic",
+      "community": 3,
+      "community_name": "unityengine",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "system_collections",
+      "source_file": "",
+      "type": "external"
+    },
+    {
       "id": "system_collections_generic",
       "label": "system_collections_generic",
       "_origin": "semantic",
@@ -9625,6 +9923,42 @@
       "external": true,
       "file_type": "concept",
       "norm_label": "system_collections_generic",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "system_io",
+      "label": "system_io",
+      "_origin": "semantic",
+      "community": 3,
+      "community_name": "unityengine",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "system_io",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "system_linq",
+      "label": "system_linq",
+      "_origin": "semantic",
+      "community": 3,
+      "community_name": "unityengine",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "system_linq",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "system_random",
+      "label": "system_random",
+      "_origin": "semantic",
+      "community": 3,
+      "community_name": "unityengine",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "system_random",
       "source_file": "",
       "type": "external"
     },
@@ -9677,52 +10011,9 @@
       "type": "external"
     },
     {
-      "id": "system_collections",
-      "label": "system_collections",
-      "community": 3,
-      "community_name": "unityengine",
-      "external": true,
-      "file_type": "concept",
-      "norm_label": "system_collections",
-      "source_file": "",
-      "type": "external"
-    },
-    {
-      "id": "system_io",
-      "label": "system_io",
-      "community": 3,
-      "community_name": "unityengine",
-      "external": true,
-      "file_type": "concept",
-      "norm_label": "system_io",
-      "source_file": "",
-      "type": "external"
-    },
-    {
-      "id": "system_linq",
-      "label": "system_linq",
-      "community": 3,
-      "community_name": "unityengine",
-      "external": true,
-      "file_type": "concept",
-      "norm_label": "system_linq",
-      "source_file": "",
-      "type": "external"
-    },
-    {
-      "id": "system_random",
-      "label": "system_random",
-      "community": 3,
-      "community_name": "unityengine",
-      "external": true,
-      "file_type": "concept",
-      "norm_label": "system_random",
-      "source_file": "",
-      "type": "external"
-    },
-    {
       "id": "unityengine_inputsystem",
       "label": "unityengine_inputsystem",
+      "_origin": "semantic",
       "community": 3,
       "community_name": "unityengine",
       "external": true,
@@ -9734,6 +10025,7 @@
     {
       "id": "unityengine_object",
       "label": "unityengine_object",
+      "_origin": "semantic",
       "community": 3,
       "community_name": "unityengine",
       "external": true,
@@ -9745,6 +10037,7 @@
     {
       "id": "unityengine_random",
       "label": "unityengine_random",
+      "_origin": "semantic",
       "community": 3,
       "community_name": "unityengine",
       "external": true,
@@ -9756,6 +10049,7 @@
     {
       "id": "unityengine_rendering",
       "label": "unityengine_rendering",
+      "_origin": "semantic",
       "community": 3,
       "community_name": "unityengine",
       "external": true,
@@ -9767,6 +10061,7 @@
     {
       "id": "unityengine_scenemanagement",
       "label": "unityengine_scenemanagement",
+      "_origin": "semantic",
       "community": 3,
       "community_name": "unityengine",
       "external": true,
@@ -9778,6 +10073,7 @@
     {
       "id": "unityengine_testtools",
       "label": "unityengine_testtools",
+      "_origin": "semantic",
       "community": 3,
       "community_name": "unityengine",
       "external": true,
@@ -9789,6 +10085,7 @@
     {
       "id": "unityengine_uielements",
       "label": "unityengine_uielements",
+      "_origin": "semantic",
       "community": 3,
       "community_name": "unityengine",
       "external": true,
@@ -12450,7 +12747,7 @@
     },
     {
       "source": "assets_project_scripts_runtime_core_sectionlayoutgenerator_sortinggame_core_containercontent",
-      "target": "assets_project_scripts_runtime_data_containerdefinition_sortinggame_data_containerdefinition",
+      "target": "assets_project_scripts_runtime_core_sectionlayoutgenerator_cs_containerdefinition",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -12480,7 +12777,7 @@
     },
     {
       "source": "assets_project_scripts_runtime_section_containerview_sortinggame_section_containerview",
-      "target": "assets_project_scripts_runtime_data_containerdefinition_sortinggame_data_containerdefinition",
+      "target": "assets_project_scripts_runtime_section_containerview_cs_containerdefinition",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -12810,7 +13107,7 @@
     },
     {
       "source": "assets_project_scripts_runtime_section_itemview_sortinggame_section_itemview",
-      "target": "assets_project_scripts_runtime_data_itemdefinition_sortinggame_data_itemdefinition",
+      "target": "assets_project_scripts_runtime_section_itemview_cs_itemdefinition",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -13290,7 +13587,7 @@
     },
     {
       "source": "assets_project_scripts_runtime_core_gamebootstrap_sortinggame_core_gamebootstrap",
-      "target": "assets_project_scripts_runtime_data_sectiondefinition_sortinggame_data_sectiondefinition",
+      "target": "assets_project_scripts_runtime_core_gamebootstrap_cs_sectiondefinition",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -13305,7 +13602,7 @@
     },
     {
       "source": "assets_project_scripts_runtime_section_sectioncontroller_sortinggame_section_sectioncontroller",
-      "target": "assets_project_scripts_runtime_data_sectiondefinition_sortinggame_data_sectiondefinition",
+      "target": "assets_project_scripts_runtime_section_sectioncontroller_cs_sectiondefinition",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -13695,7 +13992,7 @@
     },
     {
       "source": "assets_project_scripts_runtime_core_gamebootstrap_sortinggame_core_gamebootstrap",
-      "target": "assets_project_scripts_runtime_core_wallet_sortinggame_core_wallet",
+      "target": "assets_project_scripts_runtime_core_gamebootstrap_cs_wallet",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -13710,7 +14007,7 @@
     },
     {
       "source": "assets_project_scripts_runtime_section_sectioncontroller_sortinggame_section_sectioncontroller",
-      "target": "assets_project_scripts_runtime_core_wallet_sortinggame_core_wallet",
+      "target": "assets_project_scripts_runtime_section_sectioncontroller_cs_wallet",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -13725,7 +14022,7 @@
     },
     {
       "source": "assets_project_scripts_runtime_ui_sectionhud_sortinggame_ui_sectionhud",
-      "target": "assets_project_scripts_runtime_core_wallet_sortinggame_core_wallet",
+      "target": "assets_project_scripts_runtime_ui_sectionhud_cs_wallet",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -14692,7 +14989,7 @@
     },
     {
       "source": "assets_project_scripts_editor_contentbuilder_sortinggame_editortools_contentbuilder_container",
-      "target": "assets_project_scripts_runtime_data_containerdefinition_sortinggame_data_containerdefinition",
+      "target": "assets_project_scripts_editor_contentbuilder_cs_containerdefinition",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -14707,7 +15004,7 @@
     },
     {
       "source": "assets_project_scripts_runtime_data_gamedatabase_sortinggame_data_gamedatabase",
-      "target": "assets_project_scripts_runtime_data_containerdefinition_sortinggame_data_containerdefinition",
+      "target": "assets_project_scripts_runtime_data_gamedatabase_cs_containerdefinition",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -14722,7 +15019,7 @@
     },
     {
       "source": "assets_project_tests_editmode_sectionlayoutgeneratortests_sortinggame_tests_sectionlayoutgeneratortests_makesection",
-      "target": "assets_project_scripts_runtime_data_containerdefinition_sortinggame_data_containerdefinition",
+      "target": "assets_project_tests_editmode_sectionlayoutgeneratortests_cs_containerdefinition",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -14962,7 +15259,7 @@
     },
     {
       "source": "assets_project_scripts_editor_contentbuilder_sortinggame_editortools_contentbuilder_item",
-      "target": "assets_project_scripts_runtime_data_itemdefinition_sortinggame_data_itemdefinition",
+      "target": "assets_project_scripts_editor_contentbuilder_cs_itemdefinition",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -14977,7 +15274,7 @@
     },
     {
       "source": "assets_project_scripts_runtime_core_sectionlayoutgenerator_sortinggame_core_containercontent",
-      "target": "assets_project_scripts_runtime_data_itemdefinition_sortinggame_data_itemdefinition",
+      "target": "assets_project_scripts_runtime_core_sectionlayoutgenerator_cs_itemdefinition",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -14992,7 +15289,7 @@
     },
     {
       "source": "assets_project_scripts_runtime_core_sectionlayoutgenerator_sortinggame_core_sectionlayout",
-      "target": "assets_project_scripts_runtime_data_itemdefinition_sortinggame_data_itemdefinition",
+      "target": "assets_project_scripts_runtime_core_sectionlayoutgenerator_cs_itemdefinition",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -15007,7 +15304,7 @@
     },
     {
       "source": "assets_project_scripts_runtime_core_sectionlayoutgenerator_sortinggame_core_sectionlayoutgenerator_generate",
-      "target": "assets_project_scripts_runtime_data_itemdefinition_sortinggame_data_itemdefinition",
+      "target": "assets_project_scripts_runtime_core_sectionlayoutgenerator_cs_itemdefinition",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -15022,7 +15319,7 @@
     },
     {
       "source": "assets_project_scripts_runtime_data_gamedatabase_sortinggame_data_gamedatabase",
-      "target": "assets_project_scripts_runtime_data_itemdefinition_sortinggame_data_itemdefinition",
+      "target": "assets_project_scripts_runtime_data_gamedatabase_cs_itemdefinition",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -15037,7 +15334,7 @@
     },
     {
       "source": "assets_project_scripts_runtime_data_gamedatabase_sortinggame_data_gamedatabase_commonitemsof",
-      "target": "assets_project_scripts_runtime_data_itemdefinition_sortinggame_data_itemdefinition",
+      "target": "assets_project_scripts_runtime_data_gamedatabase_cs_itemdefinition",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -15052,7 +15349,7 @@
     },
     {
       "source": "assets_project_scripts_runtime_section_containerview_sortinggame_section_containerview",
-      "target": "assets_project_scripts_runtime_data_itemdefinition_sortinggame_data_itemdefinition",
+      "target": "assets_project_scripts_runtime_section_containerview_cs_itemdefinition",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -15067,7 +15364,7 @@
     },
     {
       "source": "assets_project_scripts_runtime_section_containerview_sortinggame_section_containerview_build",
-      "target": "assets_project_scripts_runtime_data_itemdefinition_sortinggame_data_itemdefinition",
+      "target": "assets_project_scripts_runtime_section_containerview_cs_itemdefinition",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -15097,7 +15394,7 @@
     },
     {
       "source": "assets_project_tests_editmode_sectionlayoutgeneratortests_sortinggame_tests_sectionlayoutgeneratortests_allitems",
-      "target": "assets_project_scripts_runtime_data_itemdefinition_sortinggame_data_itemdefinition",
+      "target": "assets_project_tests_editmode_sectionlayoutgeneratortests_cs_itemdefinition",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -15112,7 +15409,7 @@
     },
     {
       "source": "assets_project_tests_editmode_sectionlayoutgeneratortests_sortinggame_tests_sectionlayoutgeneratortests_makesection",
-      "target": "assets_project_scripts_runtime_data_itemdefinition_sortinggame_data_itemdefinition",
+      "target": "assets_project_tests_editmode_sectionlayoutgeneratortests_cs_itemdefinition",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -15397,7 +15694,7 @@
     },
     {
       "source": "assets_project_scripts_editor_contentbuilder_sortinggame_editortools_contentbuilder_build",
-      "target": "assets_project_scripts_runtime_data_sectiondefinition_sortinggame_data_sectiondefinition",
+      "target": "assets_project_scripts_editor_contentbuilder_cs_sectiondefinition",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -15412,7 +15709,7 @@
     },
     {
       "source": "assets_project_scripts_editor_projectsetup_sortinggame_editortools_projectsetup_createmainscene",
-      "target": "assets_project_scripts_runtime_data_sectiondefinition_sortinggame_data_sectiondefinition",
+      "target": "assets_project_scripts_editor_projectsetup_cs_sectiondefinition",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -15442,7 +15739,7 @@
     },
     {
       "source": "assets_project_tests_editmode_sectionlayoutgeneratortests_sortinggame_tests_sectionlayoutgeneratortests_makesection",
-      "target": "assets_project_scripts_runtime_data_sectiondefinition_sortinggame_data_sectiondefinition",
+      "target": "assets_project_tests_editmode_sectionlayoutgeneratortests_cs_sectiondefinition",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -15697,7 +15994,7 @@
     },
     {
       "source": "assets_project_scripts_editor_contentbuilder_sortinggame_editortools_contentbuilder_build",
-      "target": "assets_project_scripts_runtime_data_venuedefinition_sortinggame_data_venuedefinition",
+      "target": "assets_project_scripts_editor_contentbuilder_cs_venuedefinition",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -15712,7 +16009,7 @@
     },
     {
       "source": "assets_project_scripts_runtime_data_gamedatabase_sortinggame_data_gamedatabase",
-      "target": "assets_project_scripts_runtime_data_venuedefinition_sortinggame_data_venuedefinition",
+      "target": "assets_project_scripts_runtime_data_gamedatabase_cs_venuedefinition",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -17890,7 +18187,7 @@
     },
     {
       "source": "assets_project_scripts_runtime_section_containerview_sortinggame_section_containerview_build",
-      "target": "assets_project_scripts_runtime_data_containerdefinition_sortinggame_data_containerdefinition",
+      "target": "assets_project_scripts_runtime_section_containerview_cs_containerdefinition",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -18115,7 +18412,7 @@
     },
     {
       "source": "assets_project_scripts_runtime_section_itemview_sortinggame_section_itemview_create",
-      "target": "assets_project_scripts_runtime_data_itemdefinition_sortinggame_data_itemdefinition",
+      "target": "assets_project_scripts_runtime_section_itemview_cs_itemdefinition",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -18130,7 +18427,7 @@
     },
     {
       "source": "assets_project_scripts_runtime_section_sectioncontroller_sortinggame_section_sectioncontroller_spawnitem",
-      "target": "assets_project_scripts_runtime_data_itemdefinition_sortinggame_data_itemdefinition",
+      "target": "assets_project_scripts_runtime_section_sectioncontroller_cs_itemdefinition",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -18370,7 +18667,7 @@
     },
     {
       "source": "assets_project_scripts_editor_contentbuilder_sortinggame_editortools_contentbuilder_item",
-      "target": "assets_project_scripts_runtime_data_enums_sortinggame_data_placeholdershape",
+      "target": "placeholdershape",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -18385,7 +18682,7 @@
     },
     {
       "source": "assets_project_scripts_runtime_section_placeholderfactory_sortinggame_section_placeholderfactory_createshape",
-      "target": "assets_project_scripts_runtime_data_placeholdervisual_sortinggame_data_placeholdervisual",
+      "target": "placeholdervisual",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -18400,7 +18697,7 @@
     },
     {
       "source": "assets_project_scripts_runtime_section_placeholderfactory_sortinggame_section_placeholderfactory_restpose",
-      "target": "assets_project_scripts_runtime_data_placeholdervisual_sortinggame_data_placeholdervisual",
+      "target": "placeholdervisual",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -18595,7 +18892,7 @@
     },
     {
       "source": "assets_project_scripts_runtime_core_sectionlayoutgenerator_sortinggame_core_sectionlayoutgenerator_generate",
-      "target": "assets_project_scripts_runtime_data_sectiondefinition_sortinggame_data_sectiondefinition",
+      "target": "assets_project_scripts_runtime_core_sectionlayoutgenerator_cs_sectiondefinition",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -18610,7 +18907,7 @@
     },
     {
       "source": "assets_project_scripts_runtime_section_sectioncontroller_sortinggame_section_sectioncontroller_build",
-      "target": "assets_project_scripts_runtime_data_sectiondefinition_sortinggame_data_sectiondefinition",
+      "target": "assets_project_scripts_runtime_section_sectioncontroller_cs_sectiondefinition",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -18625,7 +18922,7 @@
     },
     {
       "source": "assets_project_scripts_runtime_section_sectioncontroller_sortinggame_section_sectioncontroller_buildroom",
-      "target": "assets_project_scripts_runtime_data_sectiondefinition_sortinggame_data_sectiondefinition",
+      "target": "assets_project_scripts_runtime_section_sectioncontroller_cs_sectiondefinition",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -18640,7 +18937,7 @@
     },
     {
       "source": "assets_project_scripts_runtime_section_sectioncontroller_sortinggame_section_sectioncontroller_buildshelves",
-      "target": "assets_project_scripts_runtime_data_sectiondefinition_sortinggame_data_sectiondefinition",
+      "target": "assets_project_scripts_runtime_section_sectioncontroller_cs_sectiondefinition",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -19225,7 +19522,7 @@
     },
     {
       "source": "assets_project_scripts_runtime_section_sectioncontroller_sortinggame_section_sectioncontroller_build",
-      "target": "assets_project_scripts_runtime_core_wallet_sortinggame_core_wallet",
+      "target": "assets_project_scripts_runtime_section_sectioncontroller_cs_wallet",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -19240,7 +19537,7 @@
     },
     {
       "source": "assets_project_scripts_runtime_ui_sectionhud_sortinggame_ui_sectionhud_bind",
-      "target": "assets_project_scripts_runtime_core_wallet_sortinggame_core_wallet",
+      "target": "assets_project_scripts_runtime_ui_sectionhud_cs_wallet",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -19330,7 +19627,7 @@
     },
     {
       "source": "assets_project_scripts_runtime_section_placeholderfactory_sortinggame_section_placeholderfactory_createbox",
-      "target": "assets_project_scripts_runtime_section_placeholderfactory_cs_gameobject",
+      "target": "gameobject",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -19345,7 +19642,7 @@
     },
     {
       "source": "assets_project_scripts_runtime_section_placeholderfactory_sortinggame_section_placeholderfactory_createshape",
-      "target": "assets_project_scripts_runtime_section_placeholderfactory_cs_gameobject",
+      "target": "gameobject",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -21974,18 +22271,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "Docs/PROGRESS.md",
-      "source_location": "L12",
-      "weight": 1.0
-    },
-    {
-      "source": "docs_progress_progress_handoff",
-      "target": "docs_progress_open_questions_for_the_user",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "Docs/PROGRESS.md",
-      "source_location": "L20",
+      "source_location": "L13",
       "weight": 1.0
     },
     {
@@ -21996,7 +22282,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "Docs/PROGRESS.md",
-      "source_location": "L23",
+      "source_location": "L21",
       "weight": 1.0
     },
     {
@@ -22007,7 +22293,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "Docs/PROGRESS.md",
-      "source_location": "L28",
+      "source_location": "L26",
       "weight": 1.0
     },
     {
@@ -22023,13 +22309,24 @@
     },
     {
       "source": "docs_progress_session_log",
+      "target": "docs_progress_2026_10_06_m1_implemented_and_approved_committed",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "Docs/PROGRESS.md",
+      "source_location": "L27",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_progress_session_log",
       "target": "docs_progress_2026_10_06_m0_done_approved",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "Docs/PROGRESS.md",
-      "source_location": "L29",
+      "source_location": "L32",
       "weight": 1.0
     },
     {
@@ -24211,30 +24508,6 @@
       "weight": 1.0
     },
     {
-      "source": "assets_project_scripts_editor_contentbuilder_sortinggame_editortools_contentbuilder_container",
-      "target": "assets_project_scripts_runtime_data_placeholdervisual_sortinggame_data_placeholdervisual",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "Assets/_Project/Scripts/Editor/ContentBuilder.cs",
-      "source_location": "L160",
-      "weight": 1.0
-    },
-    {
-      "source": "assets_project_scripts_editor_contentbuilder_sortinggame_editortools_contentbuilder_item",
-      "target": "assets_project_scripts_runtime_data_placeholdervisual_sortinggame_data_placeholdervisual",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "INFERRED",
-      "confidence_score": 0.85,
-      "context": "call",
-      "source_file": "Assets/_Project/Scripts/Editor/ContentBuilder.cs",
-      "source_location": "L148",
-      "weight": 1.0
-    },
-    {
       "source": "assets_project_tests_editmode_sectionlayoutgeneratortests_sortinggame_tests_sectionlayoutgeneratortests_makesection",
       "target": "assets_project_scripts_runtime_data_sectiondefinition_sortinggame_data_shelfentry",
       "relation": "calls",
@@ -24327,7 +24600,7 @@
       "confidence_score": 0.95,
       "context": "BalanceConfig",
       "source_file": "Docs/PROGRESS.md",
-      "source_location": "L16",
+      "source_location": "L17",
       "weight": 1.0
     },
     {
@@ -24339,7 +24612,7 @@
       "confidence_score": 0.95,
       "context": "CameraFitter",
       "source_file": "Docs/PROGRESS.md",
-      "source_location": "L13",
+      "source_location": "L14",
       "weight": 1.0
     },
     {
@@ -24423,7 +24696,7 @@
       "confidence_score": 0.95,
       "context": "ContainerView",
       "source_file": "Docs/PROGRESS.md",
-      "source_location": "L14",
+      "source_location": "L15",
       "weight": 1.0
     },
     {
@@ -24435,7 +24708,7 @@
       "confidence_score": 0.95,
       "context": "ContentBuilder",
       "source_file": "Docs/PROGRESS.md",
-      "source_location": "L17",
+      "source_location": "L18",
       "weight": 1.0
     },
     {
@@ -24447,7 +24720,7 @@
       "confidence_score": 0.95,
       "context": "CoreLoopTests",
       "source_file": "Docs/PROGRESS.md",
-      "source_location": "L18",
+      "source_location": "L19",
       "weight": 1.0
     },
     {
@@ -24459,7 +24732,7 @@
       "confidence_score": 0.95,
       "context": "DragController",
       "source_file": "Docs/PROGRESS.md",
-      "source_location": "L13",
+      "source_location": "L14",
       "weight": 1.0
     },
     {
@@ -24471,7 +24744,7 @@
       "confidence_score": 0.95,
       "context": "FeelConfig",
       "source_file": "Docs/PROGRESS.md",
-      "source_location": "L16",
+      "source_location": "L17",
       "weight": 1.0
     },
     {
@@ -24483,7 +24756,7 @@
       "confidence_score": 0.95,
       "context": "FlashHint",
       "source_file": "Docs/PROGRESS.md",
-      "source_location": "L15",
+      "source_location": "L16",
       "weight": 1.0
     },
     {
@@ -24495,7 +24768,7 @@
       "confidence_score": 0.95,
       "context": "FlyToSlot",
       "source_file": "Docs/PROGRESS.md",
-      "source_location": "L15",
+      "source_location": "L16",
       "weight": 1.0
     },
     {
@@ -24507,7 +24780,7 @@
       "confidence_score": 0.95,
       "context": "GameBootstrap",
       "source_file": "Docs/PROGRESS.md",
-      "source_location": "L13",
+      "source_location": "L14",
       "weight": 1.0
     },
     {
@@ -24543,7 +24816,7 @@
       "confidence_score": 0.95,
       "context": "ItemView",
       "source_file": "Docs/PROGRESS.md",
-      "source_location": "L14",
+      "source_location": "L15",
       "weight": 1.0
     },
     {
@@ -24555,7 +24828,7 @@
       "confidence_score": 0.95,
       "context": "Loc.Get",
       "source_file": "Docs/PROGRESS.md",
-      "source_location": "L16",
+      "source_location": "L17",
       "weight": 1.0
     },
     {
@@ -24567,7 +24840,7 @@
       "confidence_score": 0.95,
       "context": "PlaceholderFactory",
       "source_file": "Docs/PROGRESS.md",
-      "source_location": "L14",
+      "source_location": "L15",
       "weight": 1.0
     },
     {
@@ -24591,7 +24864,7 @@
       "confidence_score": 0.95,
       "context": "ProjectSetup.CreateMainScene",
       "source_file": "Docs/PROGRESS.md",
-      "source_location": "L17",
+      "source_location": "L18",
       "weight": 1.0
     },
     {
@@ -24603,7 +24876,7 @@
       "confidence_score": 0.95,
       "context": "ReturnToPickup",
       "source_file": "Docs/PROGRESS.md",
-      "source_location": "L15",
+      "source_location": "L16",
       "weight": 1.0
     },
     {
@@ -24615,7 +24888,7 @@
       "confidence_score": 0.95,
       "context": "SectionController",
       "source_file": "Docs/PROGRESS.md",
-      "source_location": "L13",
+      "source_location": "L14",
       "weight": 1.0
     },
     {
@@ -24627,7 +24900,7 @@
       "confidence_score": 0.95,
       "context": "SectionController.Build",
       "source_file": "Docs/PROGRESS.md",
-      "source_location": "L14",
+      "source_location": "L15",
       "weight": 1.0
     },
     {
@@ -24639,7 +24912,7 @@
       "confidence_score": 0.95,
       "context": "SectionController.TryPlace",
       "source_file": "Docs/PROGRESS.md",
-      "source_location": "L15",
+      "source_location": "L16",
       "weight": 1.0
     },
     {
@@ -24663,7 +24936,7 @@
       "confidence_score": 0.95,
       "context": "SectionDefinition",
       "source_file": "Docs/PROGRESS.md",
-      "source_location": "L14",
+      "source_location": "L15",
       "weight": 1.0
     },
     {
@@ -24675,7 +24948,7 @@
       "confidence_score": 0.95,
       "context": "SectionHud",
       "source_file": "Docs/PROGRESS.md",
-      "source_location": "L13",
+      "source_location": "L14",
       "weight": 1.0
     },
     {
@@ -24687,7 +24960,7 @@
       "confidence_score": 0.95,
       "context": "SectionLayoutGenerator",
       "source_file": "Docs/PROGRESS.md",
-      "source_location": "L14",
+      "source_location": "L15",
       "weight": 1.0
     },
     {
@@ -24711,7 +24984,7 @@
       "confidence_score": 0.95,
       "context": "SectionVisuals",
       "source_file": "Docs/PROGRESS.md",
-      "source_location": "L16",
+      "source_location": "L17",
       "weight": 1.0
     },
     {
@@ -24735,7 +25008,7 @@
       "confidence_score": 0.95,
       "context": "SfxPlayer",
       "source_file": "Docs/PROGRESS.md",
-      "source_location": "L13",
+      "source_location": "L14",
       "weight": 1.0
     },
     {
@@ -24759,7 +25032,7 @@
       "confidence_score": 0.95,
       "context": "ShelfView",
       "source_file": "Docs/PROGRESS.md",
-      "source_location": "L14",
+      "source_location": "L15",
       "weight": 1.0
     },
     {
@@ -24783,10 +25056,10 @@
       "confidence_score": 0.95,
       "context": "Wallet",
       "source_file": "Docs/PROGRESS.md",
-      "source_location": "L13",
+      "source_location": "L14",
       "weight": 1.0
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "7be4c858e8154553f854b81713a7907be3e71df5"
+  "built_at_commit": "07f13fb3df19400a4847b47a43f36e235decb8db"
 }

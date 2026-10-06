@@ -1,5 +1,5 @@
 {
-  "0": "ItemDefinition",
+  "0": "GameDatabase",
   "1": "GDD — Chubby's Clutter (çalışma adı)",
   "2": "8. Eşyalar ve kategoriler",
   "3": "unityengine",
@@ -19,11 +19,15 @@
   "17": "ShelfView",
   "18": "SectionHud",
   "19": "SectionController",
-  "20": ".OnLanded",
+  "20": "ContainerView",
   "21": "SectionProgress",
-  "22": ".Snapshot",
+  "22": "FeelConfig",
   "23": "11. Ekonomi ve gelir modeli",
   "24": "7. Etkileşim ve kontroller",
   "25": "16. MVP kapsamı",
-  "26": "6. Görünümler ve kamera"
+  "26": "6. Görünümler ve kamera",
+  "27": ".Generate",
+  "28": "PlaceholderShape",
+  "29": "ItemState",
+  "30": "GameObject"
 }
