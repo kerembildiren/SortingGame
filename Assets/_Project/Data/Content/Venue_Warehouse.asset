@@ -15,8 +15,6 @@ MonoBehaviour:
   Id: warehouse
   DisplayNameKey: venue.warehouse
   ThemeId: warehouse
-  PurchasePrice: 300
-  SellValue: 1500
   Sections:
   - {fileID: 11400000, guid: e9d508839f2feec439ee0d8e641a9a7d, type: 2}
   - {fileID: 11400000, guid: e18ebc989efa3644aa6e1f0be51e4661, type: 2}
@@ -24,6 +22,3 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 61418965135edff48a6cd8e5571d732e, type: 2}
   CollectionPage:
   - {fileID: 11400000, guid: 27354a6b44359c242ad32754bfe7f905, type: 2}
-  - {fileID: 11400000, guid: 0203fa3c3a2266a4e8b89316ce786495, type: 2}
-  - {fileID: 11400000, guid: 63c3802b00338a54e9357fb6c1d70c7c, type: 2}
-  - {fileID: 11400000, guid: 912d2799f3e92584fa98b09ac56b2761, type: 2}

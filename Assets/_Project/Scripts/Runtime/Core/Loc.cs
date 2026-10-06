@@ -4,7 +4,7 @@ namespace SortingGame.Core
 {
     /// <summary>
     /// GDD 15.6: no hard-coded UI text. Every string goes through Loc.Get(key).
-    /// Temporary English table; M5 swaps this for the Unity Localization package without touching call sites.
+    /// Temporary English table; M7 swaps this for the Unity Localization package without touching call sites.
     /// </summary>
     public static class Loc
     {
@@ -49,9 +49,9 @@ namespace SortingGame.Core
             ["hud.off"] = "Off",
             ["hud.book"] = "Book",
             ["hud.collection_book"] = "Collection Book",
-            ["hud.rare_find"] = "Rare find!",
+            ["hud.rare_find"] = "You found a Chubby!",
             ["hud.continue"] = "Continue",
-            ["hud.duplicate_sold"] = "Duplicate {0} sold +{1}",
+            ["hud.rare_item"] = "Rare: {0}  +{1}",
             ["hud.shop"] = "Shop",
             ["hud.shop_title"] = "Tools",
             ["hud.locked"] = "locked",
@@ -60,7 +60,29 @@ namespace SortingGame.Core
             ["hud.max"] = "MAX",
             ["hud.bought"] = "{0} level {1}!",
             ["hud.not_enough"] = "Not enough coins yet",
-            ["hud.mastered"] = "{0} mastered! They sort themselves now.",
+            ["hud.needs_max"] = "Needs {0} at max level",
+
+            ["hud.auto_sort"] = "Auto Sort",
+            ["hud.auto_ad"] = "AD",
+            ["hud.auto_charges"] = "x{0}",
+            ["hud.auto_used"] = "used",
+            ["hud.auto_tag"] = "{0}  AUTO",
+            ["hud.auto_title"] = "Auto Sort",
+            ["hud.auto_text"] = "Pick one shelf. Its items sort themselves until this room is finished. One shelf per room.",
+            ["hud.auto_left"] = "{0:N0} to go",
+            ["hud.auto_watch_ad"] = "Watch an ad",
+            ["hud.auto_use_charge"] = "Use a charge  (you have {0:N0})",
+            ["hud.auto_get_charges"] = "Get charges",
+            ["hud.auto_sort_on"] = "{0} sort themselves in this room now!",
+            ["hud.auto_used_toast"] = "Auto Sort is already on in this room",
+            ["hud.auto_room_done"] = "This room is already finished",
+            ["hud.ad_failed"] = "The ad did not finish, nothing was used",
+            ["hud.store_title"] = "Auto Sort charges",
+            ["hud.store_owned"] = "You have {0:N0}",
+            ["hud.store_pack"] = "{0:N0} x Auto Sort",
+            ["hud.store_bought"] = "+{0:N0} Auto Sort",
+            ["hud.store_test_note"] = "Test store: nothing is charged.",
+            ["hud.purchase_failed"] = "Purchase did not go through",
             ["hud.reset_progress"] = "Reset all progress",
             ["hud.back_to_overview"] = "Back to overview",
             ["hud.stay_in_room"] = "Stay and look around",
@@ -74,7 +96,9 @@ namespace SortingGame.Core
             ["hud.venue_locked"] = "Restore {0} first",
             ["hud.open"] = "Open",
             ["hud.go_to_venue"] = "Next place: {0}",
-            ["hud.collection_complete"] = "{0} collection complete!",
+            ["hud.album_title"] = "Chubby album",
+            ["hud.album_progress"] = "{0} joins the album!  {1} / {2}",
+            ["hud.album_complete"] = "Every Chubby found! The album is complete.",
             ["hud.venue_opened"] = "All rooms restored! {0} is now open.",
             ["hud.venue_restored"] = "Fully restored",
             ["hud.restored_tag"] = "100%",
@@ -85,25 +109,21 @@ namespace SortingGame.Core
             ["hud.room_unlocked"] = "{0} is open!",
             ["hud.view_hint"] = "Drag to turn  ·  Pinch to zoom  ·  Two fingers to move  ·  Double-tap to reset",
 
-            // Collectibles: original names only (GDD 13).
+            // Collectibles: original names only (GDD 13). One costumed Chubby per venue.
             ["collectible.captain_chubby"] = "Captain Chubby",
             ["collectible.captain_chubby.desc"] = "A tiny hero in a homemade cape. Always ready to save the day, right after a nap.",
-            ["collectible.golden_robot"] = "Golden Robot",
-            ["collectible.golden_robot.desc"] = "A wind-up tin robot with a golden shine. Still walks, a little sideways.",
-            ["collectible.first_issue"] = "First Issue",
-            ["collectible.first_issue.desc"] = "The very first issue of 'Moonlight Mice'. The corners are a bit chewed.",
-            ["collectible.lucky_wrench"] = "Lucky Wrench",
             ["collectible.mechanic_chubby"] = "Mechanic Chubby",
             ["collectible.mechanic_chubby.desc"] = "Overalls, a smudge of oil and a lot of confidence. Fixes nothing, cheers everyone up.",
             ["collectible.night_guard_chubby"] = "Night Guard Chubby",
             ["collectible.night_guard_chubby.desc"] = "Keeps watch over the warehouse. Mostly with his eyes closed.",
-            ["collectible.brass_stapler"] = "Brass Stapler",
-            ["collectible.brass_stapler.desc"] = "Heavy, shiny and older than the building. Still staples like new.",
-            ["collectible.chrome_hubcap"] = "Chrome Hubcap",
-            ["collectible.chrome_hubcap.desc"] = "So polished you can check your hair in it.",
-            ["collectible.message_bottle"] = "Message in a Bottle",
-            ["collectible.message_bottle.desc"] = "The note inside says: 'Please tidy the basement.' Done!",
-            ["collectible.lucky_wrench.desc"] = "Someone engraved a tiny star on it. Fixes bolts, and maybe luck too.",
+
+            // Rare items (GDD 9.4): shelved like the rest of their category, worth a bit more.
+            ["item.rare_first_issue"] = "Sealed First Issue",
+            ["item.rare_golden_robot"] = "Golden Robot",
+            ["item.rare_lucky_wrench"] = "Lucky Wrench",
+            ["item.rare_brass_stapler"] = "Brass Stapler",
+            ["item.rare_chrome_hubcap"] = "Chrome Hubcap",
+            ["item.rare_message_bottle"] = "Message in a Bottle",
         };
 
         /// <summary>Number formatting follows the UI language, not the device region (English for now).</summary>

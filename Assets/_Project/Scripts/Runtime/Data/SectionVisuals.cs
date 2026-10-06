@@ -34,8 +34,11 @@ namespace SortingGame.Data
         public Color CardboardColor = new(0.74f, 0.56f, 0.36f);
         public Color SlotGhostColor = new(1f, 0.97f, 0.9f, 0.55f);
 
-        [Header("Rare items")]
+        [Header("Glow")]
+        [Tooltip("Gold: Chubby figures, the only collectibles (GDD 9.3).")]
         public Color RareGlowColor = new(1f, 0.82f, 0.3f, 0.75f);
+        [Tooltip("Blue: rare items that go on a shelf (GDD 9.4).")]
+        public Color RareItemGlowColor = new(0.35f, 0.7f, 1f, 0.7f);
 
         [Header("Mood: dirty -> clean")]
         public Color LightColor = new(1f, 0.86f, 0.68f);

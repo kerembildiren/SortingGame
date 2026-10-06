@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace SortingGame.Data
@@ -13,7 +15,17 @@ namespace SortingGame.Data
         [Header("Economy")]
         public int StartingCoins;
 
-        [Header("Offline progress (GDD 15.4)")]
-        public float OfflineCapHours = 8f;
+        [Serializable]
+        public struct AutoSortPack
+        {
+            public string Id;
+            public int Charges;
+            [Tooltip("Stand-in until a real store supplies localised prices.")]
+            public string PriceLabel;
+        }
+
+        [Header("Auto Sort boost (GDD 10.2, 11.3)")]
+        [Tooltip("Real-money packs of Auto Sort charges. Never sold for coins.")]
+        public List<AutoSortPack> AutoSortPacks = new();
     }
 }

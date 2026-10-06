@@ -11,8 +11,8 @@ using UnityEngine.UIElements;
 namespace SortingGame.UI
 {
     /// <summary>
-    /// Section screen HUD (GDD 6.2, 12.2): top bar with name + %, coins, Collection Book button, tool bar,
-    /// shelf labels anchored to the 3D signs, coin popups, rare-find card, book page and completion banner.
+    /// Section screen HUD (GDD 6.2, 12.2): top bar with name + %, coins, Collection Book button, tool bar with the
+    /// Auto Sort boost, shelf labels anchored to the 3D signs, coin popups, Chubby card, album and completion banner.
     /// Built in code with UI Toolkit; styling lives in SectionHud.uss.
     /// </summary>
     [RequireComponent(typeof(UIDocument))]
@@ -90,17 +90,24 @@ namespace SortingGame.UI
         Button _unlockBuy;
         SectionDefinition _unlockSection;
         VisualElement _fade;
-        Label _bookTitle;
-        int _bookPageIndex;
         VisualElement _bookCard;
+
+        Button _boostButton;
+        Label _boostState;
+        VisualElement _boost;
+        VisualElement _boostList;
+        Button _boostAd;
+        Button _boostCharge;
+        ShelfView _boostShelf;
+        VisualElement _store;
+        VisualElement _storeList;
+        Label _storeOwned;
 
         class ShelfLabel
         {
             public ShelfView Shelf;
             public VisualElement Root;
             public Label Name;
-            public VisualElement MasteryTrack;
-            public VisualElement MasteryFill;
         }
 
         /// <summary>Panel units per screen pixel is 1/UiScale. Used to convert reference-pixel tunables.</summary>
@@ -153,6 +160,7 @@ namespace SortingGame.UI
             BuildBanner();
             BuildSettings();
             BuildShop();
+            BuildBoost();
             BuildOverviewUi();
             _bigToast = Add(_root, new Label(), "big-toast");
             _fade = Add(_root, new VisualElement(), "fade");
@@ -176,7 +184,7 @@ namespace SortingGame.UI
             section.ItemPlaced += OnItemPlaced;
             section.ShelfCompleted += OnShelfCompleted;
             section.SectionCompleted += OnSectionCompleted;
-            section.CategoryMastered += OnCategoryMastered;
+            section.AutoSortStarted += OnAutoSortStarted;
             section.OnlyCollectiblesLeft += OnOnlyCollectiblesLeft;
             wallet.Changed += OnCoins;
 
@@ -189,19 +197,16 @@ namespace SortingGame.UI
                 var entry = new ShelfLabel { Shelf = shelf };
                 entry.Root = Add(_worldLayer, new VisualElement(), "shelf-label");
                 entry.Name = Add(entry.Root, new Label(), "shelf-label-text");
-                entry.MasteryTrack = Add(entry.Root, new VisualElement(), "mastery-track");
-                entry.MasteryFill = Add(entry.MasteryTrack, new VisualElement(), "mastery-fill");
                 entry.Root.pickingMode = PickingMode.Ignore;
-                entry.MasteryTrack.pickingMode = PickingMode.Ignore;
-                entry.MasteryFill.pickingMode = PickingMode.Ignore;
                 _shelfLabels.Add(entry);
             }
-            RefreshMastery();
+            RefreshShelfLabels();
 
             _banner.AddToClassList("hidden");
             SetMomentMode(false);
             OnProgress(section.Progress);
             _coins.text = wallet.Coins.ToString("N0", Loc.Culture);
+            CloseBoost();
             RefreshToolbar();
         }
 
@@ -221,7 +226,7 @@ namespace SortingGame.UI
                 _section.ItemPlaced -= OnItemPlaced;
                 _section.ShelfCompleted -= OnShelfCompleted;
                 _section.SectionCompleted -= OnSectionCompleted;
-                _section.CategoryMastered -= OnCategoryMastered;
+                _section.AutoSortStarted -= OnAutoSortStarted;
                 _section.OnlyCollectiblesLeft -= OnOnlyCollectiblesLeft;
             }
             if (_wallet != null) _wallet.Changed -= OnCoins;
@@ -293,8 +298,8 @@ namespace SortingGame.UI
 
         void OnItemPlaced(ItemView item, ShelfView shelf, int coins)
         {
-            RefreshMastery();
             if (coins > 0) CoinPopup(item.transform.position, coins);
+            if (item.IsRare) ShowToast(Loc.Format("hud.rare_item", Loc.Get(item.Definition.DisplayNameKey), coins));
         }
 
         void CoinPopup(Vector3 world, int coins)
@@ -321,6 +326,7 @@ namespace SortingGame.UI
             CurrentMode = mode;
             _toolbar.style.display = mode == Mode.Section ? DisplayStyle.Flex : DisplayStyle.None;
             if (mode == Mode.Section) _sellButton.style.display = DisplayStyle.None;
+            else CloseBoost();
             _banner.AddToClassList("hidden");
             if (!_inspect.ClassListContains("hidden")) HideInspect();
         }
@@ -448,26 +454,181 @@ namespace SortingGame.UI
 
         public void ShowCelebration(string text) => ShowBigToast(text);
 
-        // ---------- Category Mastery (GDD 10.2) ----------
+        // ---------- Auto Sort boost (GDD 10.2) ----------
 
-        void RefreshMastery()
+        void RefreshShelfLabels()
         {
-            if (_ctx == null) return;
             foreach (var entry in _shelfLabels)
             {
                 var category = entry.Shelf.Category;
-                var mastered = _ctx.Mastery.IsMastered(category);
-                entry.Name.text = mastered ? $"{Loc.Get(category.DisplayNameKey)} *" : Loc.Get(category.DisplayNameKey);
-                entry.Root.EnableInClassList("shelf-label--mastered", mastered);
-                entry.MasteryTrack.style.display = mastered ? DisplayStyle.None : DisplayStyle.Flex;
-                entry.MasteryFill.style.width = Length.Percent(_ctx.Mastery.ProgressOf(category) * 100f);
+                var boosted = _section != null && _section.AutoSortCategory == category;
+                var name = Loc.Get(category.DisplayNameKey);
+                entry.Name.text = boosted ? Loc.Format("hud.auto_tag", name) : name;
+                entry.Root.EnableInClassList("shelf-label--auto", boosted);
             }
         }
 
-        void OnCategoryMastered(CategoryDefinition category)
+        void OnAutoSortStarted(CategoryDefinition category)
         {
-            RefreshMastery();
-            ShowBigToast(Loc.Format("hud.mastered", Loc.Get(category.DisplayNameKey)));
+            RefreshShelfLabels();
+            RefreshBoostButton();
+            ShowBigToast(Loc.Format("hud.auto_sort_on", Loc.Get(category.DisplayNameKey)));
+        }
+
+        /// <summary>Tool bar button: what a use costs right now, or that this room has had its one shelf.</summary>
+        void RefreshBoostButton()
+        {
+            if (_boostButton == null) return;
+            var usable = _section != null && _section.CanStartAutoSort;
+            _boostButton.EnableInClassList("tool--locked", !usable);
+            var charges = _ctx != null ? _ctx.AutoSort.Charges : 0;
+            _boostState.text = _section != null && _section.AutoSortCategory != null ? Loc.Get("hud.auto_used")
+                : charges > 0 ? Loc.Format("hud.auto_charges", charges)
+                : Loc.Get("hud.auto_ad");
+        }
+
+        /// <summary>Card: pick one shelf, then pay with a rewarded ad or a charge. Never coins.</summary>
+        public void OpenBoost()
+        {
+            if (_section == null || CurrentMode != Mode.Section) return;
+            if (!_section.CanStartAutoSort)
+            {
+                ShowToast(Loc.Get(_section.AutoSortCategory != null ? "hud.auto_used_toast" : "hud.auto_room_done"));
+                return;
+            }
+            _boostShelf = null;
+            RefreshBoost();
+            _boost.RemoveFromClassList("hidden");
+        }
+
+        public void CloseBoost()
+        {
+            _boost.AddToClassList("hidden");
+            _store.AddToClassList("hidden");
+        }
+
+        public bool IsBoostOpen => !_boost.ClassListContains("hidden");
+
+        public void PickBoostShelf(ShelfView shelf)
+        {
+            _boostShelf = shelf;
+            RefreshBoost();
+        }
+
+        void RefreshBoost()
+        {
+            _boostList.Clear();
+            if (_section == null || _ctx == null) return;
+            foreach (var shelf in _section.Shelves)
+            {
+                if (!shelf.HasFreeSlot) continue;
+                var picked = shelf;
+                var row = Add(_boostList, new Button(() => PickBoostShelf(picked)), "boost-row");
+                row.EnableInClassList("boost-row--selected", shelf == _boostShelf);
+                Add(row, new Label(Loc.Get(shelf.Category.DisplayNameKey)), "shop-name");
+                Add(row, new Label(Loc.Format("hud.auto_left", shelf.Slots.Count - shelf.FilledCount)), "shop-effect");
+            }
+
+            var charges = _ctx.AutoSort.Charges;
+            _boostAd.SetEnabled(CanBoost(_boostShelf) && _ctx.Ads.IsRewardedReady);
+            _boostCharge.text = Loc.Format("hud.auto_use_charge", charges);
+            _boostCharge.style.display = charges > 0 ? DisplayStyle.Flex : DisplayStyle.None;
+            _boostCharge.SetEnabled(CanBoost(_boostShelf));
+        }
+
+        bool CanBoost(ShelfView shelf) => _section != null && shelf != null && _section.CanStartAutoSort && shelf.HasFreeSlot;
+
+        public void BoostWithAd()
+        {
+            var shelf = _boostShelf;
+            if (!CanBoost(shelf)) return;
+            _ctx.Ads.ShowRewarded(earned =>
+            {
+                if (earned) StartBoost(shelf);
+                else ShowToast(Loc.Get("hud.ad_failed"));
+            });
+        }
+
+        public void BoostWithCharge()
+        {
+            var shelf = _boostShelf;
+            if (!CanBoost(shelf) || !_ctx.AutoSort.TrySpend()) return;
+            StartBoost(shelf);
+        }
+
+        void StartBoost(ShelfView shelf)
+        {
+            CloseBoost();
+            if (CanBoost(shelf)) _section.StartAutoSort(shelf);
+            RefreshBoostButton();
+        }
+
+        void BuildBoost()
+        {
+            _boost = Add(_root, new VisualElement(), "settings");
+            _boost.AddToClassList("hidden");
+            var card = Add(_boost, new VisualElement(), "banner-card");
+            card.AddToClassList("book-card");
+            Add(card, new Label(Loc.Get("hud.auto_title")), "banner-title");
+            Add(card, new Label(Loc.Get("hud.auto_text")), "rare-description");
+            _boostList = Add(card, new VisualElement(), "shop-list");
+            _boostAd = Add(card, new Button(BoostWithAd) { text = Loc.Get("hud.auto_watch_ad") }, "primary-button");
+            _boostCharge = Add(card, new Button(BoostWithCharge), "primary-button");
+            Add(card, new Button(OpenStore) { text = Loc.Get("hud.auto_get_charges") }, "secondary-button");
+            Add(card, new Button(CloseBoost) { text = Loc.Get("hud.close") }, "secondary-button");
+
+            // Real-money packs of charges (GDD 11.3). Sits on top of the boost card.
+            _store = Add(_root, new VisualElement(), "settings");
+            _store.AddToClassList("hidden");
+            var storeCard = Add(_store, new VisualElement(), "banner-card");
+            storeCard.AddToClassList("book-card");
+            Add(storeCard, new Label(Loc.Get("hud.store_title")), "banner-title");
+            _storeOwned = Add(storeCard, new Label(), "rare-description");
+            _storeList = Add(storeCard, new VisualElement(), "shop-list");
+            Add(storeCard, new Label(Loc.Get("hud.store_test_note")), "shop-effect");
+            Add(storeCard, new Button(CloseStore) { text = Loc.Get("hud.close") }, "primary-button");
+        }
+
+        public void OpenStore()
+        {
+            RefreshStore();
+            _store.RemoveFromClassList("hidden");
+        }
+
+        public void CloseStore() => _store.AddToClassList("hidden");
+
+        void RefreshStore()
+        {
+            _storeList.Clear();
+            if (_ctx == null) return;
+            _storeOwned.text = Loc.Format("hud.store_owned", _ctx.AutoSort.Charges);
+            foreach (var pack in _ctx.Database.Balance.AutoSortPacks)
+            {
+                var row = Add(_storeList, new VisualElement(), "shop-row");
+                var info = Add(row, new VisualElement(), "shop-info");
+                Add(info, new Label(Loc.Format("hud.store_pack", pack.Charges)), "shop-name");
+                var bought = pack;
+                Add(row, new Button(() => BuyPack(bought)) { text = pack.PriceLabel }, "store-buy");
+            }
+        }
+
+        public void BuyPack(BalanceConfig.AutoSortPack pack)
+        {
+            _ctx.Store.Purchase(pack.Id, paid =>
+            {
+                if (!paid)
+                {
+                    ShowToast(Loc.Get("hud.purchase_failed"));
+                    return;
+                }
+                _ctx.AutoSort.Add(pack.Charges);
+                SfxPlayer.Instance?.Play(Sfx.Purchase, 0f);
+                Haptics.Medium();
+                ShowToast(Loc.Format("hud.store_bought", pack.Charges));
+                RefreshStore();
+                if (IsBoostOpen) RefreshBoost();
+                RefreshBoostButton();
+            });
         }
 
         void ShowBigToast(string text)
@@ -515,6 +676,9 @@ namespace SortingGame.UI
                 var shown = maxed ? tool.Stats(level) : tool.Stats(level + 1);
                 var effect = Loc.Format(tool.EffectKey, shown.Primary, shown.Secondary);
                 Add(info, new Label(maxed ? effect : $"{(level == 0 ? Loc.Get("hud.unlock") : Loc.Get("hud.next"))}: {effect}"), "shop-effect");
+                // GDD 10.1: a gated tool says what it is waiting for.
+                var gated = !maxed && !_ctx.Tools.CanBuy(tool);
+                if (gated) Add(info, new Label(RequirementText(tool)), "shop-requirement");
 
                 if (maxed)
                 {
@@ -525,12 +689,21 @@ namespace SortingGame.UI
                 var buy = Add(row, new Button(() => Buy(tool)), "shop-buy");
                 Add(buy, new VisualElement(), "coin-icon");
                 Add(buy, new Label(cost.ToString("N0", Loc.Culture)), "shop-cost");
-                buy.EnableInClassList("shop-buy--poor", !_wallet.CanAfford(cost));
+                buy.EnableInClassList("shop-buy--poor", gated || !_wallet.CanAfford(cost));
             }
         }
 
+        static string RequirementText(ToolDefinition tool) =>
+            Loc.Format("hud.needs_max", Loc.Get(tool.RequiresMaxed.DisplayNameKey));
+
         void Buy(ToolDefinition tool)
         {
+            if (!_ctx.Tools.CanBuy(tool))
+            {
+                SfxPlayer.Instance?.Play(Sfx.Wrong, 0f);
+                ShowToast(RequirementText(tool));
+                return;
+            }
             if (_ctx.Tools.TryUpgrade(tool, _wallet))
             {
                 SfxPlayer.Instance?.Play(Sfx.Purchase, 0f);
@@ -553,6 +726,8 @@ namespace SortingGame.UI
 
         void OnSectionCompleted()
         {
+            CloseBoost();
+            RefreshBoostButton();
             // Let the renovation (and any rare find / shelf showcase) play before the banner covers it.
             Tween.Delay(this, 1.4f, ShowBannerWhenFree);
         }
@@ -606,67 +781,50 @@ namespace SortingGame.UI
             Pulse(_bookButton);
         }
 
-        public void OnDuplicateSold(CollectibleDefinition collectible, int coins, Vector3 world)
-        {
-            CoinPopup(world, coins);
-            ShowToast(Loc.Format("hud.duplicate_sold", Loc.Get(collectible.DisplayNameKey), coins));
-        }
+        public void OpenBook() => ShowBookPage();
 
-        public void OpenBook()
-        {
-            var venues = _ctx?.Database.Venues;
-            _bookPageIndex = venues != null && _venue != null ? Mathf.Max(0, venues.IndexOf(_venue)) : 0;
-            ShowBookPage();
-        }
-
-        void TurnBookPage(int delta)
-        {
-            var count = _ctx?.Database.Venues.Count ?? 1;
-            _bookPageIndex = (_bookPageIndex + delta + count) % count;
-            ShowBookPage();
-        }
-
+        /// <summary>GDD 9.1: one album, one Chubby per venue along the ladder; missing ones are silhouettes.</summary>
         void ShowBookPage()
         {
             _bookBadge.AddToClassList("hidden");
             _bookGrid.Clear();
-            var pageVenue = _ctx != null && _ctx.Database.Venues.Count > 0 ? _ctx.Database.Venues[_bookPageIndex] : _venue;
-            var page = pageVenue != null ? pageVenue.CollectionPage : new List<CollectibleDefinition>();
             var found = 0;
-            foreach (var collectible in page)
+            var total = 0;
+            if (_ctx != null)
             {
-                var has = _book != null && _book.Has(collectible);
-                if (has) found++;
-                var entry = Add(_bookGrid, new VisualElement(), "book-entry");
-                var icon = Add(entry, new VisualElement(), "book-icon");
-                if (has) icon.style.backgroundColor = collectible.Placeholder.Color;
-                else icon.AddToClassList("book-icon--missing");
-                Add(icon, new Label(has ? "" : "?"), "book-icon-text");
-                Add(entry, new Label(has ? Loc.Get(collectible.DisplayNameKey) : "???"), "book-entry-name");
-                if (collectible.Rarity == ItemRarity.Mascot) entry.AddToClassList("book-entry--mascot");
-                if (has)
+                foreach (var collectible in _ctx.Database.Album)
                 {
+                    total++;
+                    var has = _book != null && _book.Has(collectible);
+                    if (has) found++;
+                    var entry = Add(_bookGrid, new VisualElement(), "book-entry");
+                    entry.AddToClassList("book-entry--mascot");
+                    var icon = Add(entry, new VisualElement(), "book-icon");
+                    if (has) icon.style.backgroundColor = collectible.Placeholder.Color;
+                    else icon.AddToClassList("book-icon--missing");
+                    Add(icon, new Label(has ? "" : "?"), "book-icon-text");
+                    Add(entry, new Label(has ? Loc.Get(collectible.DisplayNameKey) : "???"), "book-entry-name");
+                    var venue = _ctx.Database.VenueOf(collectible);
+                    if (venue != null) Add(entry, new Label(Loc.Get(venue.DisplayNameKey)), "book-entry-venue");
+                    if (!has) continue;
                     // GDD 9.1.1: tap a found piece to display it in 3D.
                     entry.AddToClassList("book-entry--found");
                     var shown = collectible;
                     entry.RegisterCallback<ClickEvent>(_ => OpenViewer(shown));
                 }
             }
-            _bookTitle.text = pageVenue != null ? Loc.Get(pageVenue.DisplayNameKey) : "";
-            _bookCount.text = $"{found} / {page.Count}";
+            _bookCount.text = $"{found} / {total}";
             _bookPage.RemoveFromClassList("hidden");
         }
 
         public void CloseBook() => _bookPage.AddToClassList("hidden");
 
         /// <summary>
-        /// A venue's collection page is complete: the book flies out of its button to the middle of the screen,
-        /// opens on that page and the pieces pop in one by one. Tapping a piece opens the 3D viewer as usual.
+        /// A Chubby has just joined the album: the book flies out of its button to the middle of the screen,
+        /// opens and the pieces pop in one by one. Tapping a piece opens the 3D viewer as usual.
         /// </summary>
-        public void PlayCollectionComplete(VenueDefinition venue)
+        public void PlayAlbumCelebration(CollectibleDefinition added)
         {
-            var venues = _ctx?.Database.Venues;
-            _bookPageIndex = venues != null ? Mathf.Max(0, venues.IndexOf(venue)) : 0;
             ShowBookPage();
 
             // Start small at the book button, grow and straighten in the middle.
@@ -685,7 +843,11 @@ namespace SortingGame.UI
                 // "Opening": the page content unfolds sideways, then each piece pops in.
                 SfxPlayer.Instance?.Play(Sfx.Mastery, 0f);
                 Haptics.Strong();
-                ShowBigToast(Loc.Format("hud.collection_complete", Loc.Get(venue.DisplayNameKey)));
+                var album = _ctx.Database.Album.ToList();
+                var found = _book.CountFound(album);
+                ShowBigToast(found >= album.Count
+                    ? Loc.Get("hud.album_complete")
+                    : Loc.Format("hud.album_progress", Loc.Get(added.DisplayNameKey), found, album.Count));
                 var entries = _bookGrid.Children().ToList();
                 foreach (var entry in entries) entry.style.scale = new Scale(Vector3.zero);
                 Tween.Run(this, 0.3f, t => _bookGrid.style.scale = new Scale(new Vector3(t, 1f, 1f)), Ease.OutCubic);
@@ -716,7 +878,7 @@ namespace SortingGame.UI
             _viewer.AddToClassList("hidden");
             SetMomentMode(false);
             ViewerClosed?.Invoke();
-            ShowBookPage(); // back to the page the player came from
+            ShowBookPage(); // back to the album the player came from
         }
 
         // ---------- Shelf close-up ----------
@@ -740,7 +902,7 @@ namespace SortingGame.UI
 
         public bool IsInspecting => !_inspect.ClassListContains("hidden");
 
-        /// <summary>During the rare-find moment only the card is visible (GDD 9.3: background darkens).</summary>
+        /// <summary>During the Chubby find moment only the card is visible (GDD 9.3: background darkens).</summary>
         void SetMomentMode(bool on)
         {
             foreach (var element in new[] { _topBar, _coinRow, _toolbar, _worldLayer })
@@ -772,6 +934,13 @@ namespace SortingGame.UI
                 _toolButtons[tool] = button;
                 button.clicked += () => OnToolClicked(tool);
             }
+
+            // Not a tool: the Auto Sort boost (GDD 10.2), paid with an ad or a charge.
+            _boostButton = Add(_toolbar, new Button(OpenBoost), "tool");
+            _boostButton.AddToClassList("tool--boost");
+            Add(_boostButton, new Label("A"), "tool-glyph");
+            Add(_boostButton, new Label(Loc.Get("hud.auto_sort")), "tool-name");
+            _boostState = Add(_boostButton, new Label(), "tool-price");
             SelectTool(ToolType.Hand);
         }
 
@@ -808,6 +977,7 @@ namespace SortingGame.UI
                 price.style.display = owned ? DisplayStyle.None : DisplayStyle.Flex;
             }
             if (!_ctx.Owns(_selectedTool)) SelectTool(ToolType.Hand);
+            RefreshBoostButton();
         }
 
         void BuildRareCard()
@@ -831,12 +1001,8 @@ namespace SortingGame.UI
             card.AddToClassList("book-card");
             _bookCard = card;
             Add(card, new Label(Loc.Get("hud.collection_book")), "banner-title");
-            var pager = Add(card, new VisualElement(), "book-pager");
-            Add(pager, new Button(() => TurnBookPage(-1)) { text = "<" }, "pager-button");
-            var pageInfo = Add(pager, new VisualElement(), "book-page-info");
-            _bookTitle = Add(pageInfo, new Label(), "book-page-title");
-            _bookCount = Add(pageInfo, new Label(), "book-count");
-            Add(pager, new Button(() => TurnBookPage(1)) { text = ">" }, "pager-button");
+            Add(card, new Label(Loc.Get("hud.album_title")), "book-page-title");
+            _bookCount = Add(card, new Label(), "book-count");
             _bookGrid = Add(card, new VisualElement(), "book-grid");
             Add(card, new Button(CloseBook) { text = Loc.Get("hud.close") }, "primary-button");
         }

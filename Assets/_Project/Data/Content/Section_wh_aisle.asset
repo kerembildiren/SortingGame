@@ -33,6 +33,7 @@ MonoBehaviour:
     Count: 12
   Collectibles:
   - {fileID: 11400000, guid: 27354a6b44359c242ad32754bfe7f905, type: 2}
+  RareItems: []
   LooseItemRatio: 0.25
   DirtCoverage: 0.5
   BuriedItemRatio: 0.15

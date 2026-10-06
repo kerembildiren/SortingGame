@@ -9,7 +9,7 @@ namespace SortingGame.EditorTools
 {
     /// <summary>
     /// Creates the placeholder content: 3 venues (Comic Box, Garage, Warehouse with 4 sections), 7 categories,
-    /// collectibles with one costumed mascot per venue, tools.
+    /// one costumed Chubby per venue, a few blue rare items, tools, Auto Sort packs.
     /// "Create" only fills in what is missing, so inspector edits survive.
     /// "Rebuild" overwrites the sample assets with the values below.
     /// </summary>
@@ -39,6 +39,17 @@ namespace SortingGame.EditorTools
 
             var database = ProjectSetup.LoadOrCreate<GameDatabase>(ProjectSetup.DatabasePath);
             database.Balance = ProjectSetup.LoadOrCreate<BalanceConfig>(ProjectSetup.BalancePath);
+            if (overwrite || database.Balance.AutoSortPacks.Count == 0)
+            {
+                // GDD 11.3: Auto Sort charges are sold for real money only. Prices are stand-ins (fake store).
+                database.Balance.AutoSortPacks = new List<BalanceConfig.AutoSortPack>
+                {
+                    new() { Id = "auto_sort_1", Charges = 1, PriceLabel = "$0.99" },
+                    new() { Id = "auto_sort_5", Charges = 5, PriceLabel = "$3.99" },
+                    new() { Id = "auto_sort_15", Charges = 15, PriceLabel = "$9.99" },
+                };
+                EditorUtility.SetDirty(database.Balance);
+            }
             database.Feel = ProjectSetup.LoadOrCreate<FeelConfig>(FeelPath);
 
             var lit = LitMaterial();
@@ -120,34 +131,41 @@ namespace SortingGame.EditorTools
 
             var box = Container("cardboard_box", 15, overwrite);
 
-            // ---- Collectibles (GDD 9): one costumed Chubby per venue + rare items ----
+            // ---- Collectibles (GDD 9.2): one costumed Chubby per venue, nothing else ----
             var chubbyBlue = new Color(0.30f, 0.50f, 0.95f);
             var mascotSize = new Vector3(0.30f, 0.30f, 0.28f);
-            var captain = Collectible("captain_chubby", ItemRarity.Mascot, PlaceholderShape.Sphere, chubbyBlue, mascotSize, 150, overwrite, new Color(0.90f, 0.22f, 0.22f));
-            var firstIssue = Collectible("first_issue", ItemRarity.Rare, PlaceholderShape.Book, new Color(0.98f, 0.78f, 0.35f), new Vector3(0.29f, 0.39f, 0.05f), 60, overwrite);
-            var mechanic = Collectible("mechanic_chubby", ItemRarity.Mascot, PlaceholderShape.Sphere, chubbyBlue, mascotSize, 200, overwrite, new Color(1.00f, 0.55f, 0.10f));
-            var robot = Collectible("golden_robot", ItemRarity.Rare, PlaceholderShape.Capsule, new Color(1.00f, 0.80f, 0.25f), new Vector3(0.18f, 0.36f, 0.18f), 60, overwrite);
-            var luckyWrench = Collectible("lucky_wrench", ItemRarity.Rare, PlaceholderShape.Rod, new Color(1.00f, 0.84f, 0.30f), new Vector3(0.09f, 0.40f, 0.09f), 60, overwrite);
-            var guard = Collectible("night_guard_chubby", ItemRarity.Mascot, PlaceholderShape.Sphere, chubbyBlue, mascotSize, 300, overwrite, new Color(0.15f, 0.20f, 0.42f));
-            var stapler = Collectible("brass_stapler", ItemRarity.Rare, PlaceholderShape.Cube, new Color(0.95f, 0.75f, 0.30f), new Vector3(0.26f, 0.12f, 0.10f), 90, overwrite);
-            var hubcap = Collectible("chrome_hubcap", ItemRarity.Rare, PlaceholderShape.Cylinder, new Color(1.00f, 0.88f, 0.45f), new Vector3(0.34f, 0.06f, 0.34f), 90, overwrite);
-            var bottle = Collectible("message_bottle", ItemRarity.Rare, PlaceholderShape.Cylinder, new Color(1.00f, 0.85f, 0.40f), new Vector3(0.13f, 0.38f, 0.13f), 90, overwrite);
-            items.AddRange(new ItemDefinition[] { captain, firstIssue, mechanic, robot, luckyWrench, guard, stapler, hubcap, bottle });
+            var captain = Collectible("captain_chubby", chubbyBlue, mascotSize, overwrite, new Color(0.90f, 0.22f, 0.22f));
+            var mechanic = Collectible("mechanic_chubby", chubbyBlue, mascotSize, overwrite, new Color(1.00f, 0.55f, 0.10f));
+            var guard = Collectible("night_guard_chubby", chubbyBlue, mascotSize, overwrite, new Color(0.15f, 0.20f, 0.42f));
+            items.AddRange(new ItemDefinition[] { captain, mechanic, guard });
+
+            // ---- Rare items (GDD 9.4): a special member of a category, glows blue, shelved like the rest,
+            // worth a bit more. Not every room has one. These were gold collectibles before 2026-10-06.
+            var firstIssue = RareItem("rare_first_issue", comics, 5, PlaceholderShape.Book, new Color(0.98f, 0.78f, 0.35f), new Vector3(0.29f, 0.39f, 0.05f), overwrite);
+            var robot = RareItem("rare_golden_robot", toys, 8, PlaceholderShape.Capsule, new Color(1.00f, 0.80f, 0.25f), new Vector3(0.18f, 0.36f, 0.18f), overwrite);
+            var luckyWrench = RareItem("rare_lucky_wrench", tools, 8, PlaceholderShape.Rod, new Color(1.00f, 0.84f, 0.30f), new Vector3(0.09f, 0.40f, 0.09f), overwrite);
+            var stapler = RareItem("rare_brass_stapler", stationery, 8, PlaceholderShape.Cube, new Color(0.95f, 0.75f, 0.30f), new Vector3(0.26f, 0.12f, 0.10f), overwrite);
+            var hubcap = RareItem("rare_chrome_hubcap", tyres, 12, PlaceholderShape.Cylinder, new Color(1.00f, 0.88f, 0.45f), new Vector3(0.34f, 0.06f, 0.34f), overwrite);
+            var bottle = RareItem("rare_message_bottle", bottles, 8, PlaceholderShape.Cylinder, new Color(1.00f, 0.85f, 0.40f), new Vector3(0.13f, 0.38f, 0.13f), overwrite);
+            items.AddRange(new[] { firstIssue, robot, luckyWrench, stapler, hubcap, bottle });
+            DeleteObsolete("Collectible_first_issue", "Collectible_golden_robot", "Collectible_lucky_wrench",
+                "Collectible_brass_stapler", "Collectible_chrome_hubcap", "Collectible_message_bottle");
 
             // ---- Sections (M4.2 "big" sizes: ~60 / ~200 / ~300 per Warehouse room; more categories further up the ladder).
             // Floor width follows the bookcases; wide rooms pan sideways. GDD 5.3 numbers are [VARSAYILAN].
+            var none = new CollectibleDefinition[0];
             var comicBoxSection = Section("comic_box", 5.6f, overwrite, 0.35f, 0.1f,
-                new[] { (comics, 40), (toys, 20) }, 1, new[] { captain, firstIssue });
+                new[] { (comics, 40), (toys, 20) }, 1, new[] { captain }, firstIssue);
             var garageSection = Section("garage", 6.4f, overwrite, 0.55f, 0.15f,
-                new[] { (comics, 50), (toys, 50), (tools, 50), (tyres, 50) }, 1, new[] { mechanic, robot, luckyWrench });
+                new[] { (comics, 50), (toys, 50), (tools, 50), (tyres, 50) }, 1, new[] { mechanic }, robot, luckyWrench);
             var office = Section("wh_office", 6.4f, overwrite, 0.5f, 0.15f,
-                new[] { (stationery, 60), (mugs, 60), (comics, 60), (bottles, 60), (tools, 60) }, 2, new[] { stapler });
+                new[] { (stationery, 60), (mugs, 60), (comics, 60), (bottles, 60), (tools, 60) }, 2, none, stapler);
             var dock = Section("wh_dock", 6.4f, overwrite, 0.6f, 0.15f,
-                new[] { (tools, 60), (tyres, 60), (bottles, 60), (toys, 60), (mugs, 60) }, 3, new[] { hubcap });
+                new[] { (tools, 60), (tyres, 60), (bottles, 60), (toys, 60), (mugs, 60) }, 3, none, hubcap);
             var aisle = Section("wh_aisle", 6.4f, overwrite, 0.5f, 0.15f,
                 new[] { (toys, 50), (comics, 50), (stationery, 50), (mugs, 50), (tyres, 50), (bottles, 50) }, 4, new[] { guard });
             var basement = Section("wh_basement", 6.4f, overwrite, 0.7f, 0.2f,
-                new[] { (bottles, 50), (stationery, 50), (tools, 50), (tyres, 50), (comics, 50), (toys, 50) }, 5, new[] { bottle });
+                new[] { (bottles, 50), (stationery, 50), (tools, 50), (tyres, 50), (comics, 50), (toys, 50) }, 5, none, bottle);
             if (overwrite || basement.UnlockCoinCost == 0)
             {
                 // GDD 5.4: opens when the other rooms average 60%, or right away for coins.
@@ -157,23 +175,23 @@ namespace SortingGame.EditorTools
                 EditorUtility.SetDirty(basement);
             }
 
-            // ---- Venues: GDD 5.3 ladder. First is free; each sale pays for the next. ----
-            var comicBox = Venue("comic_box", 0, 150, overwrite, new[] { comicBoxSection }, new[] { captain, firstIssue });
-            var garage = Venue("garage", 100, 350, overwrite, new[] { garageSection }, new[] { mechanic, robot, luckyWrench });
-            var warehouse = Venue("warehouse", 300, 1500, overwrite, new[] { office, dock, aisle, basement }, new[] { guard, stapler, hubcap, bottle });
+            // ---- Venues: GDD 5.3 ladder. Each opens for free when the one before is complete; one Chubby each. ----
+            var comicBox = Venue("comic_box", overwrite, new[] { comicBoxSection }, captain);
+            var garage = Venue("garage", overwrite, new[] { garageSection }, mechanic);
+            var warehouse = Venue("warehouse", overwrite, new[] { office, dock, aisle, basement }, guard);
 
             database.Categories = new List<CategoryDefinition> { comics, toys, tools, stationery, mugs, tyres, bottles };
             database.Items = items;
             database.Containers = new List<ContainerDefinition> { box };
 
             // ---- Tools (GDD 10.1). Level 1 cost = unlock price. Values: see ToolDefinition. ----
-            database.Tools = new List<ToolDefinition>
-            {
-                // Hand: carry capacity / pick-up radius. Magnet: pull radius / extra items pulled.
-                Tool("hand", ToolType.Hand, overwrite, (0, 1f, 0.10f), (60, 2f, 0.11f), (180, 3f, 0.12f)),
-                Tool("broom", ToolType.Broom, overwrite, (0, 0.38f, 0f), (50, 0.5f, 0f), (150, 0.65f, 0f)),
-                Tool("magnet", ToolType.Magnet, overwrite, (40, 0.35f, 2f), (120, 0.45f, 4f), (300, 0.55f, 6f)),
-            };
+            // Hand: carry capacity / pick-up radius. Magnet: pull radius / extra items pulled.
+            // Magnet is strong, so it comes late: Hand has to be maxed first and it costs clearly more
+            // (Hand costs 240 in total; a Warehouse room pays roughly 550).
+            var hand = Tool("hand", ToolType.Hand, overwrite, null, (0, 1f, 0.10f), (60, 2f, 0.11f), (180, 3f, 0.12f));
+            var broom = Tool("broom", ToolType.Broom, overwrite, null, (0, 0.38f, 0f), (50, 0.5f, 0f), (150, 0.65f, 0f));
+            var magnet = Tool("magnet", ToolType.Magnet, overwrite, hand, (500, 0.35f, 2f), (900, 0.45f, 4f), (1600, 0.55f, 6f));
+            database.Tools = new List<ToolDefinition> { hand, broom, magnet };
             database.Venues = new List<VenueDefinition> { comicBox, garage, warehouse };
             EditorUtility.SetDirty(database);
 
@@ -193,7 +211,6 @@ namespace SortingGame.EditorTools
             category.BaseCoinValue = coins;
             category.SlotSize = slotSize;
             category.PlaceSound = sound;
-            category.MasteryThreshold = 50; // prototype value; rooms hold 40-60 per category (M4.2)
             EditorUtility.SetDirty(category);
             return category;
         }
@@ -211,23 +228,46 @@ namespace SortingGame.EditorTools
             return item;
         }
 
-        static CollectibleDefinition Collectible(string id, ItemRarity rarity, PlaceholderShape shape, Color color, Vector3 size, int duplicateValue, bool overwrite, Color? costume = null)
+        static ItemDefinition RareItem(string id, CategoryDefinition category, int coins, PlaceholderShape shape, Color color, Vector3 size, bool overwrite)
+        {
+            var item = Load<ItemDefinition>($"{ContentFolder}/Item_{id}.asset", out var isNew);
+            if (!isNew && !overwrite) return item;
+            item.Id = id;
+            item.DisplayNameKey = $"item.{id}";
+            item.Category = category;
+            item.Rarity = ItemRarity.Rare;
+            item.CoinValueOverride = coins;
+            item.Placeholder = new PlaceholderVisual(shape, color, size);
+            EditorUtility.SetDirty(item);
+            return item;
+        }
+
+        static CollectibleDefinition Collectible(string id, Color color, Vector3 size, bool overwrite, Color costume)
         {
             var collectible = Load<CollectibleDefinition>($"{ContentFolder}/Collectible_{id}.asset", out var isNew);
             if (!isNew && !overwrite) return collectible;
             collectible.Id = id;
             collectible.DisplayNameKey = $"collectible.{id}";
             collectible.DescriptionKey = $"collectible.{id}.desc";
-            collectible.Rarity = rarity;
+            collectible.Rarity = ItemRarity.Mascot;
             collectible.Category = null;
-            collectible.DuplicateSellValue = duplicateValue;
-            collectible.Placeholder = new PlaceholderVisual(shape, color, size);
-            collectible.CostumeColor = costume ?? new Color(0.90f, 0.22f, 0.22f);
+            collectible.Placeholder = new PlaceholderVisual(PlaceholderShape.Sphere, color, size);
+            collectible.CostumeColor = costume;
             EditorUtility.SetDirty(collectible);
             return collectible;
         }
 
-        static ToolDefinition Tool(string id, ToolType type, bool overwrite, params (int cost, float primary, float secondary)[] levels)
+        /// <summary>Content that no longer exists must not linger as assets (setup stays idempotent).</summary>
+        static void DeleteObsolete(params string[] assetNames)
+        {
+            foreach (var name in assetNames)
+            {
+                var path = $"{ContentFolder}/{name}.asset";
+                if (AssetDatabase.LoadMainAssetAtPath(path) != null) AssetDatabase.DeleteAsset(path);
+            }
+        }
+
+        static ToolDefinition Tool(string id, ToolType type, bool overwrite, ToolDefinition requiresMaxed, params (int cost, float primary, float secondary)[] levels)
         {
             var tool = Load<ToolDefinition>($"{ContentFolder}/Tool_{id}.asset", out var isNew);
             if (!isNew && !overwrite) return tool;
@@ -235,6 +275,7 @@ namespace SortingGame.EditorTools
             tool.Type = type;
             tool.DisplayNameKey = $"tool.{id}";
             tool.EffectKey = $"tool.{id}.effect";
+            tool.RequiresMaxed = requiresMaxed;
             tool.Levels = new List<ToolDefinition.Level>();
             foreach (var (cost, primary, secondary) in levels)
                 tool.Levels.Add(new ToolDefinition.Level { Cost = cost, Primary = primary, Secondary = secondary });
@@ -245,7 +286,7 @@ namespace SortingGame.EditorTools
         const float LooseShare = 0.25f;
 
         static SectionDefinition Section(string id, float depth, bool overwrite, float dirt, float buried,
-            (CategoryDefinition category, int slots)[] shelves, int seed, CollectibleDefinition[] collectibles)
+            (CategoryDefinition category, int slots)[] shelves, int seed, CollectibleDefinition[] collectibles, params ItemDefinition[] rareItems)
         {
             var path = id == "garage" ? StartSectionPath : $"{ContentFolder}/Section_{id}.asset";
             var section = Load<SectionDefinition>(path, out var isNew);
@@ -273,6 +314,7 @@ namespace SortingGame.EditorTools
             section.DirtCoverage = dirt;
             section.BuriedItemRatio = buried;
             section.Collectibles = new List<CollectibleDefinition>(collectibles);
+            section.RareItems = new List<ItemDefinition>(rareItems);
             section.Seed = seed;
             section.StartsLocked = false;
             section.UnlockCoinCost = 0;
@@ -281,17 +323,15 @@ namespace SortingGame.EditorTools
             return section;
         }
 
-        static VenueDefinition Venue(string id, int price, int sellValue, bool overwrite, SectionDefinition[] sections, CollectibleDefinition[] page)
+        static VenueDefinition Venue(string id, bool overwrite, SectionDefinition[] sections, CollectibleDefinition chubby)
         {
             var venue = Load<VenueDefinition>($"{ContentFolder}/Venue_{Capitalise(id)}.asset", out var isNew);
             if (!isNew && !overwrite) return venue;
             venue.Id = id;
             venue.DisplayNameKey = $"venue.{id}";
             venue.ThemeId = id;
-            venue.PurchasePrice = price;
-            venue.SellValue = sellValue;
             venue.Sections = new List<SectionDefinition>(sections);
-            venue.CollectionPage = new List<CollectibleDefinition>(page);
+            venue.CollectionPage = new List<CollectibleDefinition> { chubby };
             EditorUtility.SetDirty(venue);
             return venue;
         }

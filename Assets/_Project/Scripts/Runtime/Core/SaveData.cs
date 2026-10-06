@@ -12,13 +12,14 @@ namespace SortingGame.Core
     [Serializable]
     public class SaveData
     {
-        public const int CurrentVersion = 2;
+        public const int CurrentVersion = 3;
 
         public int Version = CurrentVersion;
         public string SavedAtUtc;
         public long Coins;
         public List<string> Collection = new();
-        public List<IdCount> Mastery = new();
+        /// <summary>Auto Sort uses bought with real money and not spent yet (GDD 10.2).</summary>
+        public int AutoSortCharges;
         public List<IdCount> Tools = new();
         public List<SectionSave> Sections = new();
 
@@ -79,6 +80,8 @@ namespace SortingGame.Core
         public float Fraction;
         public List<ItemSave> Items = new();
         public List<ContainerSave> Containers = new();
+        /// <summary>Category that sorts itself in this room (Auto Sort boost, one per room). Empty = not used yet.</summary>
+        public string AutoSortCategoryId;
 
         // Dirt mask, gzip + base64. Empty = no dirt layer.
         public int DirtWidth;

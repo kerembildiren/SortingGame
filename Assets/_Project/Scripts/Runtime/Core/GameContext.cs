@@ -9,7 +9,9 @@ namespace SortingGame.Core
         public SectionVisuals Visuals;
         public Wallet Wallet;
         public CollectionBook Book;
-        public CategoryMastery Mastery;
+        public AutoSortBoost AutoSort;
+        public IAdProvider Ads;
+        public IStoreProvider Store;
         public ToolProgress Tools;
 
         public FeelConfig Feel => Database.Feel;

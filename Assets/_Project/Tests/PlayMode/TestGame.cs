@@ -67,7 +67,7 @@ namespace SortingGame.Tests
                 yield return new WaitForSeconds(0.6f);
             }
 
-            foreach (var item in Boot.Section.CommonItems.Where(i => i.State is SortingGame.Section.ItemState.Resting or SortingGame.Section.ItemState.Physics).ToList())
+            foreach (var item in Boot.Section.SortableItems.Where(i => i.State is SortingGame.Section.ItemState.Resting or SortingGame.Section.ItemState.Physics).ToList())
             {
                 var shelf = Boot.Section.ShelfFor(item.Definition.Category);
                 Boot.Section.TryPlace(item, shelf, shelf.transform.position);

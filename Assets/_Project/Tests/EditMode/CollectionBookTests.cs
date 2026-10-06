@@ -7,65 +7,73 @@ namespace SortingGame.Tests
 {
     public class CollectionBookTests
     {
-        CollectibleDefinition _robot;
-        CollectibleDefinition _chubby;
+        CollectibleDefinition _captain;
+        CollectibleDefinition _mechanic;
 
         [SetUp]
         public void SetUp()
         {
-            _robot = ScriptableObject.CreateInstance<CollectibleDefinition>();
-            _robot.Id = "golden_robot";
-            _robot.DuplicateSellValue = 60;
-            _chubby = ScriptableObject.CreateInstance<CollectibleDefinition>();
-            _chubby.Id = "captain_chubby";
-            _chubby.Rarity = ItemRarity.Mascot;
+            _captain = ScriptableObject.CreateInstance<CollectibleDefinition>();
+            _captain.Id = "captain_chubby";
+            _captain.Rarity = ItemRarity.Mascot;
+            _mechanic = ScriptableObject.CreateInstance<CollectibleDefinition>();
+            _mechanic.Id = "mechanic_chubby";
+            _mechanic.Rarity = ItemRarity.Mascot;
         }
 
         [TearDown]
         public void TearDown()
         {
-            Object.DestroyImmediate(_robot);
-            Object.DestroyImmediate(_chubby);
+            Object.DestroyImmediate(_captain);
+            Object.DestroyImmediate(_mechanic);
         }
 
         [Test]
-        public void FirstCopy_GoesToTheBook_WithoutCoins()
+        public void FoundChubby_GoesToTheBook()
         {
             var book = new CollectionBook();
             CollectibleDefinition added = null;
             book.Added += c => added = c;
 
-            var result = book.Register(_robot);
+            Assert.IsTrue(book.Register(_captain));
 
-            Assert.IsTrue(result.IsNew);
-            Assert.AreEqual(0, result.DuplicateCoins);
-            Assert.IsTrue(book.Has(_robot));
-            Assert.AreSame(_robot, added);
+            Assert.IsTrue(book.Has(_captain));
+            Assert.AreSame(_captain, added);
         }
 
         [Test]
-        public void Duplicate_IsSoldForItsValue_AndBookUnchanged()
+        public void SameChubby_IsNeverAddedTwice()
         {
             var book = new CollectionBook();
-            book.Register(_robot);
+            book.Register(_captain);
             var addedCount = 0;
             book.Added += _ => addedCount++;
 
-            var result = book.Register(_robot);
+            Assert.IsFalse(book.Register(_captain));
 
-            Assert.IsFalse(result.IsNew);
-            Assert.AreEqual(60, result.DuplicateCoins);
             Assert.AreEqual(0, addedCount);
             Assert.AreEqual(1, book.FoundIds.Count);
         }
 
         [Test]
-        public void CountFound_CountsOnlyThePage()
+        public void CountFound_CountsTheAlbumEntries()
         {
             var book = new CollectionBook();
-            book.Register(_chubby);
+            book.Register(_mechanic);
 
-            Assert.AreEqual(1, book.CountFound(new[] { _robot, _chubby }));
+            Assert.AreEqual(1, book.CountFound(new[] { _captain, _mechanic }));
+        }
+
+        [Test]
+        public void OnlyMascots_AreCollectibles_RareItemsGoOnShelves()
+        {
+            var rare = ScriptableObject.CreateInstance<ItemDefinition>();
+            rare.Rarity = ItemRarity.Rare;
+
+            Assert.IsTrue(_captain.IsCollectible);
+            Assert.IsFalse(rare.IsCollectible);
+            Assert.IsTrue(rare.IsRare);
+            Object.DestroyImmediate(rare);
         }
     }
 }

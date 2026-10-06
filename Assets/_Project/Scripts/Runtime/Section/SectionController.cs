@@ -10,14 +10,15 @@ namespace SortingGame.Section
 {
     /// <summary>
     /// Builds one section from its definition and owns its rules: correct shelf = snap + coins,
-    /// wrong shelf = soft return + hint (GDD 7.1, 7.2), sweeping the dirt layer (7.3), finding collectibles (9.3)
-    /// and the 100% renovation (5.5). Views report to it, the HUD listens to its events.
+    /// wrong shelf = soft return + hint (GDD 7.1, 7.2), sweeping the dirt layer (7.3), finding collectibles (9.3),
+    /// the Auto Sort boost (10.2) and the 100% renovation (5.5). Views report to it, the HUD listens to its events.
     /// </summary>
     public class SectionController : MonoBehaviour
     {
         const float WallHeight = 2.6f;
         const float ShelfGap = 0.12f;
         const float FloorMargin = 0.45f;
+        const float AutoSortInterval = 0.4f;
 
         public event Action<ItemView, ShelfView, int> ItemPlaced;   // item, shelf, coins
         public event Action<ItemView, ShelfView> WrongShelf;        // item, correct shelf
@@ -25,8 +26,9 @@ namespace SortingGame.Section
         public event Action SectionCompleted;
         public event Action<SectionProgress> ProgressChanged;
         public event Action<ItemView> ItemRevealed;
-        public event Action<ItemView, CollectionBook.FindResult> CollectibleFound;
-        public event Action<CategoryDefinition> CategoryMastered;
+        public event Action<ItemView> CollectibleFound;
+        /// <summary>The Auto Sort boost was switched on for this category (GDD 10.2).</summary>
+        public event Action<CategoryDefinition> AutoSortStarted;
         /// <summary>Everything is sorted and swept but a collectible is still waiting to be picked up.</summary>
         public event Action OnlyCollectiblesLeft;
         /// <summary>Something worth saving happened (placement, sweep, box opened, find...).</summary>
@@ -40,9 +42,15 @@ namespace SortingGame.Section
         public IReadOnlyList<ShelfView> Shelves => _shelves;
         public IReadOnlyList<ItemView> Items => _items;
         public IReadOnlyList<ContainerView> Containers => _containers;
-        public IEnumerable<ItemView> CommonItems => _items.Where(i => i != null && !i.IsCollectible);
+        /// <summary>Everything that belongs on a shelf: common and rare items.</summary>
+        public IEnumerable<ItemView> SortableItems => _items.Where(i => i != null && !i.IsCollectible);
         public IEnumerable<ItemView> Collectibles => _items.Where(i => i != null && i.IsCollectible);
         public float DirtCleaned => _dirt == null ? 1f : _dirt.CleanedFraction;
+
+        /// <summary>Category that sorts itself in this room until it is finished; null while the boost is unused.</summary>
+        public CategoryDefinition AutoSortCategory { get; private set; }
+        /// <summary>One shelf per room (GDD 10.2).</summary>
+        public bool CanStartAutoSort => IsLoaded && AutoSortCategory == null && !_completed;
 
         readonly List<ShelfView> _shelves = new();
         readonly List<ItemView> _items = new();
@@ -67,6 +75,7 @@ namespace SortingGame.Section
         float _mood;
         int _seed;
         bool _shinyHintShown;
+        float _autoSortTimer;
         readonly Dictionary<ItemView, MeshRenderer> _lensMarkers = new();
 
         DirtMask _dirt;
@@ -127,8 +136,8 @@ namespace SortingGame.Section
             if (camera != null) camera.backgroundColor = _completed ? _visuals.BackgroundColorClean : _visuals.BackgroundColor;
             SfxPlayer.Instance?.SetLoop(Sfx.CleanAmbienceLoop, _completed ? 0.6f : 0f);
 
-            // Give the player a moment to see the room before mastered items fly.
-            Tween.Delay(_root, 0.8f, AutoSortAllMastered);
+            // Loaded with the boost already on: give the player a moment to see the room before items fly.
+            _autoSortTimer = 0.8f;
         }
 
         /// <summary>Leaving the section view: free everything (only the active section is loaded, GDD 15.3).</summary>
@@ -155,6 +164,7 @@ namespace SortingGame.Section
             _placeStreak = 0;
             _completed = false;
             _shinyHintShown = false;
+            AutoSortCategory = null;
         }
 
         // ---------- Rules: shelves ----------
@@ -244,13 +254,34 @@ namespace SortingGame.Section
 
         static float FlatDistance(Vector3 a, Vector3 b) => Vector2.Distance(new Vector2(a.x, a.z), new Vector2(b.x, b.z));
 
-        // ---------- Category Mastery (GDD 10.2) ----------
+        // ---------- Auto Sort boost (GDD 10.2) ----------
 
-        /// <summary>A box spilled an item: mastered categories fly straight to their shelf, the rest tumble.</summary>
+        /// <summary>
+        /// Switches the boost on for this shelf's category: its common items fly to the shelf by themselves until
+        /// the room is finished, whether they lie on the floor now, spill from a box or are swept free later.
+        /// Rare items and collectibles stay for the player (principle 6). The caller has paid (ad or charge).
+        /// </summary>
+        public bool StartAutoSort(ShelfView shelf)
+        {
+            if (!CanStartAutoSort || shelf == null || !shelf.HasFreeSlot) return false;
+            AutoSortCategory = shelf.Category;
+            _autoSortTimer = AutoSortInterval;
+            SfxPlayer.Instance?.Play(Sfx.Mastery, 0f);
+            Haptics.Strong();
+            AutoSortStarted?.Invoke(shelf.Category);
+            AutoSortLoose(0.35f, 0.08f);
+            StateChanged?.Invoke();
+            return true;
+        }
+
+        bool IsAutoSorted(ItemDefinition definition) =>
+            AutoSortCategory != null && definition.Rarity == ItemRarity.Common && definition.Category == AutoSortCategory;
+
+        /// <summary>A box spilled an item: the boosted category flies straight to its shelf, the rest tumble.</summary>
         void SpillFromContainer(ItemDefinition definition, Vector3 position, Quaternion rotation, Vector3 velocity, Vector3 angular)
         {
             var view = SpawnItem(definition, position, rotation);
-            if (!definition.IsCollectible && _ctx.Mastery.IsMastered(definition.Category) && AutoSort(view, 0f)) return;
+            if (IsAutoSorted(definition) && AutoSort(view, 0f)) return;
             view.Launch(velocity, angular);
         }
 
@@ -263,22 +294,26 @@ namespace SortingGame.Section
             return true;
         }
 
-        /// <summary>The mastery moment: every loose item of the category flies to its shelf.</summary>
-        bool IsMastered(ItemView item) => !item.IsCollectible && _ctx.Mastery.IsMastered(item.Definition.Category);
-
-        /// <summary>New game or loaded save: mastered categories lying on the floor tidy themselves up.</summary>
-        void AutoSortAllMastered()
+        /// <summary>Every boosted item that lies free right now takes off, one after another.</summary>
+        void AutoSortLoose(float firstDelay, float stagger)
         {
-            foreach (var category in _database.Categories)
-                if (_ctx.Mastery.IsMastered(category)) AutoSortLoose(category);
+            var loose = _items
+                .Where(i => i != null && IsAutoSorted(i.Definition) && i.State is ItemState.Resting or ItemState.Physics)
+                .ToList();
+            for (var i = 0; i < loose.Count; i++) AutoSort(loose[i], firstDelay + i * stagger);
         }
 
-        void AutoSortLoose(CategoryDefinition category)
+        /// <summary>
+        /// Safety net behind the direct hooks (spill, reveal): whatever ends up loose later, e.g. an item the player
+        /// dropped or one that came back from a wrong shelf, is picked up on the next tick.
+        /// </summary>
+        void Update()
         {
-            var loose = CommonItems
-                .Where(i => i.Definition.Category == category && i.State is ItemState.Resting or ItemState.Physics)
-                .ToList();
-            for (var i = 0; i < loose.Count; i++) AutoSort(loose[i], 0.35f + i * 0.08f);
+            if (AutoSortCategory == null || _root == null) return;
+            _autoSortTimer -= Time.deltaTime;
+            if (_autoSortTimer > 0f) return;
+            _autoSortTimer = AutoSortInterval;
+            AutoSortLoose(0f, 0.08f);
         }
 
         public ShelfView ShelfFor(CategoryDefinition category) => _shelves.FirstOrDefault(s => s.Category == category);
@@ -304,15 +339,17 @@ namespace SortingGame.Section
             SfxPlayer.Instance?.Play(Sfx.Coin, 0.03f, 0.6f);
             Haptics.Light();
 
-            ItemPlaced?.Invoke(item, shelf, coins);
-
-            if (_ctx.Mastery.RecordPlacement(shelf.Category))
+            if (item.IsRare)
             {
-                SfxPlayer.Instance?.Play(Sfx.Mastery, 0f);
-                Haptics.Strong();
-                CategoryMastered?.Invoke(shelf.Category);
-                AutoSortLoose(shelf.Category);
+                // GDD 9.4: a rare item on its shelf gets a small celebration of its own.
+                var sparkle = _visuals.RareItemGlowColor;
+                sparkle.a = 1f;
+                _fx.Burst(item.transform.position, sparkle, 18, 1.4f, 0.08f, 0.7f);
+                SfxPlayer.Instance?.Play(Sfx.RareItemPlaced, 0f);
+                Haptics.Medium();
             }
+
+            ItemPlaced?.Invoke(item, shelf, coins);
 
             if (shelf.IsFull)
             {
@@ -376,8 +413,8 @@ namespace SortingGame.Section
             SfxPlayer.Instance?.Play(Sfx.Reveal);
             Haptics.Light();
             ItemRevealed?.Invoke(item);
-            // Swept free and already mastered: straight to the shelf once it has popped out.
-            if (IsMastered(item)) AutoSort(item, 0.4f);
+            // Swept free while its category is boosted: straight to the shelf once it has popped out.
+            if (IsAutoSorted(item.Definition)) AutoSort(item, 0.4f);
             StateChanged?.Invoke();
         }
 
@@ -399,15 +436,14 @@ namespace SortingGame.Section
 
         // ---------- Rules: collectibles ----------
 
-        /// <summary>Player tapped a glowing collectible (GDD 9.3). First copy -> book, duplicates -> coins.</summary>
+        /// <summary>Player tapped a glowing Chubby (GDD 9.3): it goes into the book and never spawns again.</summary>
         public void FindCollectible(ItemView item)
         {
             if (item == null || !item.CanTapToFind || item.Definition is not CollectibleDefinition collectible) return;
             item.MarkFound();
             _items.Remove(item);
-            var result = _book.Register(collectible);
-            if (!result.IsNew) _wallet.Add(result.DuplicateCoins);
-            CollectibleFound?.Invoke(item, result);
+            _book.Register(collectible);
+            CollectibleFound?.Invoke(item);
             Progress.SetCollectiblesRemaining(CountCollectiblesLeft());
             StateChanged?.Invoke();
         }
@@ -503,7 +539,8 @@ namespace SortingGame.Section
                 Completed = _completed,
                 PlacedItems = Progress.PlacedItems,
                 TotalItems = Progress.TotalItems,
-                Fraction = Progress.Fraction
+                Fraction = Progress.Fraction,
+                AutoSortCategoryId = AutoSortCategory != null ? AutoSortCategory.Id : ""
             };
 
             for (var s = 0; s < _shelves.Count; s++)
@@ -550,10 +587,11 @@ namespace SortingGame.Section
             return save;
         }
 
-        /// <summary>Rebuilds items, boxes and dirt from a save. Returns the number of common items (for the %).</summary>
+        /// <summary>Rebuilds items, boxes and dirt from a save. Returns the number of shelf items (for the %).</summary>
         int Restore(SectionSave save)
         {
             _seed = save.Seed;
+            AutoSortCategory = string.IsNullOrEmpty(save.AutoSortCategoryId) ? null : _database.CategoryById(save.AutoSortCategoryId);
             if (!string.IsNullOrEmpty(save.DirtData) && save.DirtWidth > 0)
             {
                 _dirt = new DirtMask(save.DirtWidth, save.DirtHeight);
@@ -762,7 +800,8 @@ namespace SortingGame.Section
 
         ItemView SpawnItem(ItemDefinition definition, Vector3 position, Quaternion rotation)
         {
-            var view = ItemView.Create(definition, _factory, _feel, _root, _fx, _visuals.RareGlowColor);
+            var glow = definition.IsCollectible ? _visuals.RareGlowColor : _visuals.RareItemGlowColor;
+            var view = ItemView.Create(definition, _factory, _feel, _root, _fx, glow);
             view.transform.SetPositionAndRotation(position, rotation);
             _items.Add(view);
             return view;

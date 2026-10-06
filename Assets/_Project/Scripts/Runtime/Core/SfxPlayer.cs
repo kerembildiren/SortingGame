@@ -20,7 +20,7 @@ namespace SortingGame.Core
         Reveal,
         RareShimmer,
         RareFanfare,
-        DuplicateSold,
+        RareItemPlaced,
         BookStamp,
         SweepLoop,
         CleanAmbienceLoop,
@@ -174,7 +174,7 @@ namespace SortingGame.Core
             });
 
             _clips[Sfx.RareFanfare] = Arpeggio("rare_fanfare", new[] { 523f, 659f, 784f, 1047f, 1319f, 1568f, 2093f }, 0.07f);
-            _clips[Sfx.DuplicateSold] = Arpeggio("duplicate_sold", new[] { 1319f, 1568f, 1760f, 2093f }, 0.05f);
+            _clips[Sfx.RareItemPlaced] = Arpeggio("rare_item_placed", new[] { 1319f, 1568f, 1760f, 2093f }, 0.05f);
 
             _clips[Sfx.BookStamp] = Make("book_stamp", 0.2f, (t, i) =>
                 (Mathf.Sin(2 * Mathf.PI * 110f * t) * 0.7f + Noise() * 0.3f) * Mathf.Exp(-t * 25f));

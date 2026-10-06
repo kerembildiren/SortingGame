@@ -31,8 +31,9 @@ MonoBehaviour:
   Containers:
   - Container: {fileID: 11400000, guid: 7c806c7c974acb040915b5bdbaba813b, type: 2}
     Count: 11
-  Collectibles:
-  - {fileID: 11400000, guid: 912d2799f3e92584fa98b09ac56b2761, type: 2}
+  Collectibles: []
+  RareItems:
+  - {fileID: 11400000, guid: bc2b58d357160eb49bdb43bd7b9511d6, type: 2}
   LooseItemRatio: 0.25
   DirtCoverage: 0.7
   BuriedItemRatio: 0.2

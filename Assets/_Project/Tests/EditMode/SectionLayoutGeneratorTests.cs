@@ -51,7 +51,7 @@ namespace SortingGame.Tests
         {
             var c = Make<CollectibleDefinition>();
             c.Id = id;
-            c.Rarity = ItemRarity.Rare;
+            c.Rarity = ItemRarity.Mascot;
             return c;
         }
 
@@ -139,6 +139,25 @@ namespace SortingGame.Tests
 
             var all = layout.BuriedCollectibles.Concat(layout.LooseCollectibles).Concat(layout.Containers.SelectMany(c => c.Collectibles)).ToList();
             CollectionAssert.AreEqual(new[] { fresh }, all);
+        }
+
+        [Test]
+        public void RareItems_TakeOneSlotOfTheirCategory()
+        {
+            var (section, items) = MakeSection(6, 4, 2, 20, 0.2f);
+            var a = items.Keys.First(c => c.Id == "a");
+            var rare = Make<ItemDefinition>();
+            rare.Id = "rare_a";
+            rare.Rarity = ItemRarity.Rare;
+            rare.Category = a;
+            section.RareItems.Add(rare);
+
+            var layout = SectionLayoutGenerator.Generate(section, c => items[c], 8);
+
+            var all = AllItems(layout).ToList();
+            Assert.AreEqual(10, layout.TotalItems, "Still exactly one item per shelf slot.");
+            Assert.AreEqual(1, all.Count(i => i == rare));
+            Assert.AreEqual(6, all.Count(i => i.Category == a), "The rare item replaced one common item of its category.");
         }
 
         [Test]

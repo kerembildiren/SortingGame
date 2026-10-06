@@ -29,6 +29,7 @@ MonoBehaviour:
   CardboardColor: {r: 0.74, g: 0.56, b: 0.36, a: 1}
   SlotGhostColor: {r: 1, g: 0.97, b: 0.9, a: 0.55}
   RareGlowColor: {r: 1, g: 0.82, b: 0.3, a: 0.75}
+  RareItemGlowColor: {r: 0.35, g: 0.7, b: 1, a: 0.7}
   LightColor: {r: 1, g: 0.86, b: 0.68, a: 1}
   LightIntensityDirty: 0.9
   LightIntensityClean: 1.5

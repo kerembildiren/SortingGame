@@ -17,12 +17,13 @@ MonoBehaviour:
   DisplayNameKey: tool.magnet
   EffectKey: tool.magnet.effect
   Levels:
-  - Cost: 40
+  - Cost: 500
     Primary: 0.35
     Secondary: 2
-  - Cost: 120
+  - Cost: 900
     Primary: 0.45
     Secondary: 4
-  - Cost: 300
+  - Cost: 1600
     Primary: 0.55
     Secondary: 6
+  RequiresMaxed: {fileID: 11400000, guid: e60f915c781f1734b8ac93d055bdb3ce, type: 2}

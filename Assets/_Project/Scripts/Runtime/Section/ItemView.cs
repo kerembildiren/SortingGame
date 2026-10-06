@@ -37,8 +37,9 @@ namespace SortingGame.Section
         Coroutine _motion;
 
         public bool IsCollectible => Definition.IsCollectible;
+        public bool IsRare => Definition.IsRare;
 
-        /// <summary>Common items are dragged; collectibles are tapped (GDD 7.1).</summary>
+        /// <summary>Common and rare items are dragged; collectibles are tapped (GDD 7.1).</summary>
         public bool CanPick => !IsCollectible && State is ItemState.Resting or ItemState.Physics;
         public bool CanTapToFind => IsCollectible && State is ItemState.Resting or ItemState.Physics;
 
@@ -75,8 +76,8 @@ namespace SortingGame.Section
                 };
             view._colliders = go.GetComponentsInChildren<Collider>();
             view._renderers = go.GetComponentsInChildren<Renderer>();
-            if (definition.IsCollectible && fx != null)
-                view._glow = RareGlow.Attach(view, factory, fx, glowColor);
+            if ((definition.IsCollectible || definition.IsRare) && fx != null)
+                view._glow = RareGlow.Attach(view, factory, fx, glowColor, definition.IsCollectible);
             foreach (var c in view._colliders) c.sharedMaterial = _physicsMaterial;
 
             body.mass = 0.3f;
@@ -161,7 +162,7 @@ namespace SortingGame.Section
         }
 
         /// <param name="duration">Defaults to FeelConfig.PlaceDuration.</param>
-        /// <param name="arcHeight">Height of the flight curve; mastery auto-sort uses a visible arc.</param>
+        /// <param name="arcHeight">Height of the flight curve; Auto Sort and helpers use a visible arc.</param>
         /// <param name="delay">Wait before taking off (staggered chains); the slot is reserved immediately.</param>
         public void FlyToSlot(ShelfSlot slot, Action onLanded, float duration = -1f, float arcHeight = 0f, float delay = 0f)
         {
@@ -189,6 +190,7 @@ namespace SortingGame.Section
                     transform.SetParent(slot.Shelf.transform, true);
                     State = ItemState.Placed;
                     slot.Fill(this);
+                    if (_glow != null) _glow.SetGlowing(false); // a shelved rare item has done its job
                     Punch();
                     onLanded?.Invoke();
                 });
@@ -210,6 +212,7 @@ namespace SortingGame.Section
             transform.localScale = Vector3.one;
             State = ItemState.Placed;
             slot.Fill(this);
+            if (_glow != null) _glow.SetGlowing(false);
         }
 
         (Vector3 position, Quaternion rotation) SlotPose(ShelfSlot slot)

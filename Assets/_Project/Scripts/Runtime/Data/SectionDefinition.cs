@@ -6,7 +6,7 @@ namespace SortingGame.Data
 {
     /// <summary>
     /// GDD 5.1 / 15.2. One playable room. Item count is derived from shelf slots:
-    /// the generator creates exactly enough items to fill every shelf.
+    /// the generator creates exactly enough items to fill every shelf (a rare item takes one slot of its category).
     /// </summary>
     [CreateAssetMenu(menuName = "Sorting Game/Section", fileName = "Section_")]
     public class SectionDefinition : ScriptableObject
@@ -33,7 +33,10 @@ namespace SortingGame.Data
 
         public List<ShelfEntry> Shelves = new();
         public List<ContainerEntry> Containers = new();
+        [Tooltip("Chubby hidden in this room, if any (GDD 9.2: one per venue).")]
         public List<CollectibleDefinition> Collectibles = new();
+        [Tooltip("Blue-glowing rare items (GDD 9.4). Each replaces one common item of its category, so that category needs a shelf here.")]
+        public List<ItemDefinition> RareItems = new();
 
         [Range(0f, 1f), Tooltip("Share of items lying loose on the floor instead of inside containers.")]
         public float LooseItemRatio = 0.2f;

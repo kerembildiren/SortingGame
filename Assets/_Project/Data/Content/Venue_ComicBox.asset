@@ -15,10 +15,7 @@ MonoBehaviour:
   Id: comic_box
   DisplayNameKey: venue.comic_box
   ThemeId: comic_box
-  PurchasePrice: 0
-  SellValue: 150
   Sections:
   - {fileID: 11400000, guid: 1e535c4559b68ed4491ed14d90baae9f, type: 2}
   CollectionPage:
   - {fileID: 11400000, guid: 1ef146af960feed469ede5bcc1a9ad5a, type: 2}
-  - {fileID: 11400000, guid: 1990656a29d9a2244a98016a7147d348, type: 2}

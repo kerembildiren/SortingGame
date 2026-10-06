@@ -392,7 +392,7 @@
     margin-bottom: 8px;
 }
 
-/* ---------- M3: shelf labels with mastery progress (GDD 10.2) ---------- */
+/* ---------- Shelf labels; the Auto Sort shelf is tagged (GDD 10.2) ---------- */
 .shelf-label { align-items: center; }
 
 .shelf-label-text {
@@ -402,21 +402,52 @@
     margin: 0; padding: 0;
 }
 
-.shelf-label--mastered .shelf-label-text { color: rgb(196, 128, 0); }
+.shelf-label--auto .shelf-label-text { color: rgb(196, 128, 0); }
 
-.mastery-track {
-    width: 120px;
-    height: 10px;
-    margin-top: 2px;
-    border-radius: 5px;
-    background-color: rgba(74, 59, 42, 0.25);
-    overflow: hidden;
+/* ---------- Auto Sort boost: tool bar button, shelf picker, store ---------- */
+.tool--boost { background-color: rgb(214, 232, 255); }
+
+.boost-row {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin: 8px 0;
+    padding: 18px 26px;
+    border-width: 4px;
+    border-color: rgba(0, 0, 0, 0);
+    border-radius: 34px;
+    background-color: rgb(246, 238, 224);
 }
 
-.mastery-fill {
-    height: 100%;
-    width: 0;
-    background-color: rgb(245, 196, 67);
+.boost-row--selected {
+    border-color: rgb(245, 196, 67);
+    background-color: rgb(255, 240, 200);
+}
+
+.store-buy {
+    height: 96px;
+    margin: 0 0 0 16px;
+    padding: 0 30px;
+    border-width: 0;
+    border-radius: 34px;
+    background-color: rgb(84, 176, 92);
+    color: rgb(255, 255, 255);
+    font-size: 36px;
+    -unity-font-style: bold;
+}
+
+.shop-requirement {
+    font-size: 28px;
+    -unity-font-style: bold;
+    color: rgb(190, 90, 60);
+    white-space: normal;
+    margin: 4px 0 0 0; padding: 0;
+}
+
+.book-entry-venue {
+    font-size: 24px;
+    color: rgb(130, 112, 92);
+    margin: 2px 0 0 0; padding: 0;
 }
 
 .big-toast {
@@ -564,30 +595,10 @@
     -unity-font-style: bold;
 }
 
-.book-pager {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    margin-bottom: 12px;
-}
-
-.book-page-info { align-items: center; }
-
 .book-page-title {
     font-size: 42px;
     -unity-font-style: bold;
     margin: 0; padding: 0;
-}
-
-.pager-button {
-    width: 96px; height: 96px;
-    border-width: 0;
-    border-radius: 48px;
-    background-color: rgb(233, 228, 220);
-    font-size: 44px;
-    -unity-font-style: bold;
-    color: rgb(74, 59, 42);
 }
 
 .fade {

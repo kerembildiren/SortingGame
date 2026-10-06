@@ -24,9 +24,28 @@ namespace SortingGame.Data
         public IEnumerable<ItemDefinition> CommonItemsOf(CategoryDefinition category)
         {
             foreach (var item in Items)
-                if (!item.IsCollectible && item.Category == category)
+                if (item.Rarity == ItemRarity.Common && item.Category == category)
                     yield return item;
         }
+
+        /// <summary>Every collectible in album order: venue by venue along the ladder (GDD 9.1).</summary>
+        public IEnumerable<CollectibleDefinition> Album
+        {
+            get
+            {
+                foreach (var venue in Venues)
+                {
+                    if (venue == null) continue;
+                    foreach (var collectible in venue.CollectionPage)
+                        if (collectible != null)
+                            yield return collectible;
+                }
+            }
+        }
+
+        /// <summary>The venue whose album entry this collectible is.</summary>
+        public VenueDefinition VenueOf(CollectibleDefinition collectible) =>
+            Venues.Find(v => v != null && v.CollectionPage.Contains(collectible));
 
         /// <summary>Returns a list of human-readable problems. Empty list = content is valid.</summary>
         public List<string> Validate()
@@ -44,7 +63,7 @@ namespace SortingGame.Data
 
             foreach (var item in Items)
                 if (item != null && !item.IsCollectible && item.Category == null)
-                    errors.Add($"Common item '{item.Id}' has no category.");
+                    errors.Add($"Item '{item.Id}' has no category.");
 
             foreach (var venue in Venues)
             {
@@ -52,6 +71,13 @@ namespace SortingGame.Data
                 foreach (var section in venue.Sections)
                 {
                     if (section == null) { errors.Add($"Venue '{venue.Id}' has an empty section slot."); continue; }
+                    foreach (var rare in section.RareItems)
+                    {
+                        if (rare == null || !rare.IsRare)
+                            errors.Add($"Section '{section.Id}' lists a rare item that is not marked Rare.");
+                        else if (!section.Shelves.Exists(s => s.Category == rare.Category))
+                            errors.Add($"Section '{section.Id}': rare item '{rare.Id}' has no shelf for its category.");
+                    }
                     foreach (var shelf in section.Shelves)
                     {
                         if (shelf.Category == null) { errors.Add($"Section '{section.Id}' has a shelf without category."); continue; }

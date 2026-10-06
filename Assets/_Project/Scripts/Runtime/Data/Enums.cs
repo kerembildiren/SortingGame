@@ -1,6 +1,9 @@
 namespace SortingGame.Data
 {
-    /// <summary>GDD 8.1. Common items go on shelves; Rare and Mascot go to the Collection Book.</summary>
+    /// <summary>
+    /// GDD 8.1. Common and Rare items go on shelves (Rare glows blue and pays a bit more);
+    /// Mascot (Chubby) is the only collectible and goes to the Collection Book.
+    /// </summary>
     public enum ItemRarity
     {
         Common,

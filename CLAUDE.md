@@ -24,11 +24,15 @@ Cozy mobile sorting game, Unity 6 (6000.6.3f1) + URP, portrait only.
 - No third-party packages without asking the user. Own small tween helpers instead of DOTween.
 - Input: new Input System only (`activeInputHandler = 1`), use `Pointer.current` so mouse and touch behave the same.
 - Pure logic (wallet, progress, collection) is plain C# with EditMode tests.
+- Never use `??`, `??=` or `?.` on a `UnityEngine.Object` (they skip Unity's destroyed-object check; domain reload is off in Play mode, so statics outlive their objects).
+- Ads and the store are reached only through `IAdProvider` / `IStoreProvider` (fake providers for now).
 
 ## Verifying (editor must be closed for batchmode)
 ```bash
-tools/unity.sh setup    # regenerate settings, data, scenes
+tools/unity.sh setup    # regenerate settings, missing data, scenes
+tools/unity.sh rebuild  # overwrite sample content from ContentBuilder (after content changes)
 tools/unity.sh test     # EditMode tests
+tools/unity.sh playtest # PlayMode tests (whole loop, screenshots in Logs/batch)
 tools/unity.sh compile  # compile only, prints C# errors
 ```
 Logs land in `Logs/batch/`.

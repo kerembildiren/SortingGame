@@ -5,23 +5,11 @@ using SortingGame.Data;
 namespace SortingGame.Core
 {
     /// <summary>
-    /// GDD 9.1 / 9.3. First copy of a collectible goes into the book automatically (no "sell or keep" choice),
-    /// later copies are sold automatically for their duplicate value.
+    /// GDD 9.1 / 9.3. A found Chubby goes into the book automatically (no "sell or keep" choice).
+    /// There are no duplicates: a collectible that is in the book never spawns again.
     /// </summary>
     public class CollectionBook
     {
-        public readonly struct FindResult
-        {
-            public readonly bool IsNew;
-            public readonly int DuplicateCoins;
-
-            public FindResult(bool isNew, int duplicateCoins)
-            {
-                IsNew = isNew;
-                DuplicateCoins = duplicateCoins;
-            }
-        }
-
         readonly HashSet<string> _found = new();
 
         public event Action<CollectibleDefinition> Added;
@@ -30,26 +18,24 @@ namespace SortingGame.Core
 
         public bool Has(CollectibleDefinition collectible) => collectible != null && _found.Contains(collectible.Id);
 
-        public FindResult Register(CollectibleDefinition collectible)
+        /// <summary>Returns false when it was already in the book.</summary>
+        public bool Register(CollectibleDefinition collectible)
         {
             if (collectible == null) throw new ArgumentNullException(nameof(collectible));
-            if (_found.Add(collectible.Id))
-            {
-                Added?.Invoke(collectible);
-                return new FindResult(true, 0);
-            }
-            return new FindResult(false, collectible.DuplicateSellValue);
+            if (!_found.Add(collectible.Id)) return false;
+            Added?.Invoke(collectible);
+            return true;
         }
 
-        public int CountFound(IEnumerable<CollectibleDefinition> page)
+        public int CountFound(IEnumerable<CollectibleDefinition> entries)
         {
             var count = 0;
-            foreach (var c in page)
+            foreach (var c in entries)
                 if (Has(c)) count++;
             return count;
         }
 
-        /// <summary>Used by the save system (M3).</summary>
+        /// <summary>Used by the save system. Ids that are no longer collectibles are dropped by the caller.</summary>
         public void Restore(IEnumerable<string> ids)
         {
             _found.Clear();

@@ -6,15 +6,13 @@ using UnityEngine;
 namespace SortingGame.Section
 {
     /// <summary>
-    /// GDD 9.3 rare find moment, 3D half: the item rises in front of the camera with light rays and
+    /// GDD 9.3 Chubby find moment, 3D half: the figure rises in front of the camera with light rays and
     /// sparkles while the scene darkens. The HUD shows the card on top and calls <see cref="Dismiss"/>.
-    /// Duplicates get a short sparkle instead (they are sold automatically).
     /// </summary>
     public class RareFindPresenter : MonoBehaviour
     {
         /// <summary>A new collectible is on display; the HUD should show its card.</summary>
         public event Action<CollectibleDefinition> CardRequested;
-        public event Action<CollectibleDefinition, int> DuplicateSold;
         /// <summary>The item has flown into the book; the HUD can pulse its book button.</summary>
         public event Action<CollectibleDefinition> Finished;
 
@@ -69,14 +67,9 @@ namespace SortingGame.Section
         /// <summary>Upper middle of the screen, leaving room for the card below.</summary>
         float DisplayHeight => Mathf.Tan(_camera.fieldOfView * 0.5f * Mathf.Deg2Rad) * _feel.RareDisplayDistance * 0.3f;
 
-        public void Present(ItemView item, CollectionBook.FindResult result)
+        public void Present(ItemView item)
         {
             if (item.Definition is not CollectibleDefinition definition) return;
-            if (!result.IsNew)
-            {
-                PlayDuplicate(item, definition, result.DuplicateCoins);
-                return;
-            }
 
             _item = item;
             _definition = definition;
@@ -153,20 +146,6 @@ namespace SortingGame.Section
                 Haptics.Light();
                 Finished?.Invoke(definition);
             });
-        }
-
-        void PlayDuplicate(ItemView item, CollectibleDefinition definition, int coins)
-        {
-            SfxPlayer.Instance?.Play(Sfx.DuplicateSold, 0f);
-            Haptics.Medium();
-            _fx.Burst(item.transform.position + Vector3.up * 0.15f, new Color(1f, 0.85f, 0.4f), 16, 1.5f, 0.1f, 0.6f);
-            var start = item.transform.position;
-            Tween.Run(item, 0.4f, t =>
-            {
-                item.transform.position = start + Vector3.up * (Ease.OutQuad(t) * 0.5f);
-                item.transform.localScale = Vector3.one * (1f - Ease.InQuad(t));
-            }, null, () => Destroy(item.gameObject));
-            DuplicateSold?.Invoke(definition, coins);
         }
 
         static void SetAlpha(MeshRenderer renderer, float alpha)

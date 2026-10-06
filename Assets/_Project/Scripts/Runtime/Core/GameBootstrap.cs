@@ -71,11 +71,15 @@ namespace SortingGame.Core
                 Visuals = _visuals,
                 Wallet = new Wallet(System.Math.Max(0, _data.Coins)),
                 Book = new CollectionBook(),
-                Mastery = new CategoryMastery(),
+                AutoSort = new AutoSortBoost(_data.AutoSortCharges),
+                // Real ad network and store are not chosen yet (GDD 15.5).
+                Ads = new FakeAdProvider(),
+                Store = new FakeStoreProvider(),
                 Tools = new ToolProgress()
             };
-            Context.Book.Restore(_data.Collection);
-            Context.Mastery.Restore(_data.Mastery.Select(m => new KeyValuePair<string, int>(m.Id, m.Count)));
+            // Older saves also listed rare items here; only Chubby figures are collectibles now (GDD 9.2).
+            var album = new HashSet<string>(_database.Album.Select(c => c.Id));
+            Context.Book.Restore(_data.Collection.Where(album.Contains));
             Context.Tools.Restore(_data.Tools.Select(t => new KeyValuePair<string, int>(t.Id, t.Count)));
 
             new GameObject("Sfx").AddComponent<SfxPlayer>();
@@ -134,6 +138,7 @@ namespace SortingGame.Core
             Section.StateChanged += MarkDirty;
             Wallet.Changed += (_, _) => MarkDirty();
             Context.Tools.Upgraded += (_, _) => MarkDirty();
+            Context.AutoSort.Changed += _ => MarkDirty();
 
             Flow.Init(this, Overview, _camera);
             Flow.Resume();
@@ -141,33 +146,25 @@ namespace SortingGame.Core
 
         bool _bookCelebrationPending;
 
-        VenueDefinition CompletedPageOf(CollectibleDefinition collectible)
-        {
-            var venue = _database.Venues.FirstOrDefault(v => v.CollectionPage.Contains(collectible));
-            return venue != null && Book.CountFound(venue.CollectionPage) == venue.CollectionPage.Count ? venue : null;
-        }
-
-        /// <summary>After a find has flown into the book: celebrate when that venue's page is now complete.</summary>
+        /// <summary>
+        /// After a Chubby has flown into the book: the album opens and shows it. There is one per venue,
+        /// so every find is worth the moment (GDD 9.1).
+        /// </summary>
         void OnCollectibleStored(CollectibleDefinition collectible)
         {
             Hud.OnCollectibleStored();
-            var venue = CompletedPageOf(collectible);
-            if (venue == null) return;
             Tween.Delay(this, 0.4f, () =>
             {
-                Hud.PlayCollectionComplete(venue); // the open book then holds back the section banner
+                Hud.PlayAlbumCelebration(collectible); // the open book then holds back the section banner
                 _bookCelebrationPending = false;
             });
         }
 
-        void OnCollectibleFound(ItemView item, CollectionBook.FindResult result)
+        void OnCollectibleFound(ItemView item)
         {
             // Known right away, so the section-complete banner waits for the book to open and close.
-            if (result.IsNew && item.Definition is CollectibleDefinition found && CompletedPageOf(found) != null)
-                _bookCelebrationPending = true;
-            if (!result.IsNew && item.Definition is CollectibleDefinition collectible)
-                Hud.OnDuplicateSold(collectible, result.DuplicateCoins, item.transform.position);
-            RareFind.Present(item, result);
+            _bookCelebrationPending = true;
+            RareFind.Present(item);
         }
 
         /// <summary>Loads a section from its save (or generates it the first time) and shows it.</summary>
@@ -187,7 +184,7 @@ namespace SortingGame.Core
             MarkDirty();
         }
 
-        /// <summary>Dev helper (Settings): reshuffle the current section. Book, coins, tools and mastery stay.</summary>
+        /// <summary>Dev helper (Settings): reshuffle the current section. Book, coins and tools stay.</summary>
         public void Restart()
         {
             if (Flow.Current != GameFlow.Screen.Section || Flow.ActiveSection == null) return;
@@ -227,7 +224,7 @@ namespace SortingGame.Core
             if (_suppressSave || Context == null || Flow == null) return;
             _data.Coins = Wallet.Coins;
             _data.Collection = Book.FoundIds.ToList();
-            _data.Mastery = Context.Mastery.Export().Select(m => new IdCount(m.Key, m.Value)).ToList();
+            _data.AutoSortCharges = Context.AutoSort.Charges;
             _data.Tools = Context.Tools.Export().Select(t => new IdCount(t.Key, t.Value)).ToList();
             if (Section.IsLoaded) _data.SetSection(Section.Capture());
             _save.Save(_data);

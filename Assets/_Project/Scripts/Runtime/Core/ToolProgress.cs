@@ -21,6 +21,12 @@ namespace SortingGame.Core
         public bool IsOwned(ToolDefinition tool) => LevelOf(tool) > 0;
         public bool IsMaxed(ToolDefinition tool) => LevelOf(tool) >= tool.MaxLevel;
 
+        /// <summary>A locked tool may need another tool at max level first (GDD 10.1: Magnet needs Hand).</summary>
+        public bool MeetsRequirement(ToolDefinition tool) => tool.RequiresMaxed == null || IsMaxed(tool.RequiresMaxed);
+
+        /// <summary>Coins aside: may the next level be bought at all?</summary>
+        public bool CanBuy(ToolDefinition tool) => !IsMaxed(tool) && (IsOwned(tool) || MeetsRequirement(tool));
+
         /// <summary>Cost of the next level (unlock price when locked); -1 when maxed.</summary>
         public int NextCost(ToolDefinition tool) => IsMaxed(tool) ? -1 : tool.Levels[LevelOf(tool)].Cost;
 
@@ -29,7 +35,7 @@ namespace SortingGame.Core
 
         public bool TryUpgrade(ToolDefinition tool, Wallet wallet)
         {
-            if (tool == null || IsMaxed(tool)) return false;
+            if (tool == null || !CanBuy(tool)) return false;
             var cost = NextCost(tool);
             if (!wallet.TrySpend(cost)) return false;
             var level = LevelOf(tool) + 1;

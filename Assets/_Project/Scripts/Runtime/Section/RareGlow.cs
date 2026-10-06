@@ -3,7 +3,10 @@ using UnityEngine;
 
 namespace SortingGame.Section
 {
-    /// <summary>GDD 9.3 / 12.1: soft golden glow + twinkles that make a rare item stand out in the clutter.</summary>
+    /// <summary>
+    /// GDD 9.3 / 9.4 / 12.1: soft glow + twinkles that make special items stand out in the clutter.
+    /// Gold for Chubby figures, blue for rare items.
+    /// </summary>
     public class RareGlow : MonoBehaviour
     {
         const float ShimmerInterval = 3.5f;
@@ -14,10 +17,13 @@ namespace SortingGame.Section
         float _baseSize;
         float _shimmerTimer;
         bool _glowing = true;
+        bool _audible;
 
-        public static RareGlow Attach(ItemView item, PlaceholderFactory factory, Fx fx, Color color)
+        /// <param name="audible">Shimmer sound now and then; kept for collectibles so a room with several rare items stays quiet.</param>
+        public static RareGlow Attach(ItemView item, PlaceholderFactory factory, Fx fx, Color color, bool audible)
         {
             var glow = item.gameObject.AddComponent<RareGlow>();
+            glow._audible = audible;
             glow._baseSize = item.VisualSize * 2.4f;
 
             var halo = factory.CreateSoftQuad("Halo", item.transform, color, ProceduralTextures.SoftDot);
@@ -51,6 +57,7 @@ namespace SortingGame.Section
             var pulse = 1f + 0.12f * Mathf.Sin(Time.time * 3.2f);
             _halo.localScale = Vector3.one * (_baseSize * pulse);
 
+            if (!_audible) return;
             _shimmerTimer -= Time.deltaTime;
             if (_shimmerTimer <= 0f)
             {

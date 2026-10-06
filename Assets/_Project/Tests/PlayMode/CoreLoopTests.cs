@@ -13,7 +13,8 @@ namespace SortingGame.Tests
 {
     /// <summary>
     /// Runs the loop end to end on the real Main scene: tip every box, sweep the floor, find every
-    /// collectible, try a wrong shelf, sort everything, expect 100%; then replay and check duplicates sell.
+    /// collectible, try a wrong shelf, sort everything (rare items included), expect 100%; then replay and
+    /// check that found collectibles do not come back.
     /// Saves screenshots to Logs/batch for review.
     /// </summary>
     public class CoreLoopTests
@@ -66,7 +67,7 @@ namespace SortingGame.Tests
                 Assert.IsFalse(_boot.RareFind.IsPresenting);
             }
             Assert.AreEqual(collectibleCount, _boot.Book.FoundIds.Count);
-            Assert.AreEqual(coinsBeforeFinds, _boot.Wallet.Coins, "First copies give no coins, they go to the book.");
+            Assert.AreEqual(coinsBeforeFinds, _boot.Wallet.Coins, "A Chubby gives no coins, it goes to the book.");
             Assert.IsTrue(_boot.Drag.InputEnabled, "Input must come back after the moment.");
 
             _boot.Hud.OpenBook();
@@ -90,8 +91,16 @@ namespace SortingGame.Tests
             Assert.IsTrue(_boot.Hud.IsBookOpen, "Closing the viewer returns to the book.");
             _boot.Hud.CloseBook();
 
+            // Rare items (GDD 9.4): on the floor like the rest, shelved by the player, worth a bit more.
+            var rares = section.SortableItems.Where(i => i.IsRare).ToList();
+            Assert.AreEqual(section.Definition.RareItems.Count, rares.Count);
+            Assert.Greater(rares.Count, 0, "The Garage has rare items.");
+            Assert.That(rares.All(r => r.CanPick && !r.CanTapToFind), "Rare items are dragged to a shelf, not tapped.");
+            Assert.That(rares.All(r => r.Definition.CoinValue > r.Definition.Category.BaseCoinValue));
+            yield return Snapshot("m5_06_rare_items");
+
             // Wrong shelf: item comes back, no coins lost or gained (GDD 7.2).
-            var item = section.CommonItems.First(i => i.State == ItemState.Resting);
+            var item = section.SortableItems.First(i => i.State == ItemState.Resting);
             var wrong = section.Shelves.First(s => s.Category != item.Definition.Category);
             var coinsBefore = _boot.Wallet.Coins;
             Assert.IsFalse(section.TryPlace(item, wrong, wrong.transform.position));
@@ -101,7 +110,7 @@ namespace SortingGame.Tests
 
             // Sort everything.
             var expectedCoins = coinsBefore;
-            foreach (var each in section.CommonItems.ToList())
+            foreach (var each in section.SortableItems.ToList())
             {
                 var shelf = section.ShelfFor(each.Definition.Category);
                 Assert.IsTrue(section.TryPlace(each, shelf, shelf.transform.position), $"{each.Definition.Id} could not be placed.");

@@ -23,5 +23,4 @@ MonoBehaviour:
     Color: {r: 0.3, g: 0.5, b: 0.95, a: 1}
     Size: {x: 0.3, y: 0.3, z: 0.28}
   DescriptionKey: collectible.night_guard_chubby.desc
-  DuplicateSellValue: 300
   CostumeColor: {r: 0.15, g: 0.2, b: 0.42, a: 1}

@@ -26,3 +26,4 @@ MonoBehaviour:
   - Cost: 150
     Primary: 0.65
     Secondary: 0
+  RequiresMaxed: {fileID: 0}

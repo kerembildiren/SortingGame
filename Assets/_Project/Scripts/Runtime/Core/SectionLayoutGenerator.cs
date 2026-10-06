@@ -20,7 +20,7 @@ namespace SortingGame.Core
         public readonly List<CollectibleDefinition> BuriedCollectibles = new();
         public readonly List<CollectibleDefinition> LooseCollectibles = new();
 
-        /// <summary>Common items only: these are what the section % counts (collectibles are a bonus, GDD 5.6).</summary>
+        /// <summary>Everything that goes on a shelf (common and rare items): what the section % counts.</summary>
         public int TotalItems
         {
             get
@@ -33,8 +33,9 @@ namespace SortingGame.Core
     }
 
     /// <summary>
-    /// Creates exactly one item per shelf slot (so a section can always reach 100%),
-    /// then spreads them over containers, the floor and under the dirt. Same seed = same layout.
+    /// Creates exactly one item per shelf slot (so a section can always reach 100%); the section's rare items
+    /// each take one slot of their category. Then spreads everything over containers, the floor and under the dirt.
+    /// Same seed = same layout.
     /// </summary>
     public static class SectionLayoutGenerator
     {
@@ -51,9 +52,18 @@ namespace SortingGame.Core
                 if (variants == null || variants.Count == 0)
                     throw new InvalidOperationException($"Category '{shelf.Category?.Id}' has no items.");
 
+                // Rare items of this category come first; the rest of the shelf is common items.
+                var rares = 0;
+                foreach (var rare in section.RareItems)
+                {
+                    if (rare == null || rare.Category != shelf.Category || rares >= shelf.SlotCount) continue;
+                    all.Add(rare);
+                    rares++;
+                }
+
                 // Walk through shuffled variants so every variant appears before any repeats.
                 var bag = new List<ItemDefinition>();
-                for (var i = 0; i < shelf.SlotCount; i++)
+                for (var i = rares; i < shelf.SlotCount; i++)
                 {
                     if (bag.Count == 0)
                     {

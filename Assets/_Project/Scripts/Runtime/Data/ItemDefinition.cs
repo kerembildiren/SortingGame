@@ -10,7 +10,7 @@ namespace SortingGame.Data
         public string DisplayNameKey;
         public ItemRarity Rarity = ItemRarity.Common;
 
-        [Tooltip("Required for common items. Collectibles have no category.")]
+        [Tooltip("Required for common and rare items. Collectibles have no category.")]
         public CategoryDefinition Category;
 
         [Tooltip("0 = use the category's base value.")]
@@ -20,7 +20,11 @@ namespace SortingGame.Data
         public GameObject Prefab;
         public PlaceholderVisual Placeholder = new(PlaceholderShape.Cube, Color.gray, new Vector3(0.2f, 0.2f, 0.2f));
 
-        public bool IsCollectible => Rarity != ItemRarity.Common;
+        /// <summary>Goes to the Collection Book when tapped (GDD 9.2: only Chubby figures).</summary>
+        public bool IsCollectible => Rarity == ItemRarity.Mascot;
+
+        /// <summary>Blue-glowing special member of its category: shelved like a common item, worth more (GDD 9.4).</summary>
+        public bool IsRare => Rarity == ItemRarity.Rare;
 
         public int CoinValue => CoinValueOverride > 0 ? CoinValueOverride : (Category != null ? Category.BaseCoinValue : 0);
     }

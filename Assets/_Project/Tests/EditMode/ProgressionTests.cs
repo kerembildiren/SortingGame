@@ -27,15 +27,6 @@ namespace SortingGame.Tests
             return tool;
         }
 
-        CategoryDefinition MakeCategory(string id, int threshold)
-        {
-            var category = ScriptableObject.CreateInstance<CategoryDefinition>();
-            _created.Add(category);
-            category.Id = id;
-            category.MasteryThreshold = threshold;
-            return category;
-        }
-
         // ---------- Tools ----------
 
         [Test]
@@ -72,40 +63,46 @@ namespace SortingGame.Tests
             Assert.IsFalse(progress.TryUpgrade(broom, new Wallet(999)));
         }
 
-        // ---------- Mastery ----------
-
         [Test]
-        public void Mastery_TriggersExactlyOnce_AtThreshold()
+        public void GatedTool_CannotBeBought_UntilTheRequiredToolIsMaxed()
         {
-            var comics = MakeCategory("comics", 3);
-            var mastery = new CategoryMastery();
-            var events = 0;
-            mastery.Mastered += _ => events++;
+            var hand = MakeTool("hand", 0, 60, 180);
+            var magnet = MakeTool("magnet", 500, 900);
+            magnet.RequiresMaxed = hand;
+            var progress = new ToolProgress();
+            var wallet = new Wallet(5000);
 
-            Assert.IsFalse(mastery.RecordPlacement(comics));
-            Assert.IsFalse(mastery.RecordPlacement(comics));
-            Assert.IsTrue(mastery.RecordPlacement(comics));
-            Assert.IsFalse(mastery.RecordPlacement(comics));
+            Assert.IsFalse(progress.CanBuy(magnet));
+            Assert.IsFalse(progress.TryUpgrade(magnet, wallet), "Coins alone do not unlock it.");
+            Assert.AreEqual(5000, wallet.Coins);
 
-            Assert.IsTrue(mastery.IsMastered(comics));
-            Assert.AreEqual(1, events);
-            Assert.AreEqual(1f, mastery.ProgressOf(comics));
+            Assert.IsTrue(progress.TryUpgrade(hand, wallet));
+            Assert.IsFalse(progress.CanBuy(magnet), "Hand is not maxed yet.");
+            Assert.IsTrue(progress.TryUpgrade(hand, wallet));
+            Assert.IsTrue(progress.IsMaxed(hand));
+
+            Assert.IsTrue(progress.TryUpgrade(magnet, wallet));
+            Assert.IsTrue(progress.CanBuy(magnet), "Once owned, further levels only need coins.");
         }
 
+        // ---------- Auto Sort charges ----------
+
         [Test]
-        public void Mastery_IsPerCategory_AndRestorable()
+        public void AutoSortCharges_AreSpentOneByOne_AndNeverGoNegative()
         {
-            var comics = MakeCategory("comics", 2);
-            var toys = MakeCategory("toys", 2);
-            var mastery = new CategoryMastery();
-            mastery.RecordPlacement(comics);
-            mastery.RecordPlacement(comics);
+            var boost = new AutoSortBoost(1);
+            var changes = 0;
+            boost.Changed += _ => changes++;
 
-            var restored = new CategoryMastery();
-            restored.Restore(mastery.Export().ToList());
+            Assert.IsTrue(boost.TrySpend());
+            Assert.IsFalse(boost.TrySpend());
+            Assert.AreEqual(0, boost.Charges);
 
-            Assert.IsTrue(restored.IsMastered(comics));
-            Assert.IsFalse(restored.IsMastered(toys));
+            boost.Add(5);
+            boost.Add(-3);
+            Assert.AreEqual(5, boost.Charges);
+            Assert.AreEqual(2, changes, "One spend, one purchase.");
+            Assert.AreEqual(0, new AutoSortBoost(-4).Charges);
         }
 
         // ---------- Save ----------
@@ -125,8 +122,8 @@ namespace SortingGame.Tests
             var system = new SaveSystem(storage);
             var data = new SaveData { Coins = 123 };
             data.Collection.Add("captain_chubby");
-            data.Mastery.Add(new IdCount("comics", 7));
-            var section = new SectionSave { SectionId = "garage", Seed = 42 };
+            data.AutoSortCharges = 4;
+            var section = new SectionSave { SectionId = "garage", Seed = 42, AutoSortCategoryId = "toys" };
             section.Items.Add(new ItemSave { Id = "comic_red", State = ItemSaveState.Placed, Shelf = 0, Slot = 3 });
             section.Containers.Add(new ContainerSave { Id = "box", Contents = { "toy_ball", "first_issue" } });
             data.SetSection(section);
@@ -136,12 +133,27 @@ namespace SortingGame.Tests
 
             Assert.AreEqual(123, loaded.Coins);
             CollectionAssert.AreEqual(new[] { "captain_chubby" }, loaded.Collection);
-            Assert.AreEqual(7, loaded.Mastery[0].Count);
+            Assert.AreEqual(4, loaded.AutoSortCharges);
             var garage = loaded.SectionById("garage");
             Assert.AreEqual(42, garage.Seed);
+            Assert.AreEqual("toys", garage.AutoSortCategoryId);
             Assert.AreEqual(ItemSaveState.Placed, garage.Items[0].State);
             Assert.AreEqual(3, garage.Items[0].Slot);
             CollectionAssert.AreEqual(new[] { "toy_ball", "first_issue" }, garage.Containers[0].Contents);
+        }
+
+        [Test]
+        public void OlderSave_WithMasteryData_StillLoads()
+        {
+            // Version 2 saves carried Category Mastery counts and no Auto Sort data.
+            const string json = "{\"Version\":2,\"Coins\":50,\"Mastery\":[{\"Id\":\"comics\",\"Count\":7}],"
+                              + "\"Collection\":[\"captain_chubby\",\"first_issue\"],\"Sections\":[{\"SectionId\":\"garage\",\"Seed\":3}]}";
+            var loaded = new SaveSystem(new MemoryStorage { Content = json }).Load();
+
+            Assert.IsNotNull(loaded);
+            Assert.AreEqual(50, loaded.Coins);
+            Assert.AreEqual(0, loaded.AutoSortCharges);
+            Assert.That(loaded.SectionById("garage").AutoSortCategoryId, Is.Null.Or.Empty);
         }
 
         [Test]

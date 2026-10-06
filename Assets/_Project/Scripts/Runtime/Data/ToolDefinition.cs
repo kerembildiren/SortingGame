@@ -28,6 +28,9 @@ namespace SortingGame.Data
         public string EffectKey;
         public List<Level> Levels = new();
 
+        [Tooltip("Unlocking needs this other tool at max level first (GDD 10.1: Magnet needs Hand). Empty = no requirement.")]
+        public ToolDefinition RequiresMaxed;
+
         public int MaxLevel => Levels.Count;
         public bool StartsOwned => Levels.Count > 0 && Levels[0].Cost == 0;
 

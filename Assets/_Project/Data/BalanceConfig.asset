@@ -14,4 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: SortingGame.Runtime::SortingGame.Data.BalanceConfig
   DirtProgressWeight: 0.2
   StartingCoins: 0
-  OfflineCapHours: 8
+  AutoSortPacks:
+  - Id: auto_sort_1
+    Charges: 1
+    PriceLabel: $0.99
+  - Id: auto_sort_5
+    Charges: 5
+    PriceLabel: $3.99
+  - Id: auto_sort_15
+    Charges: 15
+    PriceLabel: $9.99

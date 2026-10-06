@@ -4,21 +4,25 @@ Living notes so any session (any machine, any Claude account) can pick up where 
 Update this file at the end of every work chunk, before committing. Newest entry on top in the log.
 
 ## Current state
-- **Active milestone:** none in progress. Everything up to M4.3 is playtested and approved (2026-10-06), including the Hand stack and Magnet pull from M3.
-- **Design change before M5 (GDD 0.2, user decisions 2026-10-06):** permanent Category Mastery is out, Auto Sort becomes an ad / IAP boost (one shelf per room); helpers become the lasting progression; no offline progress; Magnet is gated behind max Hand and costs more; only Chubby figures are collectibles, former gold rares become blue rare items. Details: GDD sections 2, 8.1, 9, 10, 11 and the decision tables.
-- **Next concrete step:** M5 (new progression rules: mastery -> Auto Sort boost with fake ad / IAP providers, Magnet gate, collectible rework + save migration). Then M6 (helpers), M7 (localisation, balance, device test). **Waiting for the user's go-ahead to start M5.**
-- **Blocking / waiting on user:** go-ahead for M5.
+- **Active milestone:** M5 (new progression rules, GDD 0.2) implemented, tests green (EditMode 51/51, PlayMode 13/13), screenshots reviewed. **Waiting for the user's playtest.**
+- **Next concrete step:** apply M5 playtest feedback, then M6 (helpers), then M7 (localisation, balance, device test).
+- **Blocking / waiting on user:** playtest of M5.
+- **Expect in the playtest:** big rooms feel slow now (no mastery, no helpers until M6). Pacing is judged after M6.
 - **Known issue:** mouse-wheel zoom in the shelf close-up does not work in the editor (user: not important, test pinch on a device).
 - **Deferred:** on-device test (no Android device yet). 300-item rooms make this important now. APK builds fine.
 - **User intent:** mechanics first, limits/numbers later. Helpers and upgrades should not be cheap; the game should stay playable for a long time.
 
-## M5 plan (not started)
-- Remove the mastery counter (`CategoryMastery` threshold, shelf label progress bar, mastery banner trigger); keep the "category sorts itself" behaviour in `SectionController` and scope it to one category per room (`AutoSortBoost`, saved with the section).
-- UI: a way to pick the shelf (button on the shelf label or a boost button + shelf tap), offer "Watch ad" or "Use charge" (charges come from IAP packs), one use per room.
-- `IAdProvider` / `IStoreProvider` interfaces with fake providers (GDD 15.5); charges stored in `SaveData`.
-- Magnet: unlock condition "Hand at max level" in `ToolDefinition` + new price; Shop shows the reason while locked.
-- Collectibles: `ContentBuilder` keeps the three Chubby figures (one per venue, in one of its rooms); the six gold rares become `ItemRarity.Rare` items of their category with a higher coin value and a blue glow; they are dragged to the shelf, not tapped. Book: one album page.
-- Save migration: old saves contain mastery data and gold rares in the book.
+## M5 architecture (quick map)
+- **Auto Sort boost** replaces Category Mastery (`CategoryMastery` is gone). `AutoSortBoost` (pure) only keeps the charges bought with real money. The room keeps the rest: `SectionController.AutoSortCategory`, `CanStartAutoSort` (one shelf per room, not after 100%), `StartAutoSort(shelf)`. Saved as `SectionSave.AutoSortCategoryId`, charges as `SaveData.AutoSortCharges`.
+- Items of the boosted category fly from three places: the direct hooks (`SpillFromContainer`, `Reveal`) and a tick in `SectionController.Update` every 0.4 s that catches whatever is loose (dropped by the player, back from a wrong shelf). Only `ItemRarity.Common`; rare items and Chubby are never touched. **M6 helpers should use the same "scan what is loose now" idea, not one-off events.**
+- Paying: `IAdProvider` / `IStoreProvider` in `Monetisation.cs`, `FakeAdProvider` / `FakeStoreProvider` in `GameContext.Ads` / `.Store` (instant result; tests flip `NextResult`). Never coins.
+- HUD: fourth tool bar button (`tool--boost`) -> `OpenBoost` card with one row per unfinished shelf -> `PickBoostShelf` -> `BoostWithAd` / `BoostWithCharge`; `OpenStore` lists `BalanceConfig.AutoSortPacks` (`BuyPack`). The boosted shelf's label gets "AUTO".
+- **Magnet gate:** `ToolDefinition.RequiresMaxed` (Magnet -> Hand), `ToolProgress.MeetsRequirement` / `CanBuy`; the Shop row shows "Needs Hand at max level". Prices 500 / 900 / 1600 (were 40 / 120 / 300).
+- **Collectibles = Chubby only:** `ItemDefinition.IsCollectible` is true only for `ItemRarity.Mascot`. One per venue (`VenueDefinition.CollectionPage` has one entry; rooms: comic_box, garage, wh_aisle). The book is one album (`GameDatabase.Album`, `VenueOf`); every find opens it (`SectionHud.PlayAlbumCelebration`). No duplicates any more (`CollectionBook.Register` returns bool).
+- **Rare items:** `ItemRarity.Rare` + `IsRare`, plain `ItemDefinition` with a category and `CoinValueOverride`, listed in `SectionDefinition.RareItems`. The generator gives each one slot of its category shelf (total stays = shelf slots). Blue glow (`SectionVisuals.RareItemGlowColor`), dragged like any item (Hand stack and Magnet pick them up too), small celebration on landing (`Sfx.RareItemPlaced`).
+- `SectionController.CommonItems` was renamed `SortableItems` (common + rare).
+- **Saves:** version 3. Older saves load as they are: unknown fields (`Mastery`) are ignored, the old gold rares have new ids (`rare_*`) so their entries in section saves are skipped on restore, and the book only keeps ids that are in the album.
+- Content changes need `tools/unity.sh rebuild` (overwrites sample assets from `ContentBuilder`); `setup` only creates what is missing.
 
 ## M4.2 plan + task list (tick as done)
 - Room = one long strip: bookcases along the back wall, floor width computed from shelf widths. Camera shows a fixed-width window (`FeelConfig.SectionViewWidth`) and pans sideways.
@@ -77,6 +81,12 @@ Update this file at the end of every work chunk, before committing. Newest entry
 - graphify setup on a new machine (once, in project root): `graphify hook install` (git hooks are not versioned) and `graphify claude install` (writes machine-local `.claude/settings.json`; rename it to `.claude/settings.local.json`, which is git-ignored, and revert any duplicate graphify section it adds to CLAUDE.md). `graphify-out/` itself is versioned.
 
 ## Session log
+### 2026-10-06 — M5 implemented (new progression rules)
+- Category Mastery removed; Auto Sort boost (ad or store charge, one shelf per room) with fake providers, HUD card + store.
+- Magnet gated behind max Hand and repriced. Collectibles are the three Chubby figures; six former gold rares are blue rare items on shelves. Book is a single album.
+- Tests: `ProgressionTests` (tool gate, charges, old save), `SectionLayoutGeneratorTests` (rare slot), `CollectionBookTests` rewritten, PlayMode `AutoSort_*` (ad, late items, dropped item, store charge + reload), Magnet gate in `Magnet_FollowersLandOnTheSameShelf`, rare items in `CoreLoopTests`. EditMode 51/51, PlayMode 13/13.
+- `tools/unity.sh rebuild` added.
+
 ### 2026-10-06 — M4.x approved; progression redesign written down (no code)
 - User playtested on the personal PC: M4.1, M4.2, M4.3 approved, Hand stack + Magnet pull approved. Glow fix confirmed.
 - User asked for a change of direction before M5; clarified in six questions, then GDD (now 0.2), MILESTONES (new M5 / M6 / M7, decisions) and this file were updated. No game code changed for it.

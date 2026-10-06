@@ -29,8 +29,9 @@ MonoBehaviour:
     Count: 8
   Collectibles:
   - {fileID: 11400000, guid: e4619bd7025a0cd42a11005f1bca4230, type: 2}
-  - {fileID: 11400000, guid: e73ca9faa7051284cb5f4b35a0fc9cb3, type: 2}
-  - {fileID: 11400000, guid: 4b99cd809c8d17c45b9bac516a426752, type: 2}
+  RareItems:
+  - {fileID: 11400000, guid: e0f154a3fa3f1a040aaee55a49a310b3, type: 2}
+  - {fileID: 11400000, guid: 5bff22c2e42b220449232b8cc3b95003, type: 2}
   LooseItemRatio: 0.25
   DirtCoverage: 0.55
   BuriedItemRatio: 0.15

@@ -10,7 +10,7 @@ namespace SortingGame.Data
         Metal
     }
 
-    /// <summary>GDD 8.2. Categories are shared across venues so Category Mastery carries over.</summary>
+    /// <summary>GDD 8.2. Categories are shared across venues, so what the player learned stays useful.</summary>
     [CreateAssetMenu(menuName = "Sorting Game/Category", fileName = "Category_")]
     public class CategoryDefinition : ScriptableObject
     {
@@ -21,9 +21,6 @@ namespace SortingGame.Data
 
         [Tooltip("Coins for a common item of this category, unless the item overrides it.")]
         public int BaseCoinValue = 1;
-
-        [Tooltip("Correct placements needed to master this category (GDD 10.2).")]
-        public int MasteryThreshold = 100;
 
         [Tooltip("Size of one shelf slot (x = width, y = height, z = depth). Must fit every item of this category upright.")]
         public Vector3 SlotSize = new(0.3f, 0.34f, 0.3f);
