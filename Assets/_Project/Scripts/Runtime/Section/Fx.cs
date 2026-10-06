@@ -9,23 +9,42 @@ namespace SortingGame.Section
         static Texture2D _softDot;
         static Texture2D _rays;
 
+        // Statics survive Play sessions (domain reload is off) but the textures are destroyed on exit,
+        // so these need Unity's null check: "??=" would hand back the destroyed texture.
+
         /// <summary>Round soft blob: particles, halos, broom cursor.</summary>
-        public static Texture2D SoftDot => _softDot ??= Make("SoftDot", 64, (u, v) =>
+        public static Texture2D SoftDot
         {
-            var d = Mathf.Clamp01(Vector2.Distance(new Vector2(u, v), new Vector2(0.5f, 0.5f)) * 2f);
-            return Mathf.Pow(1f - d, 2f);
-        });
+            get
+            {
+                if (_softDot == null)
+                    _softDot = Make("SoftDot", 64, (u, v) =>
+                    {
+                        var d = Mathf.Clamp01(Vector2.Distance(new Vector2(u, v), new Vector2(0.5f, 0.5f)) * 2f);
+                        return Mathf.Pow(1f - d, 2f);
+                    });
+                return _softDot;
+            }
+        }
 
         /// <summary>Sun-ray burst behind a rare find (concept 03_rare_find_popup).</summary>
-        public static Texture2D Rays => _rays ??= Make("Rays", 256, (u, v) =>
+        public static Texture2D Rays
         {
-            var p = new Vector2(u - 0.5f, v - 0.5f);
-            var d = Mathf.Clamp01(p.magnitude * 2f);
-            var angle = Mathf.Atan2(p.y, p.x);
-            var ray = Mathf.SmoothStep(0.25f, 0.75f, 0.5f + 0.5f * Mathf.Sin(angle * 14f));
-            var centre = Mathf.Pow(1f - d, 4f);
-            return Mathf.Clamp01(ray * (1f - d) * 0.8f + centre);
-        });
+            get
+            {
+                if (_rays == null)
+                    _rays = Make("Rays", 256, (u, v) =>
+                    {
+                        var p = new Vector2(u - 0.5f, v - 0.5f);
+                        var d = Mathf.Clamp01(p.magnitude * 2f);
+                        var angle = Mathf.Atan2(p.y, p.x);
+                        var ray = Mathf.SmoothStep(0.25f, 0.75f, 0.5f + 0.5f * Mathf.Sin(angle * 14f));
+                        var centre = Mathf.Pow(1f - d, 4f);
+                        return Mathf.Clamp01(ray * (1f - d) * 0.8f + centre);
+                    });
+                return _rays;
+            }
+        }
 
         static Texture2D Make(string name, int size, System.Func<float, float, float> alpha)
         {

@@ -4,11 +4,21 @@ Living notes so any session (any machine, any Claude account) can pick up where 
 Update this file at the end of every work chunk, before committing. Newest entry on top in the log.
 
 ## Current state
-- **Active milestone:** M4.3 (pre-M5 requests: stay in a finished room, shelf close-up) implemented, tests green (EditMode 48/48, PlayMode 12/12), screenshots reviewed, committed. M4.1 + M4.2 also still waiting for the user's playtest.
-- **Next concrete step:** apply playtest feedback; then M5 (helpers, offline progress, ad/IAP interfaces with fake providers, localisation infrastructure). Economy redesign (what coins are for) is an open topic the user wants to revisit.
-- **Blocking / waiting on user:** playtest of M4.1 + M4.2 + M4.3.
+- **Active milestone:** none in progress. Everything up to M4.3 is playtested and approved (2026-10-06), including the Hand stack and Magnet pull from M3.
+- **Design change before M5 (GDD 0.2, user decisions 2026-10-06):** permanent Category Mastery is out, Auto Sort becomes an ad / IAP boost (one shelf per room); helpers become the lasting progression; no offline progress; Magnet is gated behind max Hand and costs more; only Chubby figures are collectibles, former gold rares become blue rare items. Details: GDD sections 2, 8.1, 9, 10, 11 and the decision tables.
+- **Next concrete step:** M5 (new progression rules: mastery -> Auto Sort boost with fake ad / IAP providers, Magnet gate, collectible rework + save migration). Then M6 (helpers), M7 (localisation, balance, device test). **Waiting for the user's go-ahead to start M5.**
+- **Blocking / waiting on user:** go-ahead for M5.
+- **Known issue:** mouse-wheel zoom in the shelf close-up does not work in the editor (user: not important, test pinch on a device).
 - **Deferred:** on-device test (no Android device yet). 300-item rooms make this important now. APK builds fine.
-- **User intent:** mechanics first, limits/numbers later.
+- **User intent:** mechanics first, limits/numbers later. Helpers and upgrades should not be cheap; the game should stay playable for a long time.
+
+## M5 plan (not started)
+- Remove the mastery counter (`CategoryMastery` threshold, shelf label progress bar, mastery banner trigger); keep the "category sorts itself" behaviour in `SectionController` and scope it to one category per room (`AutoSortBoost`, saved with the section).
+- UI: a way to pick the shelf (button on the shelf label or a boost button + shelf tap), offer "Watch ad" or "Use charge" (charges come from IAP packs), one use per room.
+- `IAdProvider` / `IStoreProvider` interfaces with fake providers (GDD 15.5); charges stored in `SaveData`.
+- Magnet: unlock condition "Hand at max level" in `ToolDefinition` + new price; Shop shows the reason while locked.
+- Collectibles: `ContentBuilder` keeps the three Chubby figures (one per venue, in one of its rooms); the six gold rares become `ItemRarity.Rare` items of their category with a higher coin value and a blue glow; they are dragged to the shelf, not tapped. Book: one album page.
+- Save migration: old saves contain mastery data and gold rares in the book.
 
 ## M4.2 plan + task list (tick as done)
 - Room = one long strip: bookcases along the back wall, floor width computed from shelf widths. Camera shows a fixed-width window (`FeelConfig.SectionViewWidth`) and pans sideways.
@@ -54,6 +64,7 @@ Update this file at the end of every work chunk, before committing. Newest entry
 ## Environment notes
 - Work PC: `C:\Users\keremb\Personal\SortingGame`, Unity 6000.6.3f1 via Unity Hub.
 - 2026-10-06: the project moves to the user's **personal GitHub repo** and continues on their personal PC with their personal Claude account. Do not push this project from a company account.
+- Personal PC (active since 2026-10-06): `C:\Users\4\Desktop\Claude_Projects\Mobile Games\SortingGame`, cloned from `github.com/kerembildiren/SortingGame` (`origin`). Unity 6000.6.3f1 + Android module, graphify 0.9.77 (the work PC had 0.9.73, so `graphify-out/cache` was rebuilt). Still commit locally only; push when the user asks.
 
 ### Continuing on a new machine (checklist)
 1. Install Unity Hub + **Unity 6000.6.3f1** with the **Android Build Support** module (for `tools/unity.sh android`).
@@ -66,6 +77,15 @@ Update this file at the end of every work chunk, before committing. Newest entry
 - graphify setup on a new machine (once, in project root): `graphify hook install` (git hooks are not versioned) and `graphify claude install` (writes machine-local `.claude/settings.json`; rename it to `.claude/settings.local.json`, which is git-ignored, and revert any duplicate graphify section it adds to CLAUDE.md). `graphify-out/` itself is versioned.
 
 ## Session log
+### 2026-10-06 — M4.x approved; progression redesign written down (no code)
+- User playtested on the personal PC: M4.1, M4.2, M4.3 approved, Hand stack + Magnet pull approved. Glow fix confirmed.
+- User asked for a change of direction before M5; clarified in six questions, then GDD (now 0.2), MILESTONES (new M5 / M6 / M7, decisions) and this file were updated. No game code changed for it.
+
+### 2026-10-06 — Personal PC set up; glow fix
+- Personal PC (`C:\Users\4\Desktop\Claude_Projects\Mobile Games\SortingGame`): Unity 6000.6.3f1 + Android module and graphify installed, EditMode 48/48 and PlayMode 12/12 pass here.
+- Bug (user playtest): from the second Play press on, halos / rays / sparkles showed as solid yellow squares. Enter Play Mode has domain reload off, so the static texture caches in `ProceduralTextures` survived while the textures were destroyed; `??=` skips Unity's null check and returned the dead texture. Fixed with `== null` checks (`Fx.cs`, same pattern for the physics material in `ItemView.cs`). Confirmed by the user.
+- Gotcha: never use `??` / `??=` / `?.` on cached `UnityEngine.Object`s.
+- Editor note: no sound in the editor was the Game view "Mute Audio" toggle (machine-local editor pref), not the game.
 ### 2026-10-06 — M4.3 implemented (pre-M5 user requests)
 - Finished room no longer forces the player out: banner choice "Stay and look around" (toast hints at the shelf close-up).
 - Tap a full shelf (during play or after finishing) -> camera flies in front of it; drag to slide along it, pinch / mouse wheel to zoom, double tap resets, Back button returns to the exact room view.

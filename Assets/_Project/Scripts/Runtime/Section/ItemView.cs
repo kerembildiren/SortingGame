@@ -64,13 +64,15 @@ namespace SortingGame.Section
 
             factory.CreateItemVisual(definition, go.transform);
 
-            _physicsMaterial ??= new PhysicsMaterial("Item")
-            {
-                dynamicFriction = 0.6f,
-                staticFriction = 0.7f,
-                bounciness = 0.15f,
-                bounceCombine = PhysicsMaterialCombine.Minimum
-            };
+            // Unity null check on purpose: the static outlives a Play session, the material does not.
+            if (_physicsMaterial == null)
+                _physicsMaterial = new PhysicsMaterial("Item")
+                {
+                    dynamicFriction = 0.6f,
+                    staticFriction = 0.7f,
+                    bounciness = 0.15f,
+                    bounceCombine = PhysicsMaterialCombine.Minimum
+                };
             view._colliders = go.GetComponentsInChildren<Collider>();
             view._renderers = go.GetComponentsInChildren<Renderer>();
             if (definition.IsCollectible && fx != null)
