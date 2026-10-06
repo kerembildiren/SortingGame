@@ -1,0 +1,4 @@
+# Keep the graph focused on our code and design docs.
+Docs/concept/
+ProjectSettings/
+Packages/

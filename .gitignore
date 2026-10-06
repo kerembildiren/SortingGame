@@ -37,3 +37,12 @@ crashlytics-build.properties
 # OS
 .DS_Store
 Thumbs.db
+
+# graphify: machine-specific interpreter/root paths (graph itself is versioned)
+graphify-out/.graphify_python
+graphify-out/.graphify_root
+graphify-out/.needs_update
+
+# Claude Code machine-local settings (graphify hook-guard uses absolute paths)
+.claude/settings.local.json
+graphify-out/20[0-9][0-9]-*/

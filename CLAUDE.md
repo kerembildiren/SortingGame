@@ -5,6 +5,15 @@ Cozy mobile sorting game, Unity 6 (6000.6.3f1) + URP, portrait only.
 - **Design source of truth:** `Docs/GDD.md`. Check it before any design decision. Tags: [KARAR] = fixed, [VARSAYILAN] = default (log changes in GDD section 19), [AÇIK] = open, keep code flexible.
 - **Concept art:** `Docs/concept/`.
 - **Milestones:** `Docs/MILESTONES.md`. Work milestone by milestone; the user playtests and approves each one before the next starts.
+- **Handoff notes:** `Docs/PROGRESS.md`. The work may continue on another machine or Claude account, and local Claude memory does not travel. The repo is the only shared memory.
+
+## Session routine
+1. **Start of session / after context compaction:** read `Docs/PROGRESS.md` (current state, next step), then `Docs/MILESTONES.md`. Use graphify (below) for code questions instead of re-reading everything.
+2. **After every code change chunk:** run `graphify update .`, update `Docs/PROGRESS.md` (state + log entry), record any design deviation in `Docs/MILESTONES.md` decisions table.
+3. **When a milestone is approved:** commit locally (graph rebuilds via post-commit hook; commit `graphify-out/` changes with the next commit).
+
+## Git rules
+- Commit locally only. **Never push, never add a remote** unless the user explicitly asks in that session (they will push from their personal account/PC).
 
 ## Conventions
 - Code, identifiers and in-game text in English. Talk to the user in Turkish.
@@ -23,3 +32,13 @@ tools/unity.sh test     # EditMode tests
 tools/unity.sh compile  # compile only, prints C# errors
 ```
 Logs land in `Logs/batch/`.
+
+## graphify
+
+This project has a knowledge graph at graphify-out/ with god nodes, community structure, and cross-file relationships.
+
+Rules:
+- For codebase questions, first run `graphify query "<question>"` when graphify-out/graph.json exists. Use `graphify path "<A>" "<B>"` for relationships and `graphify explain "<concept>"` for focused concepts. These return a scoped subgraph, usually much smaller than GRAPH_REPORT.md or raw grep output.
+- If graphify-out/wiki/index.md exists, use it for broad navigation instead of raw source browsing.
+- Read graphify-out/GRAPH_REPORT.md only for broad architecture review or when query/path/explain do not surface enough context.
+- After modifying code, run `graphify update .` to keep the graph current (AST-only, no API cost).
