@@ -26,6 +26,7 @@ namespace SortingGame.EditorTools
         {
             ApplyPlayerSettings();
             var database = EnsureDatabase();
+            ContentBuilder.CreateMissing();
             CreateMainScene(database);
             AssetDatabase.SaveAssets();
             Debug.Log("[ProjectSetup] Done.");
@@ -65,11 +66,23 @@ namespace SortingGame.EditorTools
 
         static void CreateMainScene(GameDatabase database)
         {
+            // The scene is generated: edit this method (or the data assets), not the scene by hand.
             var scene = EditorSceneManager.NewScene(NewSceneSetup.DefaultGameObjects, NewSceneMode.Single);
+
+            var light = Object.FindFirstObjectByType<Light>();
+            light.transform.rotation = Quaternion.Euler(55f, -35f, 0f);
+            light.shadows = LightShadows.Soft;
+            light.shadowStrength = 0.6f;
+            RenderSettings.sun = light;
 
             var bootstrap = new GameObject("GameBootstrap").AddComponent<GameBootstrap>();
             var serialized = new SerializedObject(bootstrap);
-            serialized.FindProperty("_database").objectReferenceValue = database;
+            // Reload from disk: references held across ContentBuilder's asset creation can go stale.
+            serialized.FindProperty("_database").objectReferenceValue = AssetDatabase.LoadAssetAtPath<GameDatabase>(DatabasePath);
+            serialized.FindProperty("_startSection").objectReferenceValue = AssetDatabase.LoadAssetAtPath<SectionDefinition>(ContentBuilder.StartSectionPath);
+            serialized.FindProperty("_visuals").objectReferenceValue = AssetDatabase.LoadAssetAtPath<SectionVisuals>(ContentBuilder.VisualsPath);
+            serialized.FindProperty("_panelSettings").objectReferenceValue = AssetDatabase.LoadAssetAtPath<UnityEngine.UIElements.PanelSettings>(ContentBuilder.PanelSettingsPath);
+            serialized.FindProperty("_hudStyle").objectReferenceValue = AssetDatabase.LoadAssetAtPath<UnityEngine.UIElements.StyleSheet>(ContentBuilder.HudStylePath);
             serialized.ApplyModifiedPropertiesWithoutUndo();
 
             EditorSceneManager.SaveScene(scene, MainScenePath);

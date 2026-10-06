@@ -8,6 +8,7 @@ namespace SortingGame.Data
     public class GameDatabase : ScriptableObject
     {
         public BalanceConfig Balance;
+        public FeelConfig Feel;
         public List<VenueDefinition> Venues = new();
         public List<CategoryDefinition> Categories = new();
         public List<ItemDefinition> Items = new();
@@ -24,6 +25,8 @@ namespace SortingGame.Data
         public List<string> Validate()
         {
             var errors = new List<string>();
+            if (Balance == null) errors.Add("No BalanceConfig assigned.");
+            if (Feel == null) errors.Add("No FeelConfig assigned.");
             CheckUniqueIds(Categories, c => c.Id, "Category", errors);
             CheckUniqueIds(Items, i => i.Id, "Item", errors);
             CheckUniqueIds(Containers, c => c.Id, "Container", errors);

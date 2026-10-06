@@ -7,7 +7,7 @@ namespace SortingGame.Data
     public class BalanceConfig : ScriptableObject
     {
         [Header("Section progress")]
-        [Range(0f, 1f), Tooltip("How much of the section % comes from cleaning dirt. The rest comes from shelved items.")]
+        [Range(0f, 1f), Tooltip("How much of the section % comes from cleaning dirt. The rest comes from shelved items. Ignored for sections without dirt.")]
         public float DirtProgressWeight = 0.2f;
 
         [Header("Economy")]

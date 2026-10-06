@@ -1,0 +1,225 @@
+/* GDD 12.2: cream cards, big rounded corners, gold primary, light grey secondary.
+   Sizes are in reference pixels (1080 x 1920, width-matched). */
+
+.hud {
+    position: absolute;
+    left: 0; top: 0; right: 0; bottom: 0;
+    color: rgb(74, 59, 42);
+}
+
+.world-layer, .popup-layer {
+    position: absolute;
+    left: 0; top: 0; right: 0; bottom: 0;
+}
+
+.hidden { display: none; }
+
+/* ---------- Top bar ---------- */
+.top-bar {
+    position: absolute;
+    top: 28px; left: 28px; right: 28px;
+    flex-direction: row;
+    align-items: center;
+}
+
+.round-button {
+    width: 112px; height: 112px;
+    margin: 0;
+    border-width: 0;
+    border-radius: 56px;
+    background-color: rgb(255, 248, 236);
+    color: rgb(74, 59, 42);
+    font-size: 54px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+}
+
+.round-button:active { scale: 0.92 0.92; }
+
+.title-card {
+    flex-grow: 1;
+    margin: 0 22px;
+    padding: 16px 36px 22px 36px;
+    border-radius: 50px;
+    background-color: rgb(255, 248, 236);
+}
+
+.title-row {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.title, .percent {
+    font-size: 46px;
+    -unity-font-style: bold;
+    margin: 0; padding: 0;
+}
+
+.progress-track {
+    height: 22px;
+    margin-top: 10px;
+    border-radius: 11px;
+    background-color: rgb(230, 222, 208);
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    width: 0;
+    border-radius: 11px;
+    background-color: rgb(245, 196, 67);
+    transition-property: width;
+    transition-duration: 0.25s;
+}
+
+/* ---------- Coins ---------- */
+.coin-row {
+    position: absolute;
+    top: 168px; left: 28px; right: 28px;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.coin-pill {
+    flex-direction: row;
+    align-items: center;
+    padding: 8px 28px 8px 12px;
+    border-radius: 40px;
+    background-color: rgb(255, 248, 236);
+    transition-property: scale;
+    transition-duration: 0.12s;
+}
+
+.coin-pill.pulse { scale: 1.15 1.15; }
+
+.coin-icon {
+    width: 46px; height: 46px;
+    border-radius: 23px;
+    border-width: 5px;
+    border-color: rgb(214, 158, 30);
+    background-color: rgb(255, 210, 80);
+}
+
+.coin-text {
+    margin-left: 12px;
+    font-size: 40px;
+    -unity-font-style: bold;
+}
+
+/* ---------- 3D-anchored labels and popups ---------- */
+.shelf-label {
+    position: absolute;
+    translate: -50% -50%;
+    font-size: 34px;
+    -unity-font-style: bold;
+    color: rgb(74, 59, 42);
+}
+
+.coin-popup {
+    position: absolute;
+    translate: -50% -50%;
+    font-size: 52px;
+    -unity-font-style: bold;
+    color: rgb(255, 205, 70);
+    -unity-text-outline-width: 3px;
+    -unity-text-outline-color: rgb(110, 70, 10);
+}
+
+/* ---------- Toast ---------- */
+.toast {
+    position: absolute;
+    bottom: 290px; left: 12%; right: 12%;
+    padding: 18px 28px;
+    border-radius: 36px;
+    background-color: rgba(40, 32, 24, 0.85);
+    color: rgb(255, 248, 236);
+    font-size: 36px;
+    -unity-text-align: middle-center;
+    white-space: normal;
+    opacity: 0;
+    transition-property: opacity;
+    transition-duration: 0.2s;
+}
+
+.toast--visible { opacity: 1; }
+
+/* ---------- Tool bar ---------- */
+.toolbar {
+    position: absolute;
+    bottom: 28px; left: 28px; right: 28px;
+    flex-direction: row;
+    padding: 14px;
+    border-radius: 50px;
+    background-color: rgb(255, 248, 236);
+}
+
+.tool {
+    flex-grow: 1;
+    flex-basis: 0;
+    height: 172px;
+    margin: 0 7px;
+    border-width: 0;
+    border-radius: 38px;
+    background-color: rgb(239, 233, 223);
+    align-items: center;
+    justify-content: center;
+}
+
+.tool:active { scale: 0.95 0.95; }
+.tool--selected { background-color: rgb(255, 214, 102); }
+.tool--locked { opacity: 0.5; }
+
+.tool-glyph {
+    font-size: 66px;
+    -unity-font-style: bold;
+    margin: 0; padding: 0;
+}
+
+.tool-name {
+    font-size: 30px;
+    -unity-font-style: bold;
+    margin: 0; padding: 0;
+}
+
+/* ---------- Modal cards ---------- */
+.banner, .settings {
+    position: absolute;
+    left: 0; top: 0; right: 0; bottom: 0;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(20, 14, 8, 0.45);
+}
+
+.banner-card {
+    width: 80%;
+    padding: 48px;
+    border-radius: 56px;
+    background-color: rgb(255, 248, 236);
+    align-items: center;
+}
+
+.banner-title {
+    font-size: 58px;
+    -unity-font-style: bold;
+}
+
+.banner-percent {
+    font-size: 120px;
+    -unity-font-style: bold;
+    color: rgb(230, 170, 30);
+}
+
+.primary-button, .secondary-button {
+    width: 100%;
+    height: 120px;
+    margin: 24px 0 0 0;
+    border-width: 0;
+    border-radius: 40px;
+    font-size: 42px;
+    -unity-font-style: bold;
+    color: rgb(74, 59, 42);
+}
+
+.primary-button { background-color: rgb(245, 196, 67); }
+.secondary-button { background-color: rgb(233, 228, 220); }

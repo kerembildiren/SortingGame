@@ -2,6 +2,7 @@
 # Batchmode helpers. The Unity editor must NOT have this project open while these run.
 #   tools/unity.sh setup   -> runs ProjectSetup.RunFullSetup (settings, data, scenes)
 #   tools/unity.sh test    -> runs EditMode tests, prints summary
+#   tools/unity.sh playtest -> runs PlayMode tests (end-to-end loop, screenshots in Logs/batch/*.png)
 #   tools/unity.sh compile -> opens the project once to compile, prints C# errors
 set -u
 UNITY="${UNITY:-C:/Program Files/Unity/Hub/Editor/6000.6.3f1/Editor/Unity.exe}"
@@ -16,8 +17,9 @@ case "${1:-}" in
     code=$?
     grep -E "error CS|Exception|\[ProjectSetup\]|\[ContentBuilder\]" "$OUT/setup.log"
     exit $code ;;
-  test)
-    "$UNITY" -batchmode -projectPath "$PROJECT" -runTests -testPlatform EditMode \
+  test|playtest)
+    PLATFORM=EditMode; [ "$1" = playtest ] && PLATFORM=PlayMode
+    "$UNITY" -batchmode -projectPath "$PROJECT" -runTests -testPlatform "$PLATFORM" \
       -testResults "$OUT/results.xml" -logFile "$OUT/tests.log"
     code=$?
     grep -E "error CS" "$OUT/tests.log"
@@ -30,5 +32,5 @@ case "${1:-}" in
     grep -E "error CS|warning CS" "$OUT/compile.log" | sort -u
     exit $code ;;
   *)
-    echo "usage: tools/unity.sh setup|test|compile"; exit 2 ;;
+    echo "usage: tools/unity.sh setup|test|playtest|compile"; exit 2 ;;
 esac

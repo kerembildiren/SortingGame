@@ -1,15 +1,15 @@
 {
   "Assets/_Project/Scripts/Editor/ProjectSetup.cs": {
-    "mtime": 1791288790.891612,
-    "seen": 1791290137.2756457,
-    "ast_hash": "6c38de2adf7e49b13144cfbc30852459",
-    "semantic_hash": "6c38de2adf7e49b13144cfbc30852459"
+    "mtime": 1791291155.204885,
+    "seen": 1791291977.6557457,
+    "ast_hash": "610e496a7c1f5c7f681c699dfa0cf497",
+    "semantic_hash": ""
   },
   "Assets/_Project/Scripts/Runtime/Core/GameBootstrap.cs": {
-    "mtime": 1791288769.5922816,
-    "seen": 1791290137.2756495,
-    "ast_hash": "a9366b6fd9a471221a0e96e499092b03",
-    "semantic_hash": "a9366b6fd9a471221a0e96e499092b03"
+    "mtime": 1791290844.609189,
+    "seen": 1791291977.6557484,
+    "ast_hash": "c6b021b326cac5f3b55e80f9015c489a",
+    "semantic_hash": ""
   },
   "Assets/_Project/Scripts/Runtime/Core/Wallet.cs": {
     "mtime": 1791288769.5695858,
@@ -18,16 +18,16 @@
     "semantic_hash": "1022399c15e105a2e756d353858ca28e"
   },
   "Assets/_Project/Scripts/Runtime/Data/BalanceConfig.cs": {
-    "mtime": 1791288752.23053,
-    "seen": 1791290137.2756522,
-    "ast_hash": "2789d9e395be3d760f60759bd783e665",
-    "semantic_hash": "2789d9e395be3d760f60759bd783e665"
+    "mtime": 1791290412.0534127,
+    "seen": 1791291977.6557577,
+    "ast_hash": "ea2a4128346aeee7974feee6087ab7b1",
+    "semantic_hash": ""
   },
   "Assets/_Project/Scripts/Runtime/Data/CategoryDefinition.cs": {
-    "mtime": 1791288752.1162694,
-    "seen": 1791290137.275653,
-    "ast_hash": "fff1db3f66d8da52a551c51f53aabf1b",
-    "semantic_hash": "fff1db3f66d8da52a551c51f53aabf1b"
+    "mtime": 1791290412.0034628,
+    "seen": 1791291977.6557584,
+    "ast_hash": "311d109cc64fc0363aa0e7b7c7902011",
+    "semantic_hash": ""
   },
   "Assets/_Project/Scripts/Runtime/Data/CollectibleDefinition.cs": {
     "mtime": 1791288752.1537936,
@@ -48,10 +48,10 @@
     "semantic_hash": "7baa3e4d2f99340f702ae9e4121a6a62"
   },
   "Assets/_Project/Scripts/Runtime/Data/GameDatabase.cs": {
-    "mtime": 1791288752.2497065,
-    "seen": 1791290137.2756557,
-    "ast_hash": "0c711a3719d52938ac10615ff5a4a73a",
-    "semantic_hash": "0c711a3719d52938ac10615ff5a4a73a"
+    "mtime": 1791290416.3770947,
+    "seen": 1791291977.6557639,
+    "ast_hash": "2634d0a084635112ce94e8657a3afe31",
+    "semantic_hash": ""
   },
   "Assets/_Project/Scripts/Runtime/Data/ItemDefinition.cs": {
     "mtime": 1791288752.13706,
@@ -90,10 +90,10 @@
     "semantic_hash": "cd441c48eb7f597fceaff4588947c528"
   },
   "tools/unity.sh": {
-    "mtime": 1791288890.048812,
-    "seen": 1791290137.2756608,
-    "ast_hash": "27d050dec93aaeedef00ccb6c706e1f1",
-    "semantic_hash": "27d050dec93aaeedef00ccb6c706e1f1"
+    "mtime": 1791291105.8948524,
+    "seen": 1791291977.65578,
+    "ast_hash": "217c13df89680f77bc142a47cbaabcc2",
+    "semantic_hash": ""
   },
   "CLAUDE.md": {
     "mtime": 1791290166.8405867,
@@ -108,21 +108,135 @@
     "semantic_hash": "87ab73c1727f2e7a93cf6bfe97086bf4"
   },
   "Docs/MILESTONES.md": {
-    "mtime": 1791288890.0859292,
-    "seen": 1791290137.275663,
-    "ast_hash": "2c4736695b9ef310d97941e94d969bed",
-    "semantic_hash": "2c4736695b9ef310d97941e94d969bed"
-  },
-  ".claude/settings.json": {
-    "mtime": 1791290148.5759177,
-    "seen": 1791290169.7517347,
-    "ast_hash": "94acb3edd7b1e1e6cc60d824f39d0756",
+    "mtime": 1791291969.9921196,
+    "seen": 1791291977.655783,
+    "ast_hash": "b968349624a838fc54c5e2154963b0a6",
     "semantic_hash": ""
   },
   "Docs/PROGRESS.md": {
-    "mtime": 1791290166.8182275,
-    "seen": 1791290169.7517624,
-    "ast_hash": "e3a65a2027ecf6c2d1ea80981b94a6c8",
+    "mtime": 1791291821.0478163,
+    "seen": 1791291977.6557837,
+    "ast_hash": "cfe8fc3421181a7c1f549e4d4ecc0966",
+    "semantic_hash": ""
+  },
+  "Assets/_Project/Scripts/Editor/ContentBuilder.cs": {
+    "mtime": 1791291900.4276059,
+    "seen": 1791291977.6557412,
+    "ast_hash": "63f5ab875b5a317b462eaa779fe86c78",
+    "semantic_hash": ""
+  },
+  "Assets/_Project/Scripts/Runtime/Core/Haptics.cs": {
+    "mtime": 1791290454.2673998,
+    "seen": 1791291977.6557493,
+    "ast_hash": "a26c3467f9018198af4de1d61fff465a",
+    "semantic_hash": ""
+  },
+  "Assets/_Project/Scripts/Runtime/Core/Loc.cs": {
+    "mtime": 1791290739.240879,
+    "seen": 1791291977.655751,
+    "ast_hash": "5b488fae419b4c69990e1f8c7ce97f8d",
+    "semantic_hash": ""
+  },
+  "Assets/_Project/Scripts/Runtime/Core/SectionLayoutGenerator.cs": {
+    "mtime": 1791290434.647287,
+    "seen": 1791291977.6557517,
+    "ast_hash": "e5cdafe726758098a02a238b2abdb09e",
+    "semantic_hash": ""
+  },
+  "Assets/_Project/Scripts/Runtime/Core/SectionProgress.cs": {
+    "mtime": 1791290434.623891,
+    "seen": 1791291977.6557524,
+    "ast_hash": "0283a5427ae6b9922f53adfb79441993",
+    "semantic_hash": ""
+  },
+  "Assets/_Project/Scripts/Runtime/Core/SfxPlayer.cs": {
+    "mtime": 1791290478.0574057,
+    "seen": 1791291977.6557531,
+    "ast_hash": "08cac50558cadd029ee57881cf243e2a",
+    "semantic_hash": ""
+  },
+  "Assets/_Project/Scripts/Runtime/Core/Tween.cs": {
+    "mtime": 1791290454.2427404,
+    "seen": 1791291977.6557536,
+    "ast_hash": "a6a72bd3560db1eb6472c0b3c9941bf8",
+    "semantic_hash": ""
+  },
+  "Assets/_Project/Scripts/Runtime/Data/FeelConfig.cs": {
+    "mtime": 1791290412.0320306,
+    "seen": 1791291977.6557631,
+    "ast_hash": "dfc18487996af143674b099dea2d9b0c",
+    "semantic_hash": ""
+  },
+  "Assets/_Project/Scripts/Runtime/Data/SectionVisuals.cs": {
+    "mtime": 1791290563.7261505,
+    "seen": 1791291977.655768,
+    "ast_hash": "f46a72c1aa687467dc0066a8af9a4e2f",
+    "semantic_hash": ""
+  },
+  "Assets/_Project/Scripts/Runtime/Section/CameraFitter.cs": {
+    "mtime": 1791290657.7421103,
+    "seen": 1791291977.6557696,
+    "ast_hash": "8ec523a9e2f908dce05239f0abda22a9",
+    "semantic_hash": ""
+  },
+  "Assets/_Project/Scripts/Runtime/Section/ContainerView.cs": {
+    "mtime": 1791290644.1945393,
+    "seen": 1791291977.6557705,
+    "ast_hash": "cb018455ee2160af5915e1666c213e4b",
+    "semantic_hash": ""
+  },
+  "Assets/_Project/Scripts/Runtime/Section/DragController.cs": {
+    "mtime": 1791290679.0417204,
+    "seen": 1791291977.655771,
+    "ast_hash": "c12f27f0f9a10bfcf0a1f6923dbcac03",
+    "semantic_hash": ""
+  },
+  "Assets/_Project/Scripts/Runtime/Section/ItemView.cs": {
+    "mtime": 1791290933.768148,
+    "seen": 1791291977.655772,
+    "ast_hash": "e1ffa831d07f49387dff398631ee598e",
+    "semantic_hash": ""
+  },
+  "Assets/_Project/Scripts/Runtime/Section/PlaceholderFactory.cs": {
+    "mtime": 1791290569.6068232,
+    "seen": 1791291977.6557727,
+    "ast_hash": "8a419e5d5ab3fd00def7382242b162bf",
+    "semantic_hash": ""
+  },
+  "Assets/_Project/Scripts/Runtime/Section/SectionController.cs": {
+    "mtime": 1791290844.6342177,
+    "seen": 1791291977.6557734,
+    "ast_hash": "263d3b22d0b085c5ec65752e0fbd27da",
+    "semantic_hash": ""
+  },
+  "Assets/_Project/Scripts/Runtime/Section/ShelfView.cs": {
+    "mtime": 1791291875.561439,
+    "seen": 1791291977.6557744,
+    "ast_hash": "ab4a55e54a3994ac3373aba8f3ef4624",
+    "semantic_hash": ""
+  },
+  "Assets/_Project/Scripts/Runtime/UI/SectionHud.cs": {
+    "mtime": 1791291875.5352607,
+    "seen": 1791291977.6557753,
+    "ast_hash": "faef99150e05d522d95085d8c34b42fc",
+    "semantic_hash": ""
+  },
+  "Assets/_Project/Tests/EditMode/SectionLayoutGeneratorTests.cs": {
+    "mtime": 1791290970.6956155,
+    "seen": 1791291977.6557767,
+    "ast_hash": "b5326a57174c5ef597d5b8a2a47949c0",
+    "semantic_hash": ""
+  },
+  "Assets/_Project/Tests/EditMode/SectionProgressTests.cs": {
+    "mtime": 1791290970.670288,
+    "seen": 1791291977.6557775,
+    "ast_hash": "1758891007b5149e289e4ac32c4e307a",
+    "semantic_hash": ""
+  },
+  "Assets/_Project/Tests/PlayMode/CoreLoopTests.cs": {
+    "mtime": 1791291805.8597207,
+    "seen": 1791291977.6557794,
+    "ast_hash": "b8058ef8b776e3be7f942828357e88ae",
     "semantic_hash": ""
   }
 }
