@@ -1,0 +1,11 @@
+# Keep LF everywhere (Unity YAML + shell scripts); binaries untouched.
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.psd binary
+*.fbx binary
+*.wav binary
+*.mp3 binary
+*.ogg binary
+*.ttf binary
+*.otf binary
