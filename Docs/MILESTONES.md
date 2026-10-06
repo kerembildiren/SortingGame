@@ -9,7 +9,7 @@ Each milestone ends with a playtest by the user in the editor. Next one starts o
 | M2 | Broom + dirt layer, items under dirt, rare item glow, "Rare find!" moment, Collection Book data (first copy to book, duplicates sold), section 100% before/after | ✅ Approved 2026-10-06 |
 | M2+ | Collection viewer (GDD 9.1.1): tap a found item in the book -> 3D view on a dimmed screen, rotate / zoom / pan, double-tap reset | ✅ Approved 2026-10-06 |
 | M3 | Tools (Magnet, Hand capacity; Magnifier dropped), Category Mastery auto-fly, coin upgrades, JSON save (sorted stays sorted) | ✅ Approved 2026-10-06 (mastery playtested; Hand stack + Magnet pull not yet playtested by user) |
-| M4 | Venue structure: isometric overview of 4-section warehouse, zoom transition, section locks, venue sale, 3 venues as data | ⏳ |
+| M4 | Venue structure: isometric overview of 4-section warehouse, zoom transition, section locks, venue sale, 3 venues as data | ✅ Playtested 2026-10-06; follow-up changes in M4.1 / M4.2 |
 | M5 | Helpers, offline progress, ad/IAP interfaces with fake providers, localisation infrastructure | ⏳ |
 
 ## Decisions taken during development
@@ -44,3 +44,12 @@ Each milestone ends with a playtest by the user in the editor. Next one starts o
 | 2026-10-06 | Invisible guard in front of the shelves stops spilled items from landing on shelf boards | Items on a board looked sorted but were not counted |
 | 2026-10-06 | After M3 playtest: Magnifier removed; Hand = carry capacity 1/2/3 (any kinds, pass over items to pick up); Magnet = continuous pull of same-category items within a small radius (0.35/0.45/0.55 m) while carrying, limit 2/4/6; rest over a shelf `ShelfDepositDwell` (0.3 s) to drop in the matching carried items, the rest stay in hand | User feedback |
 | 2026-10-06 | Mastery also auto-sorts items revealed by sweeping and floor items at the start of a new game / after loading | User feedback (bug) |
+| 2026-10-06 | M4 screens: Map (venue ladder) is a modal over the overview; Overview = isometric orthographic cutaway, one room per section (back/left walls tall, front/right cut away); Section unchanged. Back button goes one level up | GDD 6.1; fewest screens to build and test |
+| 2026-10-06 | Overview rooms are stand-ins, not the real items: clutter boxes/debris shrink and shelf blocks fill with progress, colours go dirty -> clean, locked rooms are dark with a padlock, finished rooms get a plant | GDD 15.3 (no thousands of items on the overview) |
+| 2026-10-06 | Zoom transition = orthographic camera tween into the room + fade to black, then the section loads; the reverse when coming back | GDD 6.1 |
+| 2026-10-06 | Venues (prototype counts): Comic Box (1 room, 12 comics, free), Garage (1 room, 36 items, 100 coins), Warehouse (Office, Loading Dock, Aisle, Basement; 84 items, 300 coins). Sell values 150 / 350 / 1500. New categories: Stationery, Mugs, Tyres, Bottles. One mascot costume per venue: Captain / Mechanic / Night Guard Chubby | GDD 5.3 ladder, scaled down to be testable |
+| 2026-10-06 | Basement starts locked: opens when the other rooms average 60%, or for 150 coins | GDD 5.4 |
+| 2026-10-06 | Selling a venue requires every room at 100% (collectibles not required); sold venues stay on the map as "SOLD" and cannot be re-entered | GDD 5.6 |
+| 2026-10-06 | Section 100% banner button is now "Back to overview"; "Restart section" (reshuffle) stays in Settings as a dev helper | Fits the venue flow |
+| 2026-10-06 | Game resumes where it was left: last venue, and the section if the player was inside one | GDD 15.4 |
+| 2026-10-06 | Collection Book has one page per venue with < > paging | GDD 9.1 |

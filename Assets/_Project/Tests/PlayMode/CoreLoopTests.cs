@@ -23,18 +23,10 @@ namespace SortingGame.Tests
 
         // Never touch the player's own save.
         [SetUp]
-        public void SetUp()
-        {
-            SaveSystem.FileName = "test_save.json";
-            new FileSaveStorage(SaveSystem.FileName).Delete();
-        }
+        public void SetUp() => TestGame.UseTestSave();
 
         [TearDown]
-        public void TearDown()
-        {
-            new FileSaveStorage(SaveSystem.FileName).Delete();
-            SaveSystem.FileName = "save.json";
-        }
+        public void TearDown() => TestGame.RestoreSave();
 
         [UnityTest, Timeout(180000)]
         public IEnumerator FullLoop_SweepFindSort_ReachesHundredPercent()
@@ -60,7 +52,8 @@ namespace SortingGame.Tests
 
             // Find all collectibles. First one: snapshot the moment.
             var collectibles = section.Collectibles.ToList();
-            Assert.AreEqual(4, collectibles.Count);
+            var collectibleCount = section.Definition.Collectibles.Count;
+            Assert.AreEqual(collectibleCount, collectibles.Count);
             var coinsBeforeFinds = _boot.Wallet.Coins;
             for (var i = 0; i < collectibles.Count; i++)
             {
@@ -72,7 +65,7 @@ namespace SortingGame.Tests
                 yield return new WaitForSeconds(0.6f);
                 Assert.IsFalse(_boot.RareFind.IsPresenting);
             }
-            Assert.AreEqual(4, _boot.Book.FoundIds.Count);
+            Assert.AreEqual(collectibleCount, _boot.Book.FoundIds.Count);
             Assert.AreEqual(coinsBeforeFinds, _boot.Wallet.Coins, "First copies give no coins, they go to the book.");
             Assert.IsTrue(_boot.Drag.InputEnabled, "Input must come back after the moment.");
 
@@ -80,9 +73,7 @@ namespace SortingGame.Tests
             yield return Snapshot("m2_05_book");
 
             // Collection viewer (GDD 9.1.1): open a found piece from the book, turn and zoom it, close.
-            var mascot = _boot.Book.FoundIds.Contains("captain_chubby")
-                ? collectibles.Select(c => c.Definition).OfType<SortingGame.Data.CollectibleDefinition>().First(c => c.Id == "captain_chubby")
-                : null;
+            var mascot = section.Definition.Collectibles.First(c => c.Rarity == SortingGame.Data.ItemRarity.Mascot);
             Assert.IsNotNull(mascot);
             _boot.Hud.OpenViewer(mascot);
             yield return new WaitForSeconds(0.4f);
@@ -141,16 +132,13 @@ namespace SortingGame.Tests
             yield return new WaitForSeconds(0.6f);
             Assert.IsFalse(_boot.RareFind.IsPresenting, "Duplicates do not open the full moment.");
             Assert.AreEqual(coinsBeforeDuplicate + value, _boot.Wallet.Coins);
-            Assert.AreEqual(4, _boot.Book.FoundIds.Count);
+            Assert.AreEqual(collectibleCount, _boot.Book.FoundIds.Count);
         }
 
         IEnumerator LoadMain()
         {
-            SceneManager.LoadScene("Main");
-            yield return null;
-            yield return null;
-            _boot = Object.FindFirstObjectByType<GameBootstrap>();
-            Assert.IsNotNull(_boot, "GameBootstrap missing from Main scene.");
+            yield return TestGame.LoadIntoSection("garage", "garage");
+            _boot = TestGame.Boot;
         }
 
         IEnumerator OpenAllBoxes()

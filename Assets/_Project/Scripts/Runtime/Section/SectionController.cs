@@ -126,6 +126,16 @@ namespace SortingGame.Section
             Tween.Delay(_root, 0.8f, AutoSortAllMastered);
         }
 
+        /// <summary>Leaving the section view: free everything (only the active section is loaded, GDD 15.3).</summary>
+        public void Unload()
+        {
+            Clear();
+            Definition = null;
+            SfxPlayer.Instance?.SetLoop(Sfx.CleanAmbienceLoop, 0f);
+        }
+
+        public bool IsLoaded => Definition != null && _root != null;
+
         public void Clear()
         {
             if (_root != null) Destroy(_root.gameObject);
@@ -465,7 +475,15 @@ namespace SortingGame.Section
 
         public SectionSave Capture()
         {
-            var save = new SectionSave { SectionId = Definition.Id, Seed = _seed, Completed = _completed };
+            var save = new SectionSave
+            {
+                SectionId = Definition.Id,
+                Seed = _seed,
+                Completed = _completed,
+                PlacedItems = Progress.PlacedItems,
+                TotalItems = Progress.TotalItems,
+                Fraction = Progress.Fraction
+            };
 
             for (var s = 0; s < _shelves.Count; s++)
             for (var k = 0; k < _shelves[s].Slots.Count; k++)

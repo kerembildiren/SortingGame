@@ -79,7 +79,6 @@ namespace SortingGame.EditorTools
             var serialized = new SerializedObject(bootstrap);
             // Reload from disk: references held across ContentBuilder's asset creation can go stale.
             serialized.FindProperty("_database").objectReferenceValue = AssetDatabase.LoadAssetAtPath<GameDatabase>(DatabasePath);
-            serialized.FindProperty("_startSection").objectReferenceValue = AssetDatabase.LoadAssetAtPath<SectionDefinition>(ContentBuilder.StartSectionPath);
             serialized.FindProperty("_visuals").objectReferenceValue = AssetDatabase.LoadAssetAtPath<SectionVisuals>(ContentBuilder.VisualsPath);
             serialized.FindProperty("_panelSettings").objectReferenceValue = AssetDatabase.LoadAssetAtPath<UnityEngine.UIElements.PanelSettings>(ContentBuilder.PanelSettingsPath);
             serialized.FindProperty("_hudStyle").objectReferenceValue = AssetDatabase.LoadAssetAtPath<UnityEngine.UIElements.StyleSheet>(ContentBuilder.HudStylePath);

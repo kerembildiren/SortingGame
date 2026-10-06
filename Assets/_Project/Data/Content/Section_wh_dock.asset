@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a5b8d5a3cd7834896200dca1053b20, type: 3}
+  m_Name: Section_wh_dock
+  m_EditorClassIdentifier: SortingGame.Runtime::SortingGame.Data.SectionDefinition
+  Id: wh_dock
+  DisplayNameKey: section.wh_dock
+  FloorSize: {x: 3.8, y: 5.6}
+  Shelves:
+  - Category: {fileID: 11400000, guid: 5875939e49965f2448d9d0325667cb0c, type: 2}
+    SlotCount: 12
+  - Category: {fileID: 11400000, guid: d2f9d962d90f09442a2685def81dec75, type: 2}
+    SlotCount: 9
+  Containers:
+  - Container: {fileID: 11400000, guid: 7c806c7c974acb040915b5bdbaba813b, type: 2}
+    Count: 2
+  Collectibles:
+  - {fileID: 11400000, guid: 63c3802b00338a54e9357fb6c1d70c7c, type: 2}
+  LooseItemRatio: 0.25
+  DirtCoverage: 0.6
+  BuriedItemRatio: 0.15
+  Seed: 3
+  StartsLocked: 0
+  UnlockCoinCost: 0
+  UnlockAtVenuePercent: 0

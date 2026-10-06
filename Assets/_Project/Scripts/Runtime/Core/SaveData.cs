@@ -12,7 +12,7 @@ namespace SortingGame.Core
     [Serializable]
     public class SaveData
     {
-        public const int CurrentVersion = 1;
+        public const int CurrentVersion = 2;
 
         public int Version = CurrentVersion;
         public string SavedAtUtc;
@@ -22,7 +22,22 @@ namespace SortingGame.Core
         public List<IdCount> Tools = new();
         public List<SectionSave> Sections = new();
 
+        // M4: where the player is and what they own.
+        public string CurrentVenueId;
+        public string CurrentSectionId; // empty = venue overview
+        public List<VenueSave> Venues = new();
+        public List<string> UnlockedSections = new();
+
         public SectionSave SectionById(string id) => Sections.Find(s => s.SectionId == id);
+
+        public VenueSave Venue(string id)
+        {
+            var venue = Venues.Find(v => v.Id == id);
+            if (venue != null) return venue;
+            venue = new VenueSave { Id = id };
+            Venues.Add(venue);
+            return venue;
+        }
 
         public void SetSection(SectionSave section)
         {
@@ -45,11 +60,23 @@ namespace SortingGame.Core
     }
 
     [Serializable]
+    public class VenueSave
+    {
+        public string Id;
+        public bool Owned;
+        public bool Sold;
+    }
+
+    [Serializable]
     public class SectionSave
     {
         public string SectionId;
         public int Seed;
         public bool Completed;
+        // Summary for the overview, so it never needs to rebuild a section to show its %.
+        public int PlacedItems;
+        public int TotalItems;
+        public float Fraction;
         public List<ItemSave> Items = new();
         public List<ContainerSave> Containers = new();
 

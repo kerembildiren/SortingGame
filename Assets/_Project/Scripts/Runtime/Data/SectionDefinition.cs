@@ -49,7 +49,10 @@ namespace SortingGame.Data
 
         [Tooltip("Locked at start (GDD 5.4).")]
         public bool StartsLocked;
+        [Tooltip("Coins to unlock right away. 0 = cannot be bought.")]
         public int UnlockCoinCost;
+        [Range(0, 100), Tooltip("Unlocks by itself when the venue's other unlocked sections reach this average %. 0 = never.")]
+        public int UnlockAtVenuePercent;
 
         public int TotalSlotCount
         {

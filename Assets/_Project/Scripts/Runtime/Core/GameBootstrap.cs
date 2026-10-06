@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using SortingGame.Data;
+using SortingGame.Overview;
 using SortingGame.Section;
 using SortingGame.UI;
 using UnityEngine;
@@ -18,7 +19,6 @@ namespace SortingGame.Core
         const float AutosaveDelay = 1.5f;
 
         [SerializeField] GameDatabase _database;
-        [SerializeField] SectionDefinition _startSection;
         [SerializeField] SectionVisuals _visuals;
         [SerializeField] PanelSettings _panelSettings;
         [SerializeField] StyleSheet _hudStyle;
@@ -31,9 +31,11 @@ namespace SortingGame.Core
         public DragController Drag { get; private set; }
         public RareFindPresenter RareFind { get; private set; }
         public CollectionViewer Viewer { get; private set; }
+        public OverviewController Overview { get; private set; }
+        public GameFlow Flow { get; private set; }
+        public SaveData Data => _data;
 
         Camera _camera;
-        VenueDefinition _venue;
         SaveSystem _save;
         SaveData _data;
         bool _dirty;
@@ -46,7 +48,7 @@ namespace SortingGame.Core
             Screen.orientation = ScreenOrientation.Portrait;
             Haptics.EnsurePermissionIsIncluded();
 
-            if (_database == null || _startSection == null || _visuals == null)
+            if (_database == null || _visuals == null || _database.Venues.Count == 0)
             {
                 Debug.LogError("[GameBootstrap] Missing references. Run 'Sorting Game/Setup/Run Full Setup'.");
                 enabled = false;
@@ -58,7 +60,6 @@ namespace SortingGame.Core
 
             _camera = Camera.main;
             _camera.clearFlags = CameraClearFlags.SolidColor;
-            _venue = _database.Venues.FirstOrDefault(v => v.Sections.Contains(_startSection));
 
             _save = SaveSystem.CreateDefault();
             _data = _save.Load() ?? new SaveData { Coins = _database.Balance.StartingCoins };
@@ -90,7 +91,18 @@ namespace SortingGame.Core
             RareFind.Init(_camera, _database.Feel, _visuals, on => Drag.InputEnabled = on, () => Hud.BookButtonScreenPoint());
 
             Viewer = new GameObject("CollectionViewer").AddComponent<CollectionViewer>();
-            Viewer.Init(_camera, _database.Feel, _visuals, Hud.IsOverUi, on => Drag.InputEnabled = on);
+            Viewer.Init(_camera, _database.Feel, _visuals, Hud.IsOverUi, SetWorldInput);
+
+            Overview = new GameObject("Overview").AddComponent<OverviewController>();
+            Overview.Init(Context, _camera, Hud.IsOverUi);
+            Flow = gameObject.AddComponent<GameFlow>();
+        }
+
+        /// <summary>Viewer/rare moment pause world input; give it back to whichever screen is active.</summary>
+        void SetWorldInput(bool on)
+        {
+            if (Flow == null || Flow.Current == GameFlow.Screen.Section) Drag.InputEnabled = on;
+            else Overview.InputEnabled = on;
         }
 
         void Start()
@@ -109,8 +121,8 @@ namespace SortingGame.Core
             Wallet.Changed += (_, _) => MarkDirty();
             Context.Tools.Upgraded += (_, _) => MarkDirty();
 
-            var saved = _data.SectionById(_startSection.Id);
-            BuildSection(saved != null ? saved.Seed : _startSection.Seed, saved);
+            Flow.Init(this, Overview, _camera);
+            Flow.Resume();
         }
 
         void OnCollectibleFound(ItemView item, CollectionBook.FindResult result)
@@ -120,20 +132,28 @@ namespace SortingGame.Core
             RareFind.Present(item, result);
         }
 
-        void BuildSection(int seed, SectionSave save)
+        /// <summary>Loads a section from its save (or generates it the first time) and shows it.</summary>
+        public void BuildSection(SectionDefinition section, VenueDefinition venue, bool fresh = false)
         {
             Drag.CancelDrag();
             Drag.InputEnabled = true;
-            Section.Build(_startSection, Context, seed, save);
+            var save = fresh ? null : _data.SectionById(section.Id);
+            var seed = save != null ? save.Seed : (fresh ? Random.Range(1, int.MaxValue) : section.Seed);
+            Section.Build(section, Context, seed, save);
             if (!_camera.TryGetComponent<CameraFitter>(out var fitter)) fitter = _camera.gameObject.AddComponent<CameraFitter>();
+            fitter.enabled = true;
             fitter.Frame(Section.ViewBounds, _database.Feel);
-            Hud.Bind(Section, Context, _venue, _camera);
+            Hud.Bind(Section, Context, venue, _camera);
             if (save != null && Section.IsComplete) Hud.ShowCompleteBanner();
             MarkDirty();
         }
 
-        /// <summary>"Play again": a fresh shuffle of the same section. Book, coins, tools and mastery stay.</summary>
-        public void Restart() => BuildSection(Random.Range(1, int.MaxValue), null);
+        /// <summary>Dev helper (Settings): reshuffle the current section. Book, coins, tools and mastery stay.</summary>
+        public void Restart()
+        {
+            if (Flow.Current != GameFlow.Screen.Section || Flow.ActiveSection == null) return;
+            BuildSection(Flow.ActiveSection, Flow.Venue, true);
+        }
 
         /// <summary>Prototype helper: wipe the save and start over.</summary>
         public void ResetProgress()
@@ -143,7 +163,7 @@ namespace SortingGame.Core
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
-        void MarkDirty()
+        public void MarkDirty()
         {
             if (!_dirty) _dirtyTimer = 0f;
             _dirty = true;
@@ -165,12 +185,12 @@ namespace SortingGame.Core
 
         public void SaveNow()
         {
-            if (_suppressSave || Context == null || Section == null || Section.Definition == null) return;
+            if (_suppressSave || Context == null || Flow == null) return;
             _data.Coins = Wallet.Coins;
             _data.Collection = Book.FoundIds.ToList();
             _data.Mastery = Context.Mastery.Export().Select(m => new IdCount(m.Key, m.Value)).ToList();
             _data.Tools = Context.Tools.Export().Select(t => new IdCount(t.Key, t.Value)).ToList();
-            _data.SetSection(Section.Capture());
+            if (Section.IsLoaded) _data.SetSection(Section.Capture());
             _save.Save(_data);
             _dirty = false;
         }

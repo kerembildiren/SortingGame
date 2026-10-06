@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30f137cd1560cfa4098b6629870cfad1, type: 3}
+  m_Name: Venue_Warehouse
+  m_EditorClassIdentifier: SortingGame.Runtime::SortingGame.Data.VenueDefinition
+  Id: warehouse
+  DisplayNameKey: venue.warehouse
+  ThemeId: warehouse
+  PurchasePrice: 300
+  SellValue: 1500
+  Sections:
+  - {fileID: 11400000, guid: e9d508839f2feec439ee0d8e641a9a7d, type: 2}
+  - {fileID: 11400000, guid: e18ebc989efa3644aa6e1f0be51e4661, type: 2}
+  - {fileID: 11400000, guid: 506482247cdad1d44aa97452698e8750, type: 2}
+  - {fileID: 11400000, guid: 61418965135edff48a6cd8e5571d732e, type: 2}
+  CollectionPage:
+  - {fileID: 11400000, guid: 27354a6b44359c242ad32754bfe7f905, type: 2}
+  - {fileID: 11400000, guid: 0203fa3c3a2266a4e8b89316ce786495, type: 2}
+  - {fileID: 11400000, guid: 63c3802b00338a54e9357fb6c1d70c7c, type: 2}
+  - {fileID: 11400000, guid: 912d2799f3e92584fa98b09ac56b2761, type: 2}

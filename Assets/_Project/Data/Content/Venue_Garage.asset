@@ -15,12 +15,11 @@ MonoBehaviour:
   Id: garage
   DisplayNameKey: venue.garage
   ThemeId: garage
-  PurchasePrice: 0
-  SellValue: 0
+  PurchasePrice: 100
+  SellValue: 350
   Sections:
   - {fileID: 11400000, guid: 8e4c0dcf6d8c36a459506776e8f15088, type: 2}
   CollectionPage:
-  - {fileID: 11400000, guid: 1ef146af960feed469ede5bcc1a9ad5a, type: 2}
+  - {fileID: 11400000, guid: e4619bd7025a0cd42a11005f1bca4230, type: 2}
   - {fileID: 11400000, guid: e73ca9faa7051284cb5f4b35a0fc9cb3, type: 2}
-  - {fileID: 11400000, guid: 1990656a29d9a2244a98016a7147d348, type: 2}
   - {fileID: 11400000, guid: 4b99cd809c8d17c45b9bac516a426752, type: 2}

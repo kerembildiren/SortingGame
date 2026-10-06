@@ -130,9 +130,14 @@ namespace SortingGame.Section
             Apply();
         }
 
+        /// <summary>Visible height at the display distance; the viewer also opens over the orthographic overview.</summary>
+        float FrustumHeight => _camera.orthographic
+            ? 2f * _camera.orthographicSize
+            : 2f * DisplayDistance * Mathf.Tan(_camera.fieldOfView * 0.5f * Mathf.Deg2Rad);
+
         void Apply()
         {
-            var frustumHeight = 2f * DisplayDistance * Mathf.Tan(_camera.fieldOfView * 0.5f * Mathf.Deg2Rad);
+            var frustumHeight = FrustumHeight;
             var frustumWidth = frustumHeight * _camera.aspect;
             var screenSize = Mathf.Min(frustumWidth, frustumHeight) * _feel.ViewerScreenShare;
             View.PanLimit = new Vector2(frustumWidth * 0.4f, frustumHeight * 0.3f);
@@ -219,7 +224,7 @@ namespace SortingGame.Section
             if (pointer.press.wasReleasedThisFrame) _rotating = false;
         }
 
-        float WorldPerPixel => 2f * DisplayDistance * Mathf.Tan(_camera.fieldOfView * 0.5f * Mathf.Deg2Rad) / Mathf.Max(1f, Screen.height);
+        float WorldPerPixel => FrustumHeight / Mathf.Max(1f, Screen.height);
 
         static int ActiveTouches(out Vector2 first, out Vector2 second)
         {

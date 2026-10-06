@@ -21,7 +21,13 @@ namespace SortingGame.Tests
             var sceneTexture = new RenderTexture(width, height, 24);
             var uiTexture = new RenderTexture(width, height, 24);
             camera.targetTexture = sceneTexture;
-            if (fitter != null) fitter.Fit();
+            var overview = Object.FindFirstObjectByType<SortingGame.Overview.OverviewController>();
+            void Reframe()
+            {
+                if (overview != null && overview.IsActive) overview.Refit();
+                else if (fitter != null && fitter.enabled) fitter.Fit();
+            }
+            Reframe();
             panel.targetTexture = uiTexture;
             panel.clearColor = true;
             panel.colorClearValue = Color.clear;
@@ -46,7 +52,7 @@ namespace SortingGame.Tests
             camera.targetTexture = null;
             panel.targetTexture = null;
             panel.clearColor = false;
-            if (fitter != null) fitter.Fit();
+            Reframe();
             Object.Destroy(sceneTexture);
             Object.Destroy(uiTexture);
         }

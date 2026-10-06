@@ -14,33 +14,20 @@ namespace SortingGame.Tests
     /// <summary>M3 end to end: save/reload keeps the sorted room, Magnet group placement, Category Mastery auto-sort.</summary>
     public class ProgressionPlayTests
     {
-        const string TestSave = "test_save.json";
+        const string TestSave = TestGame.SaveFile;
         GameBootstrap _boot;
         SectionController Section => _boot.Section;
 
         [SetUp]
-        public void SetUp()
-        {
-            SaveSystem.FileName = TestSave;
-            DeleteTestSave();
-        }
+        public void SetUp() => TestGame.UseTestSave();
 
         [TearDown]
-        public void TearDown()
-        {
-            DeleteTestSave();
-            SaveSystem.FileName = "save.json";
-        }
-
-        static void DeleteTestSave() => new FileSaveStorage(TestSave).Delete();
+        public void TearDown() => TestGame.RestoreSave();
 
         IEnumerator LoadMain()
         {
-            SceneManager.LoadScene("Main");
-            yield return null;
-            yield return null;
-            _boot = Object.FindFirstObjectByType<GameBootstrap>();
-            Assert.IsNotNull(_boot);
+            yield return TestGame.LoadIntoSection("garage", "garage");
+            _boot = TestGame.Boot;
         }
 
         IEnumerator OpenAllBoxesAndSettle()
@@ -92,8 +79,11 @@ namespace SortingGame.Tests
             _boot.SaveNow();
             Assert.IsTrue(File.Exists(Path.Combine(Application.persistentDataPath, TestSave)));
 
-            // "Close the app and come back".
-            yield return LoadMain();
+            // "Close the app and come back": the game resumes in the same section by itself.
+            yield return TestGame.LoadMain();
+            _boot = TestGame.Boot;
+            Assert.AreEqual(GameFlow.Screen.Section, _boot.Flow.Current);
+            Assert.AreEqual("garage", _boot.Flow.ActiveSection.Id);
             yield return new WaitForSeconds(0.5f);
 
             Assert.AreEqual(coins, _boot.Wallet.Coins);
@@ -161,7 +151,7 @@ namespace SortingGame.Tests
             Assert.AreEqual(3, Mathf.RoundToInt(_boot.Context.ToolStats(ToolType.Hand).Primary));
 
             // Carry one comic, one toy and one tool together.
-            var categories = _boot.Context.Database.Categories;
+            var categories = Section.Shelves.Select(shelf => shelf.Category).ToList();
             var stack = categories.Select(c => Section.CommonItems.First(i => i.CanPick && i.Definition.Category == c)).ToList();
             foreach (var item in stack) item.BeginDrag();
 

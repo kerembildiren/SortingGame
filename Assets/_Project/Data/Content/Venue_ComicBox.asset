@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30f137cd1560cfa4098b6629870cfad1, type: 3}
+  m_Name: Venue_ComicBox
+  m_EditorClassIdentifier: SortingGame.Runtime::SortingGame.Data.VenueDefinition
+  Id: comic_box
+  DisplayNameKey: venue.comic_box
+  ThemeId: comic_box
+  PurchasePrice: 0
+  SellValue: 150
+  Sections:
+  - {fileID: 11400000, guid: 1e535c4559b68ed4491ed14d90baae9f, type: 2}
+  CollectionPage:
+  - {fileID: 11400000, guid: 1ef146af960feed469ede5bcc1a9ad5a, type: 2}
+  - {fileID: 11400000, guid: 1990656a29d9a2244a98016a7147d348, type: 2}

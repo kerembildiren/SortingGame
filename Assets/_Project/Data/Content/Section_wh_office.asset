@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a5b8d5a3cd7834896200dca1053b20, type: 3}
+  m_Name: Section_wh_office
+  m_EditorClassIdentifier: SortingGame.Runtime::SortingGame.Data.SectionDefinition
+  Id: wh_office
+  DisplayNameKey: section.wh_office
+  FloorSize: {x: 3.6, y: 5.6}
+  Shelves:
+  - Category: {fileID: 11400000, guid: 8df65882394cf604ca3d38b9423128bb, type: 2}
+    SlotCount: 12
+  - Category: {fileID: 11400000, guid: be6f474598137c040b55947082746d94, type: 2}
+    SlotCount: 9
+  Containers:
+  - Container: {fileID: 11400000, guid: 7c806c7c974acb040915b5bdbaba813b, type: 2}
+    Count: 2
+  Collectibles:
+  - {fileID: 11400000, guid: 0203fa3c3a2266a4e8b89316ce786495, type: 2}
+  LooseItemRatio: 0.25
+  DirtCoverage: 0.5
+  BuriedItemRatio: 0.15
+  Seed: 2
+  StartsLocked: 0
+  UnlockCoinCost: 0
+  UnlockAtVenuePercent: 0

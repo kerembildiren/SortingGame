@@ -473,3 +473,4 @@ Arayüz dili İngilizce **[VARSAYILAN]**. Türkçe sonradan eklenecek; tüm meti
 | 2026-10-06 | El yükseltmesi = aynı anda taşıma kapasitesi (farklı türler birlikte); raf üzerinde bekleyince ait olanlar yerleşir | Birkaç eşyayı toplayıp raf raf dağıtmak; Mıknatıs'tan farklı bir rol. |
 | 2026-10-06 | Mıknatıs sürekli çeker: taşıma sırasında küçük yarıçapa giren aynı kategori eşyalar ele gelir (1. seviyede 2) | Oyuncu parmağını gezdirerek toplar; pasif ve tatmin edici. |
 | 2026-10-06 | Kategori Ustalığı: süpürülerek ortaya çıkan ve yeni oyunda yerde duran ustalaşılmış eşyalar da kendiliğinden rafa gider | Ustalık sonrası o kategoride elle iş kalmamalı. |
+| 2026-10-06 | Prototipte mekân merdiveni küçük sayılarla kuruldu: Çizgi Roman Kutusu (12 eşya), Garaj (36), Depo (4 bölüm, 84). Her mekânda kostümlü bir Chubby (Captain / Mechanic / Night Guard). | Mekaniği test edilebilir tutmak; GDD 5.3 sayıları [VARSAYILAN]. |

@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b72bc105a1bb614ba7e6ef09e957e81, type: 3}
+  m_Name: Collectible_chrome_hubcap
+  m_EditorClassIdentifier: SortingGame.Runtime::SortingGame.Data.CollectibleDefinition
+  Id: chrome_hubcap
+  DisplayNameKey: collectible.chrome_hubcap
+  Rarity: 1
+  Category: {fileID: 0}
+  CoinValueOverride: 0
+  Prefab: {fileID: 0}
+  Placeholder:
+    Shape: 4
+    Color: {r: 1, g: 0.88, b: 0.45, a: 1}
+    Size: {x: 0.34, y: 0.06, z: 0.34}
+  DescriptionKey: collectible.chrome_hubcap.desc
+  DuplicateSellValue: 90
+  CostumeColor: {r: 0.9, g: 0.22, b: 0.22, a: 1}

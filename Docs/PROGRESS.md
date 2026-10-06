@@ -4,12 +4,20 @@ Living notes so any session (any machine, any Claude account) can pick up where 
 Update this file at the end of every work chunk, before committing. Newest entry on top in the log.
 
 ## Current state
-- **Active milestone:** M3 round 2 after user playtest (Magnifier removed, Hand carry stack, continuous Magnet, mastery fixes): implemented, tests green (EditMode 38/38, PlayMode 6/6). NOT committed yet.
-- **Last approved milestone:** M2+ Collection viewer (2026-10-06, commit f9c553f). M3 round 1 was playtested: "mostly works", feedback applied.
-- **Next concrete step:** user re-checks M3; commit; then M4 (overview of a 4-section warehouse, zoom transition, section locks, venue sale, 3 venues as data).
-- **Blocking / waiting on user:** M3 re-check.
-- **Deferred:** on-device test (no Android device yet). APK builds fine (`tools/unity.sh android`).
-- **User intent:** mechanics first, limits/numbers later (they will tune thresholds and prices themselves).
+- **Active milestone:** M4 (venue structure): implemented, tests green (EditMode 43/43, PlayMode 8/8), screenshots reviewed. NOT committed yet (commit after user approval).
+- **Last approved milestone:** M3 (2026-10-06, commit af3fdca). Hand stack + Magnet pull not yet playtested by the user.
+- **Next concrete step:** user playtests M4; apply feedback; commit; then M5 (helpers, offline progress, ad/IAP interfaces with fake providers, localisation infrastructure).
+- **Blocking / waiting on user:** M4 playtest.
+- **Deferred:** on-device test (no Android device yet). Performance matters more from here (Warehouse).
+- **User intent:** mechanics first, limits/numbers later (they tune thresholds and prices themselves).
+
+## M4 architecture (quick map)
+- `GameFlow` (Core): screen state Overview/Section, transitions, buy/sell venue, unlock rooms, `Resume()` on start. Test helpers: `OpenSectionImmediately`, `ShowOverviewImmediately`.
+- `VenueProgress` (pure): section/venue status from `SaveData`, ladder states, `CanSell`, auto-unlock rule.
+- `OverviewController` + `RoomView` (namespace `SortingGame.Overview`): isometric building at world offset (500,0,0), orthographic camera, room tap -> `RoomTapped`, `Zoom()`, `Refit()` on resize.
+- `SectionHud` has two modes (`Mode.Section` / `Mode.Overview`), map modal, unlock card, fade overlay, book paging.
+- `SaveData` v2: `CurrentVenueId`, `CurrentSectionId`, `Venues` (owned/sold), `UnlockedSections`; `SectionSave` keeps Placed/Total/Fraction for the overview.
+- Content: `ContentBuilder` makes 3 venues / 6 sections / 7 categories / 9 collectibles.
 
 ## M1 architecture (quick map)
 - `GameBootstrap` (scene entry) creates: `SfxPlayer`, `Wallet`, `SectionController`, `SectionHud` (UI Toolkit), `DragController` + `CameraFitter` on the main camera.
@@ -29,6 +37,12 @@ Update this file at the end of every work chunk, before committing. Newest entry
 - graphify setup on a new machine (once, in project root): `graphify hook install` (git hooks are not versioned) and `graphify claude install` (writes machine-local `.claude/settings.json`; rename it to `.claude/settings.local.json`, which is git-ignored, and revert any duplicate graphify section it adds to CLAUDE.md). `graphify-out/` itself is versioned.
 
 ## Session log
+### 2026-10-06 — M4 implemented
+- M3 approved and committed (af3fdca).
+- Map / Overview / Section flow with zoom + fade transitions, room labels, sell button, venue purchase, locked Basement (60% rule or 150 coins), 3 venues of content, book paging, resume.
+- Tests: `VenueProgressTests` (EditMode), `VenueFlowTests` (PlayMode: finish -> sell -> buy, unlock by progress and coins); older PlayMode tests jump into the garage via `TestGame.LoadIntoSection`.
+- Fixes from screenshots: overview did not refit on screen-size change; big toast covered the map; snapshot helper reframing.
+
 ### 2026-10-06 — M3 round 2 (user feedback)
 - Magnifier removed everywhere (code, content asset, GDD). Tool bar: Hand, Broom, Magnet.
 - `DragController` now carries a stack: Hand picks up anything the carried item passes over (capacity 1/2/3), Magnet pulls same-category items in a small radius continuously (limit 2/4/6). Resting over a shelf for `FeelConfig.ShelfDepositDwell` drops matching items (`SectionController.DeliverStack`), others stay in hand.

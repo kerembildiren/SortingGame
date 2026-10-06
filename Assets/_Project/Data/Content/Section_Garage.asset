@@ -26,9 +26,8 @@ MonoBehaviour:
   - Container: {fileID: 11400000, guid: 7c806c7c974acb040915b5bdbaba813b, type: 2}
     Count: 3
   Collectibles:
-  - {fileID: 11400000, guid: 1ef146af960feed469ede5bcc1a9ad5a, type: 2}
+  - {fileID: 11400000, guid: e4619bd7025a0cd42a11005f1bca4230, type: 2}
   - {fileID: 11400000, guid: e73ca9faa7051284cb5f4b35a0fc9cb3, type: 2}
-  - {fileID: 11400000, guid: 1990656a29d9a2244a98016a7147d348, type: 2}
   - {fileID: 11400000, guid: 4b99cd809c8d17c45b9bac516a426752, type: 2}
   LooseItemRatio: 0.25
   DirtCoverage: 0.55
@@ -36,3 +35,4 @@ MonoBehaviour:
   Seed: 1
   StartsLocked: 0
   UnlockCoinCost: 0
+  UnlockAtVenuePercent: 0

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea26d7032dbe6ce44bec491f68bb82ef, type: 3}
+  m_Name: Item_mug_tall
+  m_EditorClassIdentifier: SortingGame.Runtime::SortingGame.Data.ItemDefinition
+  Id: mug_tall
+  DisplayNameKey: item.mug_tall
+  Rarity: 0
+  Category: {fileID: 11400000, guid: be6f474598137c040b55947082746d94, type: 2}
+  CoinValueOverride: 0
+  Prefab: {fileID: 0}
+  Placeholder:
+    Shape: 4
+    Color: {r: 0.82, g: 0.88, b: 1, a: 1}
+    Size: {x: 0.18, y: 0.28, z: 0.18}
