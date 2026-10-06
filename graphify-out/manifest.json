@@ -6,9 +6,9 @@
     "semantic_hash": ""
   },
   "Assets/_Project/Scripts/Runtime/Core/GameBootstrap.cs": {
-    "mtime": 1791304681.8547704,
-    "seen": 1791305228.1982074,
-    "ast_hash": "4f975d01794c7920097476be5e17a387",
+    "mtime": 1791307768.3974216,
+    "seen": 1791308481.9293358,
+    "ast_hash": "56ab4f70295d12af3ab502f45dc5d53a",
     "semantic_hash": ""
   },
   "Assets/_Project/Scripts/Runtime/Core/Wallet.cs": {
@@ -108,15 +108,15 @@
     "semantic_hash": ""
   },
   "Docs/MILESTONES.md": {
-    "mtime": 1791305004.9095852,
-    "seen": 1791305228.1982665,
-    "ast_hash": "a96eddc39324f0efe246b7a651beaa04",
+    "mtime": 1791308461.1679876,
+    "seen": 1791308481.9293976,
+    "ast_hash": "99ef110493a45b3485c27e97272098bb",
     "semantic_hash": ""
   },
   "Docs/PROGRESS.md": {
-    "mtime": 1791305004.9095852,
-    "seen": 1791305228.1982675,
-    "ast_hash": "e260c4b055ac1ba6d058f14bff8d2a8b",
+    "mtime": 1791308461.0933447,
+    "seen": 1791308481.9293983,
+    "ast_hash": "7ceb32c61f4de4c5aa463638426639c7",
     "semantic_hash": ""
   },
   "Assets/_Project/Scripts/Editor/ContentBuilder.cs": {
@@ -132,9 +132,9 @@
     "semantic_hash": ""
   },
   "Assets/_Project/Scripts/Runtime/Core/Loc.cs": {
-    "mtime": 1791303525.0712621,
-    "seen": 1791304414.079313,
-    "ast_hash": "a11128656dee81582efeaaf68977c220",
+    "mtime": 1791307751.2294323,
+    "seen": 1791308481.9293404,
+    "ast_hash": "cc1decbbab144acf4285f488e21e46ef",
     "semantic_hash": ""
   },
   "Assets/_Project/Scripts/Runtime/Core/SectionLayoutGenerator.cs": {
@@ -162,9 +162,9 @@
     "semantic_hash": ""
   },
   "Assets/_Project/Scripts/Runtime/Data/FeelConfig.cs": {
-    "mtime": 1791304528.0343733,
-    "seen": 1791305228.1982274,
-    "ast_hash": "aaa99f8be95b2dafeb5aeb7d50b5349e",
+    "mtime": 1791308181.3149107,
+    "seen": 1791308481.9293573,
+    "ast_hash": "f164e64002910f4d6257ba58c5a7c6d8",
     "semantic_hash": ""
   },
   "Assets/_Project/Scripts/Runtime/Data/SectionVisuals.cs": {
@@ -186,9 +186,9 @@
     "semantic_hash": ""
   },
   "Assets/_Project/Scripts/Runtime/Section/DragController.cs": {
-    "mtime": 1791304554.5249612,
-    "seen": 1791305228.1982403,
-    "ast_hash": "eb65378dd3c58651161b520201df80ee",
+    "mtime": 1791307838.045758,
+    "seen": 1791308481.9293697,
+    "ast_hash": "1b88ad8631e5789f7561f1a924d061c1",
     "semantic_hash": ""
   },
   "Assets/_Project/Scripts/Runtime/Section/ItemView.cs": {
@@ -216,9 +216,9 @@
     "semantic_hash": ""
   },
   "Assets/_Project/Scripts/Runtime/UI/SectionHud.cs": {
-    "mtime": 1791304153.7505822,
-    "seen": 1791304414.079352,
-    "ast_hash": "6115de250349f2af161190cd8d8fa9ab",
+    "mtime": 1791308291.53213,
+    "seen": 1791308481.929378,
+    "ast_hash": "b28e66a293f595579be9412c308de143",
     "semantic_hash": ""
   },
   "Assets/_Project/Tests/EditMode/SectionLayoutGeneratorTests.cs": {
@@ -366,9 +366,9 @@
     "semantic_hash": ""
   },
   "Assets/_Project/Scripts/Runtime/Core/GameFlow.cs": {
-    "mtime": 1791303525.0712621,
-    "seen": 1791304414.0793114,
-    "ast_hash": "17ecdfcf0453854e8b0ec65bfc7d141d",
+    "mtime": 1791307779.4096248,
+    "seen": 1791308481.9293385,
+    "ast_hash": "fd1d681fe722401a2cca3ab2cab7b2a3",
     "semantic_hash": ""
   },
   "Assets/_Project/Scripts/Runtime/Core/VenueProgress.cs": {
@@ -396,15 +396,15 @@
     "semantic_hash": ""
   },
   "Assets/_Project/Tests/PlayMode/TestGame.cs": {
-    "mtime": 1791300367.8780544,
-    "seen": 1791301207.626629,
-    "ast_hash": "305b4f85e0c48f6b5dfdb57156d8bced",
+    "mtime": 1791307829.055413,
+    "seen": 1791308481.9293923,
+    "ast_hash": "4b22051911b6936f9a142739bcdf939c",
     "semantic_hash": ""
   },
   "Assets/_Project/Tests/PlayMode/VenueFlowTests.cs": {
-    "mtime": 1791304858.935441,
-    "seen": 1791305228.1982634,
-    "ast_hash": "c3c7f0ca8eaa19b11732cf6d2306c37c",
+    "mtime": 1791307829.005295,
+    "seen": 1791308481.929394,
+    "ast_hash": "ff64efef129b1278515ac4de93981cd2",
     "semantic_hash": ""
   },
   "Assets/_Project/Scripts/Runtime/Section/ShelfShowcase.cs": {
@@ -417,6 +417,30 @@
     "mtime": 1791304700.5120811,
     "seen": 1791305228.198258,
     "ast_hash": "56c40f47b4cc207cdab93527706606fe",
+    "semantic_hash": ""
+  },
+  "Assets/_Project/Scripts/Runtime/Core/ShelfInspectView.cs": {
+    "mtime": 1791307810.0582862,
+    "seen": 1791308481.9293473,
+    "ast_hash": "ff4fc2664534fddc3fe0396707348bb3",
+    "semantic_hash": ""
+  },
+  "Assets/_Project/Scripts/Runtime/Section/ShelfInspector.cs": {
+    "mtime": 1791308244.8951516,
+    "seen": 1791308481.9293754,
+    "ast_hash": "b4983c1f64277a9147041c8fee6fd1b7",
+    "semantic_hash": ""
+  },
+  "Assets/_Project/Tests/EditMode/ShelfInspectViewTests.cs": {
+    "mtime": 1791307828.954009,
+    "seen": 1791308481.9293854,
+    "ast_hash": "1c189fe0d3432834f11dbe20a88a5fed",
+    "semantic_hash": ""
+  },
+  "Assets/_Project/Tests/PlayMode/ShelfInspectTests.cs": {
+    "mtime": 1791308121.6993241,
+    "seen": 1791308481.9293914,
+    "ast_hash": "5716d9d387177b4eed9450cdafbe2fd2",
     "semantic_hash": ""
   }
 }

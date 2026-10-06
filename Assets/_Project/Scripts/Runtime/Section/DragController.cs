@@ -15,6 +15,7 @@ namespace SortingGame.Section
     /// in hand for the next shelf. Broom sweeps the dirt. With any tool, a tap opens a box or picks up a glowing collectible.
     /// Wide sections pan sideways: drag on empty floor (Hand/Magnet), two fingers (any tool), right mouse (editor),
     /// and the view scrolls by itself at the screen edges while carrying or sweeping (GDD 6.2).
+    /// Tapping a full shelf asks for a close-up (<see cref="FullShelfTapped"/>).
     /// </summary>
     public class DragController : MonoBehaviour
     {
@@ -40,6 +41,7 @@ namespace SortingGame.Section
         Vector3 _shelfHitPoint;
         ContainerView _tapContainer;
         ItemView _tapCollectible;
+        ShelfView _tapShelf;
         Vector2 _pressPosition;
         Vector2 _lastPosition;
         bool _pressStartedOnUi;
@@ -56,6 +58,9 @@ namespace SortingGame.Section
         public bool InputEnabled { get; set; } = true;
         public ToolType Tool { get; private set; } = ToolType.Hand;
         public IReadOnlyList<ItemView> Carried => _stack;
+
+        /// <summary>A finished shelf was tapped (any tool): show it up close.</summary>
+        public event Action<ShelfView> FullShelfTapped;
 
         public void Init(Camera cam, SectionController section, GameContext context, Func<Vector2, bool> isOverUi, Func<float> uiScale)
         {
@@ -117,7 +122,8 @@ namespace SortingGame.Section
             }
 
             _tapContainer = container;
-            if (Tool == ToolType.Broom)
+            if (item == null && container == null) _tapShelf = FullShelfAt(screen);
+            if (Tool == ToolType.Broom && _tapShelf == null)
             {
                 _sweeping = true;
                 OnHold(screen);
@@ -126,6 +132,7 @@ namespace SortingGame.Section
 
             if (item == null)
             {
+                if (Tool == ToolType.Broom) return; // pressed on a full shelf: wait for the tap
                 // Empty floor: grab the room and slide it sideways.
                 if (container == null && Fitter != null && Fitter.CanPan && FloorX(screen, out _panGrabX))
                 {
@@ -155,7 +162,11 @@ namespace SortingGame.Section
             {
                 // Keep the grabbed floor point under the finger.
                 if (FloorX(screen, out var x)) Fitter.Pan(_panGrabX - x, Time.deltaTime);
-                if ((screen - _pressPosition).magnitude > TapMaxMovePixels) _tapContainer = null;
+                if ((screen - _pressPosition).magnitude > TapMaxMovePixels)
+                {
+                    _tapContainer = null;
+                    _tapShelf = null;
+                }
                 return;
             }
             if (_sweeping || _stack.Count > 0) EdgeScroll(screen);
@@ -285,6 +296,7 @@ namespace SortingGame.Section
                 _panning = false;
                 _tapContainer = null;
                 _tapCollectible = null;
+                _tapShelf = null;
                 _twoFingerPan = true;
                 _twoFingerGrabX = x;
                 Fitter.BeginPan();
@@ -362,10 +374,12 @@ namespace SortingGame.Section
             {
                 if (_tapCollectible != null) _section.FindCollectible(_tapCollectible);
                 else if (_tapContainer != null) _section.OpenContainer(_tapContainer);
+                else if (_tapShelf != null && _tapShelf.IsFull) FullShelfTapped?.Invoke(_tapShelf);
             }
 
             _tapCollectible = null;
             _tapContainer = null;
+            _tapShelf = null;
         }
 
         void EndCarry()
@@ -421,6 +435,28 @@ namespace SortingGame.Section
             return (null, null, bestContainer);
         }
 
+        /// <summary>
+        /// A full shelf whose frame or items are under the finger, in front of the floor. Solid colliders only:
+        /// the generous drop zone would also catch taps on the floor just in front of the shelf.
+        /// </summary>
+        public ShelfView FullShelfAt(Vector2 screen)
+        {
+            var ray = _camera.ScreenPointToRay(screen);
+            var floor = new Plane(Vector3.up, Vector3.zero).Raycast(ray, out var floorDistance) ? floorDistance : float.MaxValue;
+            var count = Physics.RaycastNonAlloc(ray, _hits, 100f, ~0, QueryTriggerInteraction.Ignore);
+            ShelfView best = null;
+            var bestDistance = floor;
+            for (var i = 0; i < count; i++)
+            {
+                if (_hits[i].distance >= bestDistance) continue;
+                var shelf = _hits[i].collider.GetComponentInParent<ShelfView>();
+                if (shelf == null) continue;
+                best = shelf;
+                bestDistance = _hits[i].distance;
+            }
+            return best != null && best.IsFull ? best : null;
+        }
+
         ShelfView RaycastShelf(Ray ray, out Vector3 point)
         {
             point = default;
@@ -446,6 +482,7 @@ namespace SortingGame.Section
             EndCarry();
             _tapContainer = null;
             _tapCollectible = null;
+            _tapShelf = null;
             StopSweeping();
             if (_panning || _twoFingerPan) Fitter?.EndPan();
             _panning = false;

@@ -46,5 +46,47 @@ namespace SortingGame.Tests
             Boot.Flow.OpenSectionImmediately(venue, venue.Sections.First(s => s.Id == sectionId));
             yield return null;
         }
+
+        /// <summary>Open boxes, sweep everything, find collectibles, shelve everything.</summary>
+        public static IEnumerator FinishSection(bool pickUpCollectibles = true, string showcaseShot = null)
+        {
+            foreach (var container in Boot.Section.Containers.ToList()) Boot.Section.OpenContainer(container);
+            yield return new WaitForSeconds(2.5f);
+            var bounds = Boot.Section.ViewBounds;
+            for (var pass = 0; pass < 2; pass++)
+            for (var z = bounds.min.z; z <= bounds.max.z; z += 0.25f)
+            for (var x = bounds.min.x; x <= bounds.max.x; x += 0.2f)
+                Boot.Section.Sweep(new Vector3(x, 0f, z), 0.2f);
+            yield return new WaitForSeconds(1f);
+
+            foreach (var collectible in pickUpCollectibles ? Boot.Section.Collectibles.ToList() : new System.Collections.Generic.List<SortingGame.Section.ItemView>())
+            {
+                Boot.Section.FindCollectible(collectible);
+                yield return new WaitForSeconds(1f);
+                Boot.RareFind.Dismiss();
+                yield return new WaitForSeconds(0.6f);
+            }
+
+            foreach (var item in Boot.Section.CommonItems.Where(i => i.State is SortingGame.Section.ItemState.Resting or SortingGame.Section.ItemState.Physics).ToList())
+            {
+                var shelf = Boot.Section.ShelfFor(item.Definition.Category);
+                Boot.Section.TryPlace(item, shelf, shelf.transform.position);
+                yield return null;
+            }
+            if (showcaseShot != null)
+            {
+                yield return new WaitForSeconds(1.3f); // mid-glide
+                Assert.IsTrue(Boot.Showcase.IsPlaying, "A full shelf gets its camera showcase.");
+                yield return TestSnapshots.Capture(showcaseShot);
+            }
+            // Every finished shelf gets its showcase; wait for the queue to drain.
+            var waited = 0f;
+            while ((Boot.Showcase.IsPlaying || waited < 1f) && waited < 15f)
+            {
+                waited += Time.deltaTime;
+                yield return null;
+            }
+            Assert.IsFalse(Boot.Showcase.IsPlaying);
+        }
     }
 }

@@ -596,3 +596,35 @@
     background-color: rgb(0, 0, 0);
     opacity: 0;
 }
+
+/* ---------- Shelf close-up ---------- */
+.inspect-layer {
+    position: absolute;
+    left: 0; top: 0; right: 0; bottom: 0;
+    justify-content: space-between;
+    align-items: center;
+    padding: 110px 70px 90px 70px;
+}
+
+.inspect-top {
+    align-items: center;
+    padding: 18px 40px 22px 40px;
+    border-radius: 48px;
+    background-color: rgba(40, 32, 24, 0.78);
+}
+
+.inspect-name {
+    font-size: 54px;
+    -unity-font-style: bold;
+    color: rgb(255, 236, 190);
+}
+
+.inspect-hint {
+    margin-top: 4px;
+    font-size: 28px;
+    color: rgba(255, 248, 236, 0.75);
+    white-space: normal;
+    -unity-text-align: middle-center;
+}
+
+.inspect-back { width: 60%; }

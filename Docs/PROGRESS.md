@@ -4,9 +4,9 @@ Living notes so any session (any machine, any Claude account) can pick up where 
 Update this file at the end of every work chunk, before committing. Newest entry on top in the log.
 
 ## Current state
-- **Active milestone:** M4.1 + M4.2 implemented, tests green (EditMode 44/44, PlayMode 11/11), screenshots reviewed, committed. Waiting for the user's playtest of both.
+- **Active milestone:** M4.3 (pre-M5 requests: stay in a finished room, shelf close-up) implemented, tests green (EditMode 48/48, PlayMode 12/12), screenshots reviewed, committed. M4.1 + M4.2 also still waiting for the user's playtest.
 - **Next concrete step:** apply playtest feedback; then M5 (helpers, offline progress, ad/IAP interfaces with fake providers, localisation infrastructure). Economy redesign (what coins are for) is an open topic the user wants to revisit.
-- **Blocking / waiting on user:** playtest of M4.1 + M4.2.
+- **Blocking / waiting on user:** playtest of M4.1 + M4.2 + M4.3.
 - **Deferred:** on-device test (no Android device yet). 300-item rooms make this important now. APK builds fine.
 - **User intent:** mechanics first, limits/numbers later.
 
@@ -24,6 +24,12 @@ Update this file at the end of every work chunk, before committing. Newest entry
 - [x] ContentBuilder: new sizes, categories per room, variants, auto box count, mastery 50
 - [x] Overview RoomView size clamp
 - [x] Tests (sweep RoomBounds, pan test) + screenshots + docs
+
+## M4.3 architecture (quick map)
+- Section banner has two buttons: "Back to overview" and "Stay and look around" (`SectionHud.StayInRoom`). Staying hides the banner; the top bar "<" leaves later.
+- `DragController.FullShelfAt` (solid colliders only, must be in front of the floor) + `FullShelfTapped` event on a tap (any tool; Broom does not sweep when the press starts on a full shelf).
+- `ShelfInspector` (camera component, like `ShelfShowcase`): `Open(shelf)` saves the room pose, disables `CameraFitter` + room input, flies in; one finger pans, pinch / wheel zooms, double tap resets, Escape / Back flies home. `StopNow()` on leaving the section. State is the pure `ShelfInspectView` (focus on the shelf face + distance, limits, flick glide; EditMode tested).
+- HUD: `ShowInspect` / `HideInspect` (inspect layer: shelf name, hint, Back button; other HUD hidden via moment mode). Tunables: `FeelConfig.Inspect*`.
 
 ## M4 architecture (quick map)
 - `GameFlow` (Core): screen state Overview/Section, transitions, buy/sell venue, unlock rooms, `Resume()` on start. Test helpers: `OpenSectionImmediately`, `ShowOverviewImmediately`.
@@ -51,6 +57,12 @@ Update this file at the end of every work chunk, before committing. Newest entry
 - graphify setup on a new machine (once, in project root): `graphify hook install` (git hooks are not versioned) and `graphify claude install` (writes machine-local `.claude/settings.json`; rename it to `.claude/settings.local.json`, which is git-ignored, and revert any duplicate graphify section it adds to CLAUDE.md). `graphify-out/` itself is versioned.
 
 ## Session log
+### 2026-10-06 — M4.3 implemented (pre-M5 user requests)
+- Finished room no longer forces the player out: banner choice "Stay and look around" (toast hints at the shelf close-up).
+- Tap a full shelf (during play or after finishing) -> camera flies in front of it; drag to slide along it, pinch / mouse wheel to zoom, double tap resets, Back button returns to the exact room view.
+- Tests: `ShelfInspectViewTests` (EditMode), `ShelfInspectTests` (PlayMode: stay, tap detection, close-up, zoom/pan, back, leaving mid close-up). `FinishSection` moved to `TestGame`.
+- Fix found by screenshots: close-up kept the same distance when the screen shape changed; now it keeps the same shelf width on screen.
+
 ### 2026-10-06 — M4.2 implemented (big rooms)
 - `CameraFitter` frames a `FeelConfig.SectionViewWidth` (4.6 m) window and pans (`Pan`, `PanTo`, flick glide, limits). `DragController`: empty-floor drag pan, two-finger / right-mouse pan, edge auto-scroll while carrying or sweeping.
 - Content: Comic Box 60 (comics 40, toys 20), Garage 200 (4 x 50), Warehouse rooms 300 (5-6 categories). 7 more variants. Floor width and box count computed from shelves (`ContentBuilder.Section`). Box capacity 15. Mastery threshold 50.

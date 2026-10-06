@@ -76,6 +76,15 @@ namespace SortingGame.Data
         [Range(0f, 1f)] public float ViewerDimAlpha = 0.88f;
         public float ViewerIdleSpinSpeed = 18f;
 
+        [Header("Shelf close-up (tap a full shelf)")]
+        [Tooltip("Widest slice of a shelf shown at once, in metres. Narrower shelves are framed whole.")]
+        public float InspectMaxFrameWidth = 2.6f;
+        [Tooltip("Closest zoom: width in metres shown across the screen.")]
+        public float InspectMinFrameWidth = 0.8f;
+        [Range(0f, 30f), Tooltip("Downward tilt of the camera while looking at a shelf.")]
+        public float InspectPitch = 8f;
+        public float InspectFlyDuration = 0.5f;
+
         [Header("Section 100% renovation (GDD 5.5)")]
         public float RenovationDuration = 2.2f;
         [Range(0f, 1f), Tooltip("How much of the clean look is already reached at 99% progress. Gives continuous 'getting nicer' feedback.")]

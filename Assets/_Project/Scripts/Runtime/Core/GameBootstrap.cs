@@ -34,6 +34,7 @@ namespace SortingGame.Core
         public OverviewController Overview { get; private set; }
         public GameFlow Flow { get; private set; }
         public ShelfShowcase Showcase { get; private set; }
+        public ShelfInspector Inspector { get; private set; }
         public SaveData Data => _data;
 
         Camera _camera;
@@ -100,6 +101,9 @@ namespace SortingGame.Core
 
             Showcase = _camera.gameObject.AddComponent<ShelfShowcase>();
             Showcase.Init(_camera, _database.Feel, on => Drag.InputEnabled = on);
+
+            Inspector = _camera.gameObject.AddComponent<ShelfInspector>();
+            Inspector.Init(_camera, _database.Feel, Hud.IsOverUi, on => Drag.InputEnabled = on);
         }
 
         /// <summary>Viewer/rare moment pause world input; give it back to whichever screen is active.</summary>
@@ -121,7 +125,11 @@ namespace SortingGame.Core
             RareFind.CardRequested += Hud.ShowRareCard;
             RareFind.Finished += OnCollectibleStored;
             Section.ShelfCompleted += Showcase.Enqueue;
-            Hud.IsBusyWithMoment = () => Showcase.IsPlaying || RareFind.IsPresenting || _bookCelebrationPending;
+            Drag.FullShelfTapped += Inspector.Open;
+            Inspector.Opened += Hud.ShowInspect;
+            Inspector.Closed += Hud.HideInspect;
+            Hud.InspectBackRequested += Inspector.Close;
+            Hud.IsBusyWithMoment = () => Showcase.IsPlaying || RareFind.IsPresenting || Inspector.IsOpen || _bookCelebrationPending;
             Section.CollectibleFound += OnCollectibleFound;
             Section.StateChanged += MarkDirty;
             Wallet.Changed += (_, _) => MarkDirty();
@@ -165,6 +173,7 @@ namespace SortingGame.Core
         /// <summary>Loads a section from its save (or generates it the first time) and shows it.</summary>
         public void BuildSection(SectionDefinition section, VenueDefinition venue, bool fresh = false)
         {
+            Inspector.StopNow();
             Drag.CancelDrag();
             Drag.InputEnabled = true;
             var save = fresh ? null : VenueProgress.ValidSave(section, _data);

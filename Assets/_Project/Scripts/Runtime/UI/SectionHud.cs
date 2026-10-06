@@ -30,6 +30,7 @@ namespace SortingGame.UI
         public event Action NextVenueRequested;
         public event Action<VenueDefinition> VenueOpenRequested;
         public event Action<SectionDefinition> UnlockRequested;
+        public event Action InspectBackRequested;
 
         public enum Mode { Section, Overview }
         public Mode CurrentMode { get; private set; } = Mode.Section;
@@ -60,6 +61,8 @@ namespace SortingGame.UI
         VisualElement _viewer;
         Label _viewerName;
         Label _viewerDescription;
+        VisualElement _inspect;
+        Label _inspectName;
         Button _soundToggle;
         Button _hapticsToggle;
         IVisualElementScheduledItem _toastHide;
@@ -146,6 +149,7 @@ namespace SortingGame.UI
             BuildRareCard();
             BuildBookPage();
             BuildViewer();
+            BuildInspect();
             BuildBanner();
             BuildSettings();
             BuildShop();
@@ -318,6 +322,7 @@ namespace SortingGame.UI
             _toolbar.style.display = mode == Mode.Section ? DisplayStyle.Flex : DisplayStyle.None;
             if (mode == Mode.Section) _sellButton.style.display = DisplayStyle.None;
             _banner.AddToClassList("hidden");
+            if (!_inspect.ClassListContains("hidden")) HideInspect();
         }
 
         /// <summary>GDD 6.1: venue name + item counter on top, a label per room, "next place" button when everything is done.</summary>
@@ -555,7 +560,7 @@ namespace SortingGame.UI
         void ShowBannerWhenFree()
         {
             if (_section == null || CurrentMode != Mode.Section) return;
-            var bookOrViewerOpen = !_bookPage.ClassListContains("hidden") || !_viewer.ClassListContains("hidden");
+            var bookOrViewerOpen = !_bookPage.ClassListContains("hidden") || !_viewer.ClassListContains("hidden") || !_inspect.ClassListContains("hidden");
             if (bookOrViewerOpen || (IsBusyWithMoment != null && IsBusyWithMoment()))
             {
                 Tween.Delay(this, 0.3f, ShowBannerWhenFree);
@@ -714,6 +719,27 @@ namespace SortingGame.UI
             ShowBookPage(); // back to the page the player came from
         }
 
+        // ---------- Shelf close-up ----------
+
+        /// <summary>Close-up of a finished shelf: only the shelf name, a hint and the back button stay on screen.</summary>
+        public void ShowInspect(ShelfView shelf)
+        {
+            SetMomentMode(true);
+            _toast.RemoveFromClassList("toast--visible");
+            _inspectName.text = Loc.Get(shelf.Category.DisplayNameKey);
+            _inspect.RemoveFromClassList("hidden");
+            _inspect.style.opacity = 0f;
+            Tween.Run(this, 0.3f, t => _inspect.style.opacity = t, Ease.OutCubic);
+        }
+
+        public void HideInspect()
+        {
+            _inspect.AddToClassList("hidden");
+            SetMomentMode(false);
+        }
+
+        public bool IsInspecting => !_inspect.ClassListContains("hidden");
+
         /// <summary>During the rare-find moment only the card is visible (GDD 9.3: background darkens).</summary>
         void SetMomentMode(bool on)
         {
@@ -830,6 +856,20 @@ namespace SortingGame.UI
             Add(bottom, new Button(CloseViewer) { text = Loc.Get("hud.close") }, "primary-button");
         }
 
+        void BuildInspect()
+        {
+            _inspect = Add(_root, new VisualElement(), "inspect-layer");
+            _inspect.AddToClassList("hidden");
+            _inspect.pickingMode = PickingMode.Ignore; // the camera handles touches; only the button is UI
+            var top = Add(_inspect, new VisualElement(), "inspect-top");
+            top.pickingMode = PickingMode.Ignore;
+            _inspectName = Add(top, new Label(), "inspect-name");
+            Add(top, new Label(Loc.Get("hud.inspect_hint")), "inspect-hint");
+            var back = Add(_inspect, new Button(() => InspectBackRequested?.Invoke()) { text = Loc.Get("hud.back") }, "primary-button");
+            back.AddToClassList("inspect-back");
+            back.name = "inspect-back";
+        }
+
         void BuildBanner()
         {
             _banner = Add(_root, new VisualElement(), "banner");
@@ -842,6 +882,17 @@ namespace SortingGame.UI
                 _banner.AddToClassList("hidden");
                 BackRequested?.Invoke();
             }) { text = Loc.Get("hud.back_to_overview") }, "primary-button");
+            // Stay in the finished room: look around, pan, open shelves up close. The top bar "<" leaves later.
+            Add(card, new Button(StayInRoom) { text = Loc.Get("hud.stay_in_room") }, "secondary-button").name = "stay";
+        }
+
+        public bool IsBannerVisible => !_banner.ClassListContains("hidden");
+
+        /// <summary>Banner choice: stay in the finished room to look around. The top bar "&lt;" leaves later.</summary>
+        public void StayInRoom()
+        {
+            _banner.AddToClassList("hidden");
+            ShowToast(Loc.Get("hud.inspect_tip"));
         }
 
         void BuildSettings()

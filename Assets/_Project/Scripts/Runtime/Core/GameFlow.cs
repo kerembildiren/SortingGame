@@ -76,6 +76,7 @@ namespace SortingGame.Core
 
         void ShowOverviewNow(VenueDefinition venue)
         {
+            _boot.Inspector.StopNow();
             Venue = venue;
             ActiveSection = null;
             Current = Screen.Overview;
@@ -180,6 +181,7 @@ namespace SortingGame.Core
             if (Busy || Current != Screen.Section) return;
             Busy = true;
             _boot.Showcase.StopNow();
+            _boot.Inspector.StopNow();
             _boot.SaveNow();
             var leaving = ActiveSection;
             _hud.Fade(1f, FadeTime, () =>

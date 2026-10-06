@@ -39,7 +39,7 @@ namespace SortingGame.Tests
             Assert.AreEqual(GameFlow.Screen.Section, Flow.Current);
             Assert.IsTrue(Section.IsLoaded);
 
-            yield return FinishSection();
+            yield return TestGame.FinishSection();
             Assert.IsTrue(Section.IsComplete);
 
             // Back out: the room is at 100%, which completes the venue and opens the next place for free.
@@ -74,7 +74,7 @@ namespace SortingGame.Tests
             var shiny = false;
             Section.OnlyCollectiblesLeft += () => shiny = true;
 
-            yield return FinishSection(pickUpCollectibles: false, showcaseShot: "m4_05_shelf_showcase");
+            yield return TestGame.FinishSection(pickUpCollectibles: false, showcaseShot: "m4_05_shelf_showcase");
             Assert.IsFalse(Section.IsComplete, "A collectible is still on the floor.");
             Assert.IsTrue(shiny, "Player is told something shiny is left.");
             Assert.AreEqual(99, Section.Progress.Percent);
@@ -124,48 +124,6 @@ namespace SortingGame.Tests
             Flow.UnlockWithCoins(basement);
             Assert.IsTrue(Boot.Overview.RoomOf(basement).Status.Unlocked);
             Assert.AreEqual(0, Boot.Wallet.Coins);
-        }
-
-        /// <summary>Open boxes, sweep everything, find collectibles, shelve everything.</summary>
-        IEnumerator FinishSection(bool pickUpCollectibles = true, string showcaseShot = null)
-        {
-            foreach (var container in Section.Containers.ToList()) Section.OpenContainer(container);
-            yield return new WaitForSeconds(2.5f);
-            var bounds = Section.ViewBounds;
-            for (var pass = 0; pass < 2; pass++)
-            for (var z = bounds.min.z; z <= bounds.max.z; z += 0.25f)
-            for (var x = bounds.min.x; x <= bounds.max.x; x += 0.2f)
-                Section.Sweep(new Vector3(x, 0f, z), 0.2f);
-            yield return new WaitForSeconds(1f);
-
-            foreach (var collectible in pickUpCollectibles ? Section.Collectibles.ToList() : new System.Collections.Generic.List<ItemView>())
-            {
-                Section.FindCollectible(collectible);
-                yield return new WaitForSeconds(1f);
-                Boot.RareFind.Dismiss();
-                yield return new WaitForSeconds(0.6f);
-            }
-
-            foreach (var item in Section.CommonItems.Where(i => i.State is ItemState.Resting or ItemState.Physics).ToList())
-            {
-                var shelf = Section.ShelfFor(item.Definition.Category);
-                Section.TryPlace(item, shelf, shelf.transform.position);
-                yield return null;
-            }
-            if (showcaseShot != null)
-            {
-                yield return new WaitForSeconds(1.3f); // mid-glide
-                Assert.IsTrue(Boot.Showcase.IsPlaying, "A full shelf gets its camera showcase.");
-                yield return TestSnapshots.Capture(showcaseShot);
-            }
-            // Every finished shelf gets its showcase; wait for the queue to drain.
-            var waited = 0f;
-            while ((Boot.Showcase.IsPlaying || waited < 1f) && waited < 15f)
-            {
-                waited += Time.deltaTime;
-                yield return null;
-            }
-            Assert.IsFalse(Boot.Showcase.IsPlaying);
         }
     }
 }

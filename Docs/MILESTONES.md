@@ -12,6 +12,7 @@ Each milestone ends with a playtest by the user in the editor. Next one starts o
 | M4 | Venue structure: isometric overview of 4-section warehouse, zoom transition, section locks, venue sale, 3 venues as data | ✅ Playtested 2026-10-06; follow-up changes in M4.1 / M4.2 |
 | M4.1 | Playtest follow-ups: section only completes when every collectible in it is picked up; a found collectible never appears again; no venue selling/buying: all rooms 100% -> next venue opens for free; shelf-complete camera showcase (zoom + top-to-bottom pan); book flies in and opens when a venue's collection is complete | ✅ Implemented 2026-10-06 (tests green; user playtest pending) |
 | M4.2 | Big rooms: ~60 items (Comic Box), ~200 (Garage), ~300 per Warehouse room; horizontal camera pan in wide sections; item variety grows along the ladder | ✅ Implemented 2026-10-06 (tests green; user playtest pending) |
+| M4.3 | Pre-M5 requests: stay in a finished room (banner choice); tap a full shelf for a close-up camera (pan, zoom, back button) | ✅ Implemented 2026-10-06 (tests green; user playtest pending) |
 | M5 | Helpers, offline progress, ad/IAP interfaces with fake providers, localisation infrastructure | ⏳ |
 
 ## Decisions taken during development
@@ -63,3 +64,5 @@ Each milestone ends with a playtest by the user in the editor. Next one starts o
 | 2026-10-06 | Big rooms are one long strip of bookcases (up to 5 rows) along the back wall; the camera shows a 4.6 m window and pans. Pan by dragging empty floor (Hand/Magnet), two fingers or right mouse; edges auto-scroll while carrying/sweeping | GDD 6.2 "large sections pan sideways"; keeps items readable |
 | 2026-10-06 | Category variety grows along the ladder: Comic Box 2 categories, Garage 4, Warehouse rooms 5-6. Mastery threshold raised to 50 to match bigger rooms | User request (more different items as you progress) |
 | 2026-10-06 | Changed content invalidates the old section save (item count mismatch -> regenerate) | Content rebalances must not leave rooms in a broken state |
+| 2026-10-06 | (user) Finishing a room offers "Stay and look around" next to "Back to overview" | Player should be free to enjoy the finished room |
+| 2026-10-06 | (user) Tapping a full shelf (any time, any tool) opens a close-up: camera in front of the shelf, slide along it, zoom between ~0.8 m and 2.6 m of shelf width, Back returns to the room view. Pan stops at the shelf edges (no wandering to the next shelf); room input is paused meanwhile | Look at the sorted result up close if the showcase was skipped or after finishing |
