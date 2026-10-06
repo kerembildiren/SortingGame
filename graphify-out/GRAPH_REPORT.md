@@ -1,22 +1,21 @@
 # Graph Report - SortingGame  (2026-10-06)
 
 ## Corpus Check
-- 49 files · ~25,977 words
+- 52 files · ~27,991 words
 - Verdict: corpus is large enough that graph structure adds value.
-- Unclassified: 170 file(s) not represented in the graph (top: .meta 114, .asset 39, (none) 4)
+- Unclassified: 173 file(s) not represented in the graph (top: .meta 117, .asset 39, (none) 4)
 
 ## Summary
-- 752 nodes · 1665 edges · 33 communities (28 shown, 5 thin omitted)
-- Extraction: 91% EXTRACTED · 9% INFERRED · 0% AMBIGUOUS · INFERRED: 146 edges (avg confidence: 0.86)
+- 805 nodes · 1808 edges · 37 communities (30 shown, 7 thin omitted)
+- Extraction: 91% EXTRACTED · 9% INFERRED · 0% AMBIGUOUS · INFERRED: 170 edges (avg confidence: 0.86)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `17d0ef31`
+- Built from commit: `b74ddc16`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
-- .Build
 - GDD — Chubby's Clutter (çalışma adı)
 - 8. Eşyalar ve kategoriler
 - unityengine
@@ -24,16 +23,16 @@
 - ItemView
 - Sfx
 - DragController
-- .Generate
+- .Present
 - 5. Mekânlar ve bölümler
-- Progress & Handoff
+- CollectionViewer
 - unity.sh
 - DirtLayerView
 - 10. Otomasyon ve ilerleme
 - 12. Görsel yön
 - 4. Oyun döngüleri
 - CollectibleDefinition
-- ShelfView
+- ShelfSlot
 - SectionHud
 - SectionController
 - Wallet
@@ -44,31 +43,35 @@
 - 16. MVP kapsamı
 - 6. Görünümler ve kamera
 - ItemDefinition
-- DirtMask
+- .Run
 - ItemState
 - PlaceholderFactory
 - ProceduralTextures
+- ShelfView
+- .Generate
+- DirtMask
+- MonoBehaviour
 
 ## God Nodes (most connected - your core abstractions)
 1. `SectionController` - 71 edges
-2. `ItemView` - 56 edges
-3. `SectionHud` - 54 edges
-4. `M1 architecture (quick map)` - 36 edges
-5. `ShelfView` - 33 edges
-6. `SortingGame.Data` - 32 edges
-7. `DragController` - 32 edges
-8. `GameBootstrap` - 30 edges
-9. `SortingGame.Core` - 26 edges
-10. `RareFindPresenter` - 26 edges
+2. `SectionHud` - 58 edges
+3. `ItemView` - 56 edges
+4. `M1 architecture (quick map)` - 40 edges
+5. `SortingGame.Data` - 33 edges
+6. `ShelfView` - 33 edges
+7. `GameBootstrap` - 32 edges
+8. `DragController` - 32 edges
+9. `CollectionViewer` - 31 edges
+10. `SortingGame.Core` - 29 edges
 
 ## Surprising Connections (you probably didn't know these)
+- `9.1 Koleksiyon Kitabı (`CollectionBook`) [KARAR]` --references--> `CollectionBook`  [INFERRED]
+  Docs/GDD.md → Assets/_Project/Scripts/Runtime/Core/CollectionBook.cs
 - `8.1 Eşya türleri` --references--> `ContainerDefinition`  [INFERRED]
   Docs/GDD.md → Assets/_Project/Scripts/Runtime/Data/ContainerDefinition.cs
 - `M1 architecture (quick map)` --references--> `ContentBuilder`  [INFERRED]
   Docs/PROGRESS.md → Assets/_Project/Scripts/Editor/ContentBuilder.cs
 - `17. Sözlük` --references--> `CollectionBook`  [INFERRED]
-  Docs/GDD.md → Assets/_Project/Scripts/Runtime/Core/CollectionBook.cs
-- `9.1 Koleksiyon Kitabı (`CollectionBook`) [KARAR]` --references--> `CollectionBook`  [INFERRED]
   Docs/GDD.md → Assets/_Project/Scripts/Runtime/Core/CollectionBook.cs
 - `M1 architecture (quick map)` --references--> `DirtMask`  [INFERRED]
   Docs/PROGRESS.md → Assets/_Project/Scripts/Runtime/Core/DirtMask.cs
@@ -76,7 +79,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (33 total, 5 thin omitted)
+## Communities (37 total, 7 thin omitted)
 
 ### Community 1 - "GDD — Chubby's Clutter (çalışma adı)"
 Cohesion: 0.20
@@ -87,16 +90,16 @@ Cohesion: 0.50
 Nodes (4): 8.1 Eşya türleri, 8.2 Kategoriler [KARAR], 8.3 Eşya çeşitliliği, 8. Eşyalar ve kategoriler
 
 ### Community 3 - "unityengine"
-Cohesion: 0.07
-Nodes (8): BuildTools, SortingGame.Tests, SortingGame.Data, SortingGame.UI, SortingGame.Core, SortingGame.EditorTools, SortingGame.Section, 2026-10-06 — M2 implemented
+Cohesion: 0.08
+Nodes (6): SortingGame.Tests, SortingGame.Data, SortingGame.UI, SortingGame.Core, SortingGame.EditorTools, SortingGame.Section
 
 ### Community 4 - ".Build"
 Cohesion: 0.06
 Nodes (21): ContentBuilder, ProjectSetup, ItemRarity, Common, Mascot, Rare, PlaceholderShape, Book (+13 more)
 
 ### Community 5 - "ItemView"
-Cohesion: 0.05
-Nodes (15): Haptics, Vibrator, Ease, Tween, Runner, TweenRunner, ItemView, CanPick (+7 more)
+Cohesion: 0.15
+Nodes (8): ItemView, CanPick, CanTapToFind, Definition, IsCollectible, State, VisualSize, M1 architecture (quick map)
 
 ### Community 6 - "Sfx"
 Cohesion: 0.07
@@ -106,13 +109,17 @@ Nodes (25): Sfx, BookStamp, CleanAmbienceLoop, Coin, DuplicateSold, Pickup, Plac
 Cohesion: 0.08
 Nodes (10): SectionVisuals, ContainerView, Definition, IsOpened, DragController, InputEnabled, Tool, ToolType (+2 more)
 
+### Community 8 - ".Present"
+Cohesion: 0.15
+Nodes (3): Haptics, Vibrator, Ease
+
 ### Community 9 - "5. Mekânlar ve bölümler"
 Cohesion: 0.29
 Nodes (7): 5.1 Yapı [KARAR], 5.2 İlerleme sırası [VARSAYILAN], 5.3 Mekân merdiveni (taslak), 5.4 Bölüm kilitleri [VARSAYILAN], 5.5 Hafif renovasyon [KARAR], 5.6 Mekânın satışı [KARAR], 5. Mekânlar ve bölümler
 
-### Community 10 - "Progress & Handoff"
-Cohesion: 0.25
-Nodes (7): 2026-10-06 — M0 done, approved, 2026-10-06 — M1 implemented and approved (committed), Current state, Environment notes, Open questions for the user, Progress & Handoff, Session log
+### Community 10 - "CollectionViewer"
+Cohesion: 0.06
+Nodes (26): BuildTools, OrbitView, IsIdleSpinning, Pan, Pitch, Yaw, Zoom, CollectionViewer (+18 more)
 
 ### Community 13 - "10. Otomasyon ve ilerleme"
 Cohesion: 0.40
@@ -127,16 +134,16 @@ Cohesion: 0.40
 Nodes (5): 4.1 Anlık döngü (saniyeler), 4.2 Oturum döngüsü (1–5 dakika), 4.3 Meta döngü (günler/haftalar), 4.4 Kaynak akışı, 4. Oyun döngüleri
 
 ### Community 16 - "CollectibleDefinition"
-Cohesion: 0.11
-Nodes (11): CollectionBook, FoundIds, FindResult, CollectibleDefinition, IsMascot, CollectionBookTests, 9.1 Koleksiyon Kitabı (`CollectionBook`) [KARAR], 9.2 Maskot [KARAR] (+3 more)
+Cohesion: 0.14
+Nodes (6): CollectionBook, FoundIds, FindResult, CollectibleDefinition, IsMascot, CollectionBookTests
 
-### Community 17 - "ShelfView"
-Cohesion: 0.11
-Nodes (12): ShelfSlot, IsFree, IsReserved, Occupant, WorldBase, ShelfView, Category, FilledCount (+4 more)
+### Community 17 - "ShelfSlot"
+Cohesion: 0.24
+Nodes (5): ShelfSlot, IsFree, IsReserved, Occupant, WorldBase
 
 ### Community 18 - "SectionHud"
 Cohesion: 0.08
-Nodes (4): Loc, VenueDefinition, SectionHud, UiScale
+Nodes (5): Loc, VenueDefinition, SectionHud, IsBookOpen, UiScale
 
 ### Community 19 - "SectionController"
 Cohesion: 0.09
@@ -151,8 +158,8 @@ Cohesion: 0.23
 Nodes (9): SectionProgress, DirtCleaned, Fraction, HasDirt, IsComplete, Percent, PlacedItems, TotalItems (+1 more)
 
 ### Community 22 - "GameBootstrap"
-Cohesion: 0.06
-Nodes (16): GameBootstrap, Book, Drag, Hud, RareFind, Section, Wallet, FeelConfig (+8 more)
+Cohesion: 0.05
+Nodes (17): GameBootstrap, Book, Drag, Hud, RareFind, Section, Viewer, Wallet (+9 more)
 
 ### Community 23 - "11. Ekonomi ve gelir modeli"
 Cohesion: 0.33
@@ -172,11 +179,7 @@ Nodes (4): 6.1 Genel bakış (`OverviewView`) [KARAR], 6.2 Bölüm görünümü 
 
 ### Community 27 - "ItemDefinition"
 Cohesion: 0.06
-Nodes (22): ContainerContent, SectionLayoutGenerator, BalanceConfig, CategoryDefinition, ContainerDefinition, GameDatabase, ItemDefinition, CoinValue (+14 more)
-
-### Community 28 - "DirtMask"
-Cohesion: 0.31
-Nodes (5): DirtMask, CleanedFraction, HasDirt, Height, Width
+Nodes (24): ContainerContent, SectionLayout, TotalItems, SectionLayoutGenerator, BalanceConfig, CategoryDefinition, ContainerDefinition, GameDatabase (+16 more)
 
 ### Community 29 - "ItemState"
 Cohesion: 0.25
@@ -190,25 +193,33 @@ Nodes (3): Fx, PlaceholderFactory, DashedTexture
 Cohesion: 0.40
 Nodes (3): ProceduralTextures, Rays, SoftDot
 
+### Community 33 - "ShelfView"
+Cohesion: 0.15
+Nodes (7): ShelfView, Category, FilledCount, HasFreeSlot, IsFull, LabelAnchor, Size
+
+### Community 35 - "DirtMask"
+Cohesion: 0.31
+Nodes (5): DirtMask, CleanedFraction, HasDirt, Height, Width
+
 ## Knowledge Gaps
-- **165 isolated node(s):** `FoundIds`, `Width`, `Height`, `HasDirt`, `CleanedFraction` (+160 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 300 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **5 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **174 isolated node(s):** `FoundIds`, `Width`, `Height`, `HasDirt`, `CleanedFraction` (+169 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 311 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **7 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `SectionController` connect `SectionController` to `.Build`, `unityengine`, `ItemView`, `DragController`, `.Generate`, `DirtLayerView`, `CollectibleDefinition`, `ShelfView`, `SectionHud`, `Wallet`, `SectionProgress`, `GameBootstrap`, `ItemDefinition`, `DirtMask`, `PlaceholderFactory`, `.Sweep`?**
-  _High betweenness centrality (0.221) - this node is a cross-community bridge._
-- **Why does `M1 architecture (quick map)` connect `ItemView` to `.Build`, `.Build`, `Sfx`, `DragController`, `Progress & Handoff`, `DirtLayerView`, `CollectibleDefinition`, `ShelfView`, `SectionHud`, `SectionController`, `Wallet`, `GameBootstrap`, `ItemDefinition`, `DirtMask`, `PlaceholderFactory`, `.Sweep`?**
-  _High betweenness centrality (0.178) - this node is a cross-community bridge._
-- **Why does `GDD — Chubby's Clutter (çalışma adı)` connect `GDD — Chubby's Clutter (çalışma adı)` to `8. Eşyalar ve kategoriler`, `.Build`, `5. Mekânlar ve bölümler`, `10. Otomasyon ve ilerleme`, `12. Görsel yön`, `4. Oyun döngüleri`, `CollectibleDefinition`, `11. Ekonomi ve gelir modeli`, `7. Etkileşim ve kontroller`, `16. MVP kapsamı`, `6. Görünümler ve kamera`, `ItemDefinition`?**
-  _High betweenness centrality (0.134) - this node is a cross-community bridge._
-- **Are the 35 inferred relationships involving `M1 architecture (quick map)` (e.g. with `ContentBuilder` and `.CreateMainScene()`) actually correct?**
-  _`M1 architecture (quick map)` has 35 INFERRED edges - model-reasoned connections that need verification._
+- **Why does `M1 architecture (quick map)` connect `ItemView` to `.Build`, `.Build`, `Sfx`, `DragController`, `CollectionViewer`, `DirtLayerView`, `CollectibleDefinition`, `ShelfSlot`, `SectionHud`, `SectionController`, `Wallet`, `GameBootstrap`, `ItemDefinition`, `.Run`, `PlaceholderFactory`, `.Sweep`, `ShelfView`, `DirtMask`, `MonoBehaviour`?**
+  _High betweenness centrality (0.206) - this node is a cross-community bridge._
+- **Why does `SectionController` connect `SectionController` to `.Build`, `ShelfView`, `DirtMask`, `unityengine`, `ItemView`, `MonoBehaviour`, `DragController`, `.Present`, `DirtLayerView`, `CollectibleDefinition`, `SectionHud`, `Wallet`, `SectionProgress`, `GameBootstrap`, `ItemDefinition`, `PlaceholderFactory`, `.Sweep`?**
+  _High betweenness centrality (0.192) - this node is a cross-community bridge._
+- **Why does `GDD — Chubby's Clutter (çalışma adı)` connect `GDD — Chubby's Clutter (çalışma adı)` to `8. Eşyalar ve kategoriler`, `.Build`, `5. Mekânlar ve bölümler`, `CollectionViewer`, `10. Otomasyon ve ilerleme`, `12. Görsel yön`, `4. Oyun döngüleri`, `11. Ekonomi ve gelir modeli`, `7. Etkileşim ve kontroller`, `16. MVP kapsamı`, `6. Görünümler ve kamera`, `ItemDefinition`?**
+  _High betweenness centrality (0.127) - this node is a cross-community bridge._
+- **Are the 39 inferred relationships involving `M1 architecture (quick map)` (e.g. with `ContentBuilder` and `.CreateMainScene()`) actually correct?**
+  _`M1 architecture (quick map)` has 39 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `FoundIds`, `Width`, `Height` to the rest of the system?**
-  _165 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _174 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `unityengine` be split into smaller, more focused modules?**
-  _Cohesion score 0.07237871674491393 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.07589984350547731 - nodes in this community are weakly interconnected._
 - **Should `.Build` be split into smaller, more focused modules?**
   _Cohesion score 0.06464646464646465 - nodes in this community are weakly interconnected._

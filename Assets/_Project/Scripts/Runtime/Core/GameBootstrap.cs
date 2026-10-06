@@ -22,6 +22,7 @@ namespace SortingGame.Core
         public SectionHud Hud { get; private set; }
         public DragController Drag { get; private set; }
         public RareFindPresenter RareFind { get; private set; }
+        public CollectionViewer Viewer { get; private set; }
 
         Camera _camera;
         VenueDefinition _venue;
@@ -64,6 +65,9 @@ namespace SortingGame.Core
 
             RareFind = new GameObject("RareFind").AddComponent<RareFindPresenter>();
             RareFind.Init(_camera, _database.Feel, _visuals, on => Drag.InputEnabled = on, () => Hud.BookButtonScreenPoint());
+
+            Viewer = new GameObject("CollectionViewer").AddComponent<CollectionViewer>();
+            Viewer.Init(_camera, _database.Feel, _visuals, Hud.IsOverUi, on => Drag.InputEnabled = on);
         }
 
         void Start()
@@ -75,6 +79,8 @@ namespace SortingGame.Core
             RareFind.CardRequested += Hud.ShowRareCard;
             RareFind.Finished += _ => Hud.OnCollectibleStored();
             Section.CollectibleFound += OnCollectibleFound;
+            Hud.CollectibleViewRequested += Viewer.Open;
+            Hud.ViewerClosed += Viewer.Close;
             BuildSection();
         }
 

@@ -75,6 +75,26 @@ namespace SortingGame.Section
             return go;
         }
 
+        /// <summary>The look of any item: real prefab if set, else mascot figure or primitive. Centred on the parent.</summary>
+        public void CreateItemVisual(ItemDefinition definition, Transform parent, bool withCollider = true)
+        {
+            if (definition.Prefab != null)
+            {
+                var instance = Object.Instantiate(definition.Prefab, parent, false);
+                if (!withCollider)
+                    foreach (var c in instance.GetComponentsInChildren<Collider>()) Object.DestroyImmediate(c);
+            }
+            else if (definition.Rarity == ItemRarity.Mascot && definition is CollectibleDefinition mascot)
+            {
+                var body = CreateMascot(definition.Placeholder, mascot.CostumeColor, parent);
+                if (!withCollider) Object.DestroyImmediate(body.GetComponent<Collider>());
+            }
+            else
+            {
+                CreateShape(definition.Placeholder, parent, withCollider);
+            }
+        }
+
         /// <summary>
         /// Placeholder Chubby (GDD 9.2): round body, big eyes, costume mask + cape in <paramref name="costume"/> colour.
         /// Only the body has a collider.

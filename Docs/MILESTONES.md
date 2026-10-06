@@ -7,6 +7,7 @@ Each milestone ends with a playtest by the user in the editor. Next one starts o
 | M0 | Project skeleton: Unity 6 URP, portrait, Input System, folders, asmdefs, data layer, git, batchmode tooling | ✅ Approved 2026-10-06 |
 | M1 | Core loop in one grey-box section: shelves with dashed slots, tap-to-tip containers, drag & drop (correct = snap + coin, wrong = soft return + hint), section %, basic juice/haptics. Android build at the end. | ✅ Approved 2026-10-06 (editor/Simulator; device test deferred, no device yet) |
 | M2 | Broom + dirt layer, items under dirt, rare item glow, "Rare find!" moment, Collection Book data (first copy to book, duplicates sold), section 100% before/after | ✅ Approved 2026-10-06 |
+| M2+ | Collection viewer (GDD 9.1.1): tap a found item in the book -> 3D view on a dimmed screen, rotate / zoom / pan, double-tap reset | ✅ Approved 2026-10-06 |
 | M3 | Tools (Magnet, Magnifier, Hand upgrade), Category Mastery auto-fly, coin upgrades, JSON save (sorted stays sorted) | ⏳ |
 | M4 | Venue structure: isometric overview of 4-section warehouse, zoom transition, section locks, venue sale, 3 venues as data | ⏳ |
 | M5 | Helpers, offline progress, ad/IAP interfaces with fake providers, localisation infrastructure | ⏳ |
@@ -31,3 +32,4 @@ Each milestone ends with a playtest by the user in the editor. Next one starts o
 | 2026-10-06 | 100% "before/after" = dust fades, floor/walls recolour, lights + background warm up, sparkle wave, warm music pad; no split-screen wipe yet | Cheap and clear; a real before/after wipe can come with art |
 | 2026-10-06 | Rare find moment: no blur, a 3D dimmer behind the item instead | Blur needs post-processing on mobile; dim reads the same |
 | 2026-10-06 | Collection Book is in-memory until M3 (save) | Save system is M3 scope |
+| 2026-10-06 | Collection viewer added to M2 (user request): own camera-parented stage, own key light, game input paused while open, returns to the book on close | Builds on the rare-find stage; lighting independent of room mood |

@@ -206,6 +206,12 @@ Aynı kategorideki eşyalar görsel olarak farklı varyasyonlara sahiptir (farkl
 - Sayfada ilerleme sayacı (ör. `7 / 12`).
 - Scrapbook / albüm estetiği: kâğıt dokusu, çıkartmalar, damgalar.
 
+### 9.1.1 Vitrin (`CollectionViewer`) [KARAR]
+- Kitapta bulunmuş bir parçaya dokununca parça, kararmış ekranın ortasında 3D olarak açılır.
+- Oyuncu parçayı tek parmakla döndürür, iki parmakla yakınlaştırır ve kaydırır (editörde: fare tekerleği ve sağ tık sürükleme). Çift dokunuş görünümü sıfırlar; dokunulmadığında parça yavaşça kendi etrafında döner.
+- Altta parçanın adı ve kısa açıklaması, tek bir "Kapat" butonu. Kapatınca kitaba dönülür.
+- Amaç: toplanan parçaları istendiği an sergileyebilmek; koleksiyonun kendisi ödül hissi verir (prensip 4).
+
 ### 9.2 Maskot [KARAR]
 - Oyunun özgün bir maskotu vardır: yuvarlak gövdeli, küçük kollu-bacaklı, iri ve sevimli gözlü bir koleksiyon figürü. Taban adı **Chubby** **[VARSAYILAN]**.
 - Her mekânda maskot temaya uygun bir kostümle saklıdır (ör. Çizgi Roman Kutusu'nda süper kahraman kostümlü "Captain Chubby", Sirk'te sunucu kostümlü Chubby).
@@ -420,6 +426,7 @@ Arayüz dili İngilizce **[VARSAYILAN]**. Türkçe sonradan eklenecek; tüm meti
 | Nadir eşya | `Collectible` | Koleksiyon Kitabı'na giden eşya |
 | Maskot | `Mascot` | Her mekânda kostümlü saklanan özgün figür |
 | Koleksiyon Kitabı | `CollectionBook` | Tüm nadir eşyaların toplandığı albüm |
+| Vitrin | `CollectionViewer` | Kitaptaki bir parçayı 3D döndürüp yakınlaştırarak inceleme ekranı |
 | Set bonusu | `SetBonus` | Tamamlanan sayfanın kalıcı ödülü |
 | Alet | `Tool` | El, Süpürge, Mıknatıs, Büyüteç |
 | Kategori Ustalığı | `CategoryMastery` | Kategoriyi öğrenince gelen otomatik yerleştirme |
@@ -462,3 +469,4 @@ Arayüz dili İngilizce **[VARSAYILAN]**. Türkçe sonradan eklenecek; tüm meti
 | 2026-10-06 | Motor: Unity | Geliştirici tercihi. |
 | 2026-10-06 | Gelir modeli: ödüllü reklam + IAP; koleksiyon parayla alınamaz | Cozy deneyimi bozmadan gelir. |
 | 2026-10-06 | Yardımcılar maskottan ayrı karakterler | Konsept görsellerdeki karışıklığı gidermek. |
+| 2026-10-06 | Koleksiyon Kitabı'na 3D Vitrin eklendi (döndür, yakınlaştır, kaydır) | Toplanan parçaları istendiği an sergilemek koleksiyon motivasyonunu güçlendirir (oyun sahibi isteği). |

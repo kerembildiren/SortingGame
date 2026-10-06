@@ -63,6 +63,25 @@ namespace SortingGame.Tests
 
             _boot.Hud.OpenBook();
             yield return Snapshot("m2_05_book");
+
+            // Collection viewer (GDD 9.1.1): open a found piece from the book, turn and zoom it, close.
+            var mascot = _boot.Book.FoundIds.Contains("captain_chubby")
+                ? collectibles.Select(c => c.Definition).OfType<SortingGame.Data.CollectibleDefinition>().First(c => c.Id == "captain_chubby")
+                : null;
+            Assert.IsNotNull(mascot);
+            _boot.Hud.OpenViewer(mascot);
+            yield return new WaitForSeconds(0.4f);
+            Assert.IsTrue(_boot.Viewer.IsOpen);
+            Assert.IsFalse(_boot.Drag.InputEnabled, "Game input is paused while viewing.");
+            _boot.Viewer.View.Rotate(new Vector2(-40f, 15f));
+            _boot.Viewer.View.ZoomBy(1.3f);
+            yield return null;
+            yield return Snapshot("m2_06_viewer");
+            _boot.Hud.CloseViewer();
+            yield return new WaitForSeconds(0.4f);
+            Assert.IsFalse(_boot.Viewer.IsOpen);
+            Assert.IsTrue(_boot.Drag.InputEnabled);
+            Assert.IsTrue(_boot.Hud.IsBookOpen, "Closing the viewer returns to the book.");
             _boot.Hud.CloseBook();
 
             // Wrong shelf: item comes back, no coins lost or gained (GDD 7.2).
@@ -91,9 +110,9 @@ namespace SortingGame.Tests
             Assert.That(section.Shelves.All(s => s.IsFull));
 
             yield return new WaitForSeconds(1.0f);
-            yield return Snapshot("m2_06_renovated");
+            yield return Snapshot("m2_07_renovated");
             yield return new WaitForSeconds(1.2f);
-            yield return Snapshot("m2_07_complete");
+            yield return Snapshot("m2_08_complete");
 
             // Replay: the same collectibles are duplicates now and sell automatically (GDD 9.3).
             _boot.Restart();

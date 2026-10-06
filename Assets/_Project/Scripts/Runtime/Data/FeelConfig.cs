@@ -61,6 +61,16 @@ namespace SortingGame.Data
         public float RareDisplayScreenShare = 0.42f;
         [Range(0f, 1f)] public float RareDimAlpha = 0.7f;
 
+        [Header("Collection viewer (GDD 9.1.1)")]
+        [Range(0.1f, 0.9f), Tooltip("Item size at zoom 1 as a share of the screen width.")]
+        public float ViewerScreenShare = 0.55f;
+        [Tooltip("Degrees of turn for a drag across the full screen width.")]
+        public float ViewerRotateDegreesPerScreen = 320f;
+        public float ViewerMinZoom = 0.6f;
+        public float ViewerMaxZoom = 2.6f;
+        [Range(0f, 1f)] public float ViewerDimAlpha = 0.88f;
+        public float ViewerIdleSpinSpeed = 18f;
+
         [Header("Section 100% renovation (GDD 5.5)")]
         public float RenovationDuration = 2.2f;
         [Range(0f, 1f), Tooltip("How much of the clean look is already reached at 99% progress. Gives continuous 'getting nicer' feedback.")]

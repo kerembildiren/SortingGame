@@ -356,3 +356,38 @@
     white-space: normal;
     -unity-text-align: middle-center;
 }
+
+/* ---------- Collection viewer (GDD 9.1.1) ---------- */
+.book-entry--found:hover { scale: 1.04 1.04; }
+.book-entry--found:active { scale: 0.96 0.96; }
+
+.viewer-layer {
+    position: absolute;
+    left: 0; top: 0; right: 0; bottom: 0;
+    justify-content: space-between;
+    padding: 120px 70px 90px 70px;
+}
+
+.viewer-top, .viewer-bottom { align-items: center; }
+
+.viewer-name {
+    font-size: 64px;
+    -unity-font-style: bold;
+    color: rgb(255, 236, 190);
+}
+
+.viewer-hint {
+    margin-top: 8px;
+    font-size: 28px;
+    color: rgba(255, 248, 236, 0.6);
+    white-space: normal;
+    -unity-text-align: middle-center;
+}
+
+.viewer-description {
+    font-size: 36px;
+    color: rgb(255, 248, 236);
+    white-space: normal;
+    -unity-text-align: middle-center;
+    margin-bottom: 8px;
+}

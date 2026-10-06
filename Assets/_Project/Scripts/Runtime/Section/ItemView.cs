@@ -62,10 +62,7 @@ namespace SortingGame.Section
             view._feel = feel;
             view._body = body;
 
-            if (definition.Prefab != null) Instantiate(definition.Prefab, go.transform, false);
-            else if (definition.Rarity == ItemRarity.Mascot && definition is CollectibleDefinition mascot)
-                factory.CreateMascot(definition.Placeholder, mascot.CostumeColor, go.transform);
-            else factory.CreateShape(definition.Placeholder, go.transform);
+            factory.CreateItemVisual(definition, go.transform);
 
             _physicsMaterial ??= new PhysicsMaterial("Item")
             {

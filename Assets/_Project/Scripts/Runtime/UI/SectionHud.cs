@@ -21,6 +21,8 @@ namespace SortingGame.UI
         public event Action RestartRequested;
         public event Action<ToolType> ToolSelected;
         public event Action RareCardClosed;
+        public event Action<CollectibleDefinition> CollectibleViewRequested;
+        public event Action ViewerClosed;
 
         UIDocument _document;
         VisualElement _root;
@@ -45,6 +47,9 @@ namespace SortingGame.UI
         VisualElement _bookPage;
         Label _bookCount;
         VisualElement _bookGrid;
+        VisualElement _viewer;
+        Label _viewerName;
+        Label _viewerDescription;
         Button _soundToggle;
         Button _hapticsToggle;
         IVisualElementScheduledItem _toastHide;
@@ -100,6 +105,7 @@ namespace SortingGame.UI
             BuildToolbar();
             BuildRareCard();
             BuildBookPage();
+            BuildViewer();
             BuildBanner();
             BuildSettings();
             ApplySafeArea();
@@ -294,12 +300,40 @@ namespace SortingGame.UI
                 Add(icon, new Label(has ? "" : "?"), "book-icon-text");
                 Add(entry, new Label(has ? Loc.Get(collectible.DisplayNameKey) : "???"), "book-entry-name");
                 if (collectible.Rarity == ItemRarity.Mascot) entry.AddToClassList("book-entry--mascot");
+                if (has)
+                {
+                    // GDD 9.1.1: tap a found piece to display it in 3D.
+                    entry.AddToClassList("book-entry--found");
+                    var shown = collectible;
+                    entry.RegisterCallback<ClickEvent>(_ => OpenViewer(shown));
+                }
             }
             _bookCount.text = $"{(_venue != null ? Loc.Get(_venue.DisplayNameKey) : "")}  {found} / {page.Count}";
             _bookPage.RemoveFromClassList("hidden");
         }
 
         public void CloseBook() => _bookPage.AddToClassList("hidden");
+
+        public bool IsBookOpen => !_bookPage.ClassListContains("hidden");
+
+        public void OpenViewer(CollectibleDefinition collectible)
+        {
+            CloseBook();
+            SetMomentMode(true);
+            _viewerName.text = Loc.Get(collectible.DisplayNameKey);
+            _viewerDescription.text = Loc.Get(collectible.DescriptionKey);
+            _viewer.RemoveFromClassList("hidden");
+            CollectibleViewRequested?.Invoke(collectible);
+        }
+
+        public void CloseViewer()
+        {
+            if (_viewer.ClassListContains("hidden")) return;
+            _viewer.AddToClassList("hidden");
+            SetMomentMode(false);
+            ViewerClosed?.Invoke();
+            OpenBook(); // back to where the player came from
+        }
 
         /// <summary>During the rare-find moment only the card is visible (GDD 9.3: background darkens).</summary>
         void SetMomentMode(bool on)
@@ -373,6 +407,21 @@ namespace SortingGame.UI
             _bookCount = Add(card, new Label(), "book-count");
             _bookGrid = Add(card, new VisualElement(), "book-grid");
             Add(card, new Button(CloseBook) { text = Loc.Get("hud.close") }, "primary-button");
+        }
+
+        void BuildViewer()
+        {
+            _viewer = Add(_root, new VisualElement(), "viewer-layer");
+            _viewer.AddToClassList("hidden");
+            _viewer.pickingMode = PickingMode.Ignore; // the 3D viewer handles touches; only the button is UI
+            var top = Add(_viewer, new VisualElement(), "viewer-top");
+            top.pickingMode = PickingMode.Ignore;
+            _viewerName = Add(top, new Label(), "viewer-name");
+            Add(top, new Label(Loc.Get("hud.view_hint")), "viewer-hint");
+            var bottom = Add(_viewer, new VisualElement(), "viewer-bottom");
+            bottom.pickingMode = PickingMode.Ignore;
+            _viewerDescription = Add(bottom, new Label(), "viewer-description");
+            Add(bottom, new Button(CloseViewer) { text = Loc.Get("hud.close") }, "primary-button");
         }
 
         void BuildBanner()

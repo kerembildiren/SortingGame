@@ -39,6 +39,7 @@ namespace SortingGame.Core
             ["hud.rare_find"] = "Rare find!",
             ["hud.continue"] = "Continue",
             ["hud.duplicate_sold"] = "Duplicate {0} sold +{1}",
+            ["hud.view_hint"] = "Drag to turn  ·  Pinch to zoom  ·  Two fingers to move  ·  Double-tap to reset",
 
             // Collectibles: original names only (GDD 13).
             ["collectible.captain_chubby"] = "Captain Chubby",
