@@ -64,8 +64,9 @@ namespace SortingGame.Overview
             var cellD = 0f;
             foreach (var s in venue.Sections)
             {
-                cellW = Mathf.Max(cellW, s.FloorSize.x);
-                cellD = Mathf.Max(cellD, s.FloorSize.y);
+                var drawn = RoomView.DrawnSize(s);
+                cellW = Mathf.Max(cellW, drawn.x);
+                cellD = Mathf.Max(cellD, drawn.y);
             }
             var rows = Mathf.CeilToInt(venue.Sections.Count / (float)columns);
             var totalW = columns * cellW + (columns - 1) * RoomGap;

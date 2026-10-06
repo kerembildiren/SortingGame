@@ -23,13 +23,18 @@ namespace SortingGame.Overview
         public Vector3 LabelAnchor => transform.TransformPoint(new Vector3(0f, WallHeight + 0.4f, 0f));
         public Vector3 Centre => transform.position;
 
+        /// <summary>Size drawn on the overview: long sections are shortened so the building stays readable (GDD 15.3).</summary>
+        public static Vector2 DrawnSize(SectionDefinition section) =>
+            new(Mathf.Min(section.FloorSize.x, 7f), Mathf.Min(section.FloorSize.y, 6.4f));
+
         public void Build(SectionDefinition section, VenueProgress.SectionStatus status, GameContext ctx, PlaceholderFactory factory)
         {
             Section = section;
             Status = status;
             var visuals = ctx.Visuals;
-            var w = section.FloorSize.x;
-            var d = section.FloorSize.y;
+            var drawn = DrawnSize(section);
+            var w = drawn.x;
+            var d = drawn.y;
             Size = new Vector3(w, WallHeight, d);
 
             var clean = status.Completed ? 1f : status.Fraction;
@@ -45,7 +50,7 @@ namespace SortingGame.Overview
             factory.CreateBox("WallRight", transform, new Vector3(w / 2f - Wall / 2f, 0.15f, 0f), new Vector3(Wall, 0.3f, d), wall, false);
 
             var random = new System.Random(section.Id.GetHashCode());
-            BuildShelves(section, ctx, factory, clean, status.Unlocked, random);
+            BuildShelves(section, w, d, ctx, factory, clean, status.Unlocked, random);
             if (status.Unlocked) BuildClutter(w, d, clean, visuals, factory, random);
             else BuildLock(factory, visuals);
             if (status.Completed) BuildPlant(factory, w, d);
@@ -56,18 +61,18 @@ namespace SortingGame.Overview
         }
 
         /// <summary>Shelves along the back wall, filled with coloured blocks in proportion to progress.</summary>
-        void BuildShelves(SectionDefinition section, GameContext ctx, PlaceholderFactory factory, float clean, bool unlocked, System.Random random)
+        void BuildShelves(SectionDefinition section, float w, float d, GameContext ctx, PlaceholderFactory factory, float clean, bool unlocked, System.Random random)
         {
             var count = section.Shelves.Count;
             if (count == 0) return;
-            var usable = section.FloorSize.x - 0.6f;
+            var usable = w - 0.6f;
             var width = usable / count - 0.1f;
             var wood = unlocked ? ctx.Visuals.WoodColor : ctx.Visuals.WoodColor * 0.35f;
             wood.a = 1f;
             for (var i = 0; i < count; i++)
             {
                 var x = -usable / 2f + (i + 0.5f) * (usable / count);
-                var z = section.FloorSize.y / 2f - 0.35f;
+                var z = d / 2f - 0.35f;
                 factory.CreateBox($"Shelf{i}", transform, new Vector3(x, 0.6f, z), new Vector3(width, 1.2f, 0.4f), wood, false);
                 if (!unlocked) continue;
 

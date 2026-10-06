@@ -91,8 +91,8 @@ namespace SortingGame.Section
             _root = new GameObject($"Section_{definition.Id}").transform;
             _root.SetParent(transform, false);
 
-            BuildRoom(definition);
             BuildShelves(definition);
+            BuildRoom(definition);
 
             int totalItems;
             if (save != null && save.SectionId == definition.Id)
@@ -601,15 +601,16 @@ namespace SortingGame.Section
 
         void BuildRoom(SectionDefinition definition)
         {
-            _floorSize = definition.FloorSize;
             var w = _floorSize.x;
             var d = _floorSize.y;
+            // Tall bookcases need a taller back wall.
+            var wallHeight = Mathf.Max(WallHeight, (_shelves.Count == 0 ? 0f : _shelves.Max(s => s.Size.y)) + 0.5f);
 
             _floorMaterial = _factory.UniqueLit(_visuals.FloorColor);
             _wallMaterial = _factory.UniqueLit(_visuals.WallColor);
 
             SetMaterial(_factory.CreateBox("Floor", _root, new Vector3(0f, -0.05f, 0f), new Vector3(w + 0.4f, 0.1f, d + 0.4f), _visuals.FloorColor), _floorMaterial);
-            SetMaterial(_factory.CreateBox("BackWall", _root, new Vector3(0f, WallHeight / 2f, d / 2f + 0.05f), new Vector3(w + 0.4f, WallHeight, 0.1f), _visuals.WallColor), _wallMaterial);
+            SetMaterial(_factory.CreateBox("BackWall", _root, new Vector3(0f, wallHeight / 2f, d / 2f + 0.05f), new Vector3(w + 0.4f, wallHeight, 0.1f), _visuals.WallColor), _wallMaterial);
             // Low side walls read as a room without blocking the 3/4 view.
             SetMaterial(_factory.CreateBox("WallL", _root, new Vector3(-w / 2f - 0.1f, 0.2f, 0f), new Vector3(0.2f, 0.4f, d + 0.4f), _visuals.WallColor), _wallMaterial);
             SetMaterial(_factory.CreateBox("WallR", _root, new Vector3(w / 2f + 0.1f, 0.2f, 0f), new Vector3(0.2f, 0.4f, d + 0.4f), _visuals.WallColor), _wallMaterial);
@@ -650,6 +651,7 @@ namespace SortingGame.Section
 
         void BuildShelves(SectionDefinition definition)
         {
+            _floorSize = definition.FloorSize;
             var sizes = definition.Shelves.Select(s => ShelfView.MeasureSize(s.Category, s.SlotCount, out _, out _)).ToList();
             var totalWidth = sizes.Sum(s => s.x) + ShelfGap * Mathf.Max(0, sizes.Count - 1);
             if (totalWidth > _floorSize.x)

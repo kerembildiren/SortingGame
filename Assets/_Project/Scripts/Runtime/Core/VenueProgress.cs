@@ -35,9 +35,20 @@ namespace SortingGame.Core
             Completed   // every room at 100%, stays visitable
         }
 
-        public static SectionStatus Section(SectionDefinition section, SaveData data)
+        /// <summary>
+        /// The section's save, or null when there is none or it was made for different content
+        /// (item count changed since, e.g. after a content rebalance). A stale save is regenerated.
+        /// </summary>
+        public static SectionSave ValidSave(SectionDefinition section, SaveData data)
         {
             var save = data.SectionById(section.Id);
+            if (save == null) return null;
+            return save.TotalItems > 0 && save.TotalItems != section.TotalSlotCount ? null : save;
+        }
+
+        public static SectionStatus Section(SectionDefinition section, SaveData data)
+        {
+            var save = ValidSave(section, data);
             return new SectionStatus
             {
                 Unlocked = IsUnlocked(section, data),

@@ -13,6 +13,8 @@ namespace SortingGame.Section
     /// Magnet: like Hand, but same-category items within the magnet radius are pulled in automatically (up to its limit).
     /// While carrying, rest over a shelf for a moment (or let go) and the items that belong there jump in; the rest stay
     /// in hand for the next shelf. Broom sweeps the dirt. With any tool, a tap opens a box or picks up a glowing collectible.
+    /// Wide sections pan sideways: drag on empty floor (Hand/Magnet), two fingers (any tool), right mouse (editor),
+    /// and the view scrolls by itself at the screen edges while carrying or sweeping (GDD 6.2).
     /// </summary>
     public class DragController : MonoBehaviour
     {
@@ -43,7 +45,12 @@ namespace SortingGame.Section
         bool _pressStartedOnUi;
         bool _carrying;
         bool _sweeping;
+        bool _panning;
+        float _panGrabX;
+        bool _twoFingerPan;
+        float _twoFingerGrabX;
         float _dustTimer;
+        CameraFitter _fitter;
         Transform _broomCursor;
 
         public bool InputEnabled { get; set; } = true;
@@ -78,11 +85,15 @@ namespace SortingGame.Section
             ? 1 + Mathf.RoundToInt(_ctx.ToolStats(ToolType.Magnet).Secondary)
             : Mathf.Max(1, Mathf.RoundToInt(_ctx.ToolStats(ToolType.Hand).Primary));
 
+        CameraFitter Fitter => _fitter != null ? _fitter : _fitter = _camera.GetComponent<CameraFitter>();
+
         void Update()
         {
             var pointer = Pointer.current;
             if (pointer == null || _section == null) return;
             var position = pointer.position.ReadValue();
+
+            if (InputEnabled && HandleTwoFingerOrMousePan()) return;
 
             if (pointer.press.wasPressedThisFrame) OnPress(position);
             else if (pointer.press.isPressed) OnHold(position);
@@ -113,7 +124,16 @@ namespace SortingGame.Section
                 return;
             }
 
-            if (item == null) return;
+            if (item == null)
+            {
+                // Empty floor: grab the room and slide it sideways.
+                if (container == null && Fitter != null && Fitter.CanPan && FloorX(screen, out _panGrabX))
+                {
+                    _panning = true;
+                    Fitter.BeginPan();
+                }
+                return;
+            }
             _tapContainer = null;
             _carrying = true;
             _magnetCategory = item.Definition.Category;
@@ -131,6 +151,14 @@ namespace SortingGame.Section
         void OnHold(Vector2 screen)
         {
             if (!InputEnabled) return;
+            if (_panning)
+            {
+                // Keep the grabbed floor point under the finger.
+                if (FloorX(screen, out var x)) Fitter.Pan(_panGrabX - x, Time.deltaTime);
+                if ((screen - _pressPosition).magnitude > TapMaxMovePixels) _tapContainer = null;
+                return;
+            }
+            if (_sweeping || _stack.Count > 0) EdgeScroll(screen);
             if (_sweeping) Sweep(screen);
             if (_stack.Count == 0) return;
 
@@ -207,6 +235,74 @@ namespace SortingGame.Section
             if (_stack.Count == 0) EndCarry();
         }
 
+        /// <summary>While carrying or sweeping near the left/right edge, the view slides that way.</summary>
+        void EdgeScroll(Vector2 screen)
+        {
+            if (Fitter == null || !Fitter.CanPan) return;
+            var zone = _feel.EdgeScrollZone;
+            var x = screen.x / Mathf.Max(1f, Screen.width);
+            var push = x < zone ? -(1f - x / zone) : x > 1f - zone ? (x - (1f - zone)) / zone : 0f;
+            if (Mathf.Abs(push) > 0.001f) Fitter.Pan(push * _feel.EdgeScrollSpeed * Time.deltaTime);
+        }
+
+        /// <summary>Two fingers (touch) or the right mouse button (editor) slide the view, whatever the tool.</summary>
+        bool HandleTwoFingerOrMousePan()
+        {
+            if (Fitter == null || !Fitter.CanPan || _stack.Count > 0) return false;
+
+            Vector2? centre = null;
+            var touches = Touchscreen.current;
+            if (touches != null)
+            {
+                var count = 0;
+                var sum = Vector2.zero;
+                foreach (var touch in touches.touches)
+                {
+                    if (!touch.press.isPressed) continue;
+                    sum += touch.position.ReadValue();
+                    count++;
+                }
+                if (count >= 2) centre = sum / count;
+            }
+            var mouse = Mouse.current;
+            if (centre == null && mouse != null && mouse.rightButton.isPressed) centre = mouse.position.ReadValue();
+
+            if (centre == null)
+            {
+                if (_twoFingerPan)
+                {
+                    _twoFingerPan = false;
+                    Fitter.EndPan();
+                }
+                return false;
+            }
+
+            if (!FloorX(centre.Value, out var x)) return true;
+            if (!_twoFingerPan)
+            {
+                // A second finger turns whatever the first one started into a pan.
+                StopSweeping();
+                _panning = false;
+                _tapContainer = null;
+                _tapCollectible = null;
+                _twoFingerPan = true;
+                _twoFingerGrabX = x;
+                Fitter.BeginPan();
+                return true;
+            }
+            Fitter.Pan(_twoFingerGrabX - x, Time.deltaTime);
+            return true;
+        }
+
+        bool FloorX(Vector2 screen, out float x)
+        {
+            x = 0f;
+            var ray = _camera.ScreenPointToRay(screen);
+            if (!new Plane(Vector3.up, Vector3.zero).Raycast(ray, out var enter)) return false;
+            x = ray.GetPoint(enter).x;
+            return true;
+        }
+
         /// <summary>Floor point the carried item visually floats over (along the camera ray).</summary>
         Vector3 HoverPoint(Vector3 carried)
         {
@@ -247,6 +343,11 @@ namespace SortingGame.Section
 
             var isTap = (screen - _pressPosition).magnitude <= TapMaxMovePixels;
             StopSweeping();
+            if (_panning)
+            {
+                _panning = false;
+                Fitter.EndPan();
+            }
 
             if (_carrying)
             {
@@ -346,6 +447,9 @@ namespace SortingGame.Section
             _tapContainer = null;
             _tapCollectible = null;
             StopSweeping();
+            if (_panning || _twoFingerPan) Fitter?.EndPan();
+            _panning = false;
+            _twoFingerPan = false;
         }
     }
 }

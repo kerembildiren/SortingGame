@@ -106,7 +106,7 @@ namespace SortingGame.Tests
 
             // Progress: other rooms at 60% on average -> opens by itself next time the overview shows.
             foreach (var section in warehouse.Sections.Where(s => s != basement))
-                Boot.Data.SetSection(new SectionSave { SectionId = section.Id, PlacedItems = 13, TotalItems = 21, Fraction = 0.62f });
+                Boot.Data.SetSection(new SectionSave { SectionId = section.Id, PlacedItems = (int)(section.TotalSlotCount * 0.62f), TotalItems = section.TotalSlotCount, Fraction = 0.62f });
             Flow.ShowOverviewImmediately(warehouse);
             yield return new WaitForSeconds(0.3f);
             Assert.IsTrue(Boot.Overview.RoomOf(basement).Status.Unlocked);
@@ -115,7 +115,7 @@ namespace SortingGame.Tests
             // Coins: a fresh lock opened by paying.
             Boot.Data.UnlockedSections.Clear();
             foreach (var section in warehouse.Sections.Where(s => s != basement))
-                Boot.Data.SetSection(new SectionSave { SectionId = section.Id, PlacedItems = 0, TotalItems = 21, Fraction = 0f });
+                Boot.Data.SetSection(new SectionSave { SectionId = section.Id, PlacedItems = 0, TotalItems = section.TotalSlotCount, Fraction = 0f });
             Flow.ShowOverviewImmediately(warehouse);
             Assert.IsFalse(Boot.Overview.RoomOf(basement).Status.Unlocked);
             Boot.Hud.ShowUnlock(basement);
@@ -158,7 +158,13 @@ namespace SortingGame.Tests
                 Assert.IsTrue(Boot.Showcase.IsPlaying, "A full shelf gets its camera showcase.");
                 yield return TestSnapshots.Capture(showcaseShot);
             }
-            yield return new WaitForSeconds(4f); // last flight + showcase (~3 s)
+            // Every finished shelf gets its showcase; wait for the queue to drain.
+            var waited = 0f;
+            while ((Boot.Showcase.IsPlaying || waited < 1f) && waited < 15f)
+            {
+                waited += Time.deltaTime;
+                yield return null;
+            }
             Assert.IsFalse(Boot.Showcase.IsPlaying);
         }
     }

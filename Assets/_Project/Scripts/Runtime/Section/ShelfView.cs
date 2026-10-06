@@ -73,8 +73,8 @@ namespace SortingGame.Section
 
         public static Vector3 MeasureSize(CategoryDefinition category, int slotCount, out int rows, out int columns)
         {
-            // Portrait screen: prefer tall, narrow shelves (12 slots -> 4 rows x 3 columns).
-            rows = Mathf.Clamp(Mathf.CeilToInt(Mathf.Sqrt(slotCount * 1.3f)), 1, 4);
+            // Portrait screen: prefer tall, narrow shelves (12 slots -> 4 rows x 3 columns); big shelves get 5 rows.
+            rows = Mathf.Clamp(Mathf.CeilToInt(Mathf.Sqrt(slotCount * 1.3f)), 1, slotCount > 24 ? 5 : 4);
             columns = Mathf.CeilToInt(slotCount / (float)rows);
             var cellWidth = category.SlotSize.x + CellPadding;
             var cellHeight = category.SlotSize.y + CellPadding;

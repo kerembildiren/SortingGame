@@ -167,7 +167,7 @@ namespace SortingGame.Core
         {
             Drag.CancelDrag();
             Drag.InputEnabled = true;
-            var save = fresh ? null : _data.SectionById(section.Id);
+            var save = fresh ? null : VenueProgress.ValidSave(section, _data);
             var seed = save != null ? save.Seed : (fresh ? Random.Range(1, int.MaxValue) : section.Seed);
             Section.Build(section, Context, seed, save);
             if (!_camera.TryGetComponent<CameraFitter>(out var fitter)) fitter = _camera.gameObject.AddComponent<CameraFitter>();

@@ -17,6 +17,6 @@ MonoBehaviour:
   LabelColor: {r: 1, g: 1, b: 1, a: 1}
   Icon: {fileID: 0}
   BaseCoinValue: 3
-  MasteryThreshold: 20
+  MasteryThreshold: 50
   SlotSize: {x: 0.42, y: 0.42, z: 0.4}
   PlaceSound: 0

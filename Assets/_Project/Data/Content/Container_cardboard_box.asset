@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: SortingGame.Runtime::SortingGame.Data.ContainerDefinition
   Id: cardboard_box
   DisplayNameKey: container.cardboard_box
-  Capacity: 10
+  Capacity: 15
   Prefab: {fileID: 0}
   Placeholder:
     Shape: 1

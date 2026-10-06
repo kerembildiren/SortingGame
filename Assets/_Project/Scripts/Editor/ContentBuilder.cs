@@ -109,7 +109,16 @@ namespace SortingGame.EditorTools
             items.Add(Item("bottle_blue", bottles, PlaceholderShape.Cylinder, new Color(0.30f, 0.45f, 0.75f), new Vector3(0.11f, 0.40f, 0.11f), overwrite));
             items.Add(Item("bottle_clear", bottles, PlaceholderShape.Cylinder, new Color(0.80f, 0.90f, 0.92f), new Vector3(0.13f, 0.34f, 0.13f), overwrite));
 
-            var box = Container("cardboard_box", 10, overwrite);
+            // More variants for the warehouse categories: variety grows along the ladder (M4.2).
+            items.Add(Item("marker_green", stationery, PlaceholderShape.Rod, new Color(0.55f, 0.90f, 0.55f), new Vector3(0.06f, 0.30f, 0.06f), overwrite));
+            items.Add(Item("eraser", stationery, PlaceholderShape.Cube, new Color(1.00f, 0.90f, 0.55f), new Vector3(0.14f, 0.07f, 0.09f), overwrite));
+            items.Add(Item("mug_navy", mugs, PlaceholderShape.Cylinder, new Color(0.45f, 0.55f, 0.85f), new Vector3(0.20f, 0.22f, 0.20f), overwrite));
+            items.Add(Item("mug_lemon", mugs, PlaceholderShape.Cylinder, new Color(1.00f, 0.93f, 0.55f), new Vector3(0.19f, 0.24f, 0.19f), overwrite));
+            items.Add(Item("tyre_bike", tyres, PlaceholderShape.Cylinder, new Color(0.18f, 0.18f, 0.20f), new Vector3(0.38f, 0.07f, 0.38f), overwrite));
+            items.Add(Item("bottle_amber", bottles, PlaceholderShape.Cylinder, new Color(0.80f, 0.55f, 0.20f), new Vector3(0.12f, 0.32f, 0.12f), overwrite));
+            items.Add(Item("bottle_rose", bottles, PlaceholderShape.Cylinder, new Color(0.85f, 0.50f, 0.60f), new Vector3(0.11f, 0.38f, 0.11f), overwrite));
+
+            var box = Container("cardboard_box", 15, overwrite);
 
             // ---- Collectibles (GDD 9): one costumed Chubby per venue + rare items ----
             var chubbyBlue = new Color(0.30f, 0.50f, 0.95f);
@@ -125,19 +134,20 @@ namespace SortingGame.EditorTools
             var bottle = Collectible("message_bottle", ItemRarity.Rare, PlaceholderShape.Cylinder, new Color(1.00f, 0.85f, 0.40f), new Vector3(0.13f, 0.38f, 0.13f), 90, overwrite);
             items.AddRange(new ItemDefinition[] { captain, firstIssue, mechanic, robot, luckyWrench, guard, stapler, hubcap, bottle });
 
-            // ---- Sections (counts kept small for the prototype; GDD 5.3 numbers are [VARSAYILAN]) ----
-            var comicBoxSection = Section("comic_box", new Vector2(3.2f, 4.6f), overwrite, 1, 0.35f, 0.1f,
-                new[] { (comics, 12) }, 1, new[] { captain, firstIssue });
-            var garageSection = Section("garage", new Vector2(4.3f, 6.4f), overwrite, 3, 0.55f, 0.15f,
-                new[] { (comics, 12), (toys, 12), (tools, 12) }, 1, new[] { mechanic, robot, luckyWrench });
-            var office = Section("wh_office", new Vector2(3.6f, 5.6f), overwrite, 2, 0.5f, 0.15f,
-                new[] { (stationery, 12), (mugs, 9) }, 2, new[] { stapler });
-            var dock = Section("wh_dock", new Vector2(3.8f, 5.6f), overwrite, 2, 0.6f, 0.15f,
-                new[] { (tools, 12), (tyres, 9) }, 3, new[] { hubcap });
-            var aisle = Section("wh_aisle", new Vector2(3.8f, 5.6f), overwrite, 2, 0.5f, 0.15f,
-                new[] { (toys, 12), (comics, 12) }, 4, new[] { guard });
-            var basement = Section("wh_basement", new Vector2(3.6f, 5.6f), overwrite, 2, 0.7f, 0.2f,
-                new[] { (bottles, 12), (stationery, 9) }, 5, new[] { bottle });
+            // ---- Sections (M4.2 "big" sizes: ~60 / ~200 / ~300 per Warehouse room; more categories further up the ladder).
+            // Floor width follows the bookcases; wide rooms pan sideways. GDD 5.3 numbers are [VARSAYILAN].
+            var comicBoxSection = Section("comic_box", 5.6f, overwrite, 0.35f, 0.1f,
+                new[] { (comics, 40), (toys, 20) }, 1, new[] { captain, firstIssue });
+            var garageSection = Section("garage", 6.4f, overwrite, 0.55f, 0.15f,
+                new[] { (comics, 50), (toys, 50), (tools, 50), (tyres, 50) }, 1, new[] { mechanic, robot, luckyWrench });
+            var office = Section("wh_office", 6.4f, overwrite, 0.5f, 0.15f,
+                new[] { (stationery, 60), (mugs, 60), (comics, 60), (bottles, 60), (tools, 60) }, 2, new[] { stapler });
+            var dock = Section("wh_dock", 6.4f, overwrite, 0.6f, 0.15f,
+                new[] { (tools, 60), (tyres, 60), (bottles, 60), (toys, 60), (mugs, 60) }, 3, new[] { hubcap });
+            var aisle = Section("wh_aisle", 6.4f, overwrite, 0.5f, 0.15f,
+                new[] { (toys, 50), (comics, 50), (stationery, 50), (mugs, 50), (tyres, 50), (bottles, 50) }, 4, new[] { guard });
+            var basement = Section("wh_basement", 6.4f, overwrite, 0.7f, 0.2f,
+                new[] { (bottles, 50), (stationery, 50), (tools, 50), (tyres, 50), (comics, 50), (toys, 50) }, 5, new[] { bottle });
             if (overwrite || basement.UnlockCoinCost == 0)
             {
                 // GDD 5.4: opens when the other rooms average 60%, or right away for coins.
@@ -183,7 +193,7 @@ namespace SortingGame.EditorTools
             category.BaseCoinValue = coins;
             category.SlotSize = slotSize;
             category.PlaceSound = sound;
-            category.MasteryThreshold = 20; // prototype value: reachable in two playthroughs of the garage
+            category.MasteryThreshold = 50; // prototype value; rooms hold 40-60 per category (M4.2)
             EditorUtility.SetDirty(category);
             return category;
         }
@@ -232,7 +242,9 @@ namespace SortingGame.EditorTools
             return tool;
         }
 
-        static SectionDefinition Section(string id, Vector2 floor, bool overwrite, int boxes, float dirt, float buried,
+        const float LooseShare = 0.25f;
+
+        static SectionDefinition Section(string id, float depth, bool overwrite, float dirt, float buried,
             (CategoryDefinition category, int slots)[] shelves, int seed, CollectibleDefinition[] collectibles)
         {
             var path = id == "garage" ? StartSectionPath : $"{ContentFolder}/Section_{id}.asset";
@@ -240,13 +252,24 @@ namespace SortingGame.EditorTools
             if (!isNew && !overwrite) return section;
             section.Id = id;
             section.DisplayNameKey = $"section.{id}";
-            section.FloorSize = floor;
             section.Shelves = new List<SectionDefinition.ShelfEntry>();
+            var shelfWidth = 0f;
+            var total = 0;
             foreach (var (category, slots) in shelves)
+            {
                 section.Shelves.Add(new SectionDefinition.ShelfEntry { Category = category, SlotCount = slots });
+                shelfWidth += SortingGame.Section.ShelfView.MeasureSize(category, slots, out _, out _).x + 0.12f;
+                total += slots;
+            }
+            // Floor: bookcases side by side plus a margin; at least one screen wide.
+            section.FloorSize = new Vector2(Mathf.Max(4.3f, shelfWidth + 0.6f), depth);
+
+            // Enough boxes for everything that is neither loose nor buried.
             var box = AssetDatabase.LoadAssetAtPath<ContainerDefinition>($"{ContentFolder}/Container_cardboard_box.asset");
+            var inBoxes = total * (1f - LooseShare - buried);
+            var boxes = Mathf.Max(1, Mathf.CeilToInt(inBoxes / Mathf.Max(1, box.Capacity)));
             section.Containers = new List<SectionDefinition.ContainerEntry> { new() { Container = box, Count = boxes } };
-            section.LooseItemRatio = 0.25f;
+            section.LooseItemRatio = LooseShare;
             section.DirtCoverage = dirt;
             section.BuriedItemRatio = buried;
             section.Collectibles = new List<CollectibleDefinition>(collectibles);

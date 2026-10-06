@@ -16,6 +16,12 @@ namespace SortingGame.Data
         public float TopSafeArea = 0.11f;
         [Range(0f, 0.3f), Tooltip("Screen share reserved for the tool bar.")]
         public float BottomSafeArea = 0.15f;
+        [Tooltip("Width in metres of the slice of a section shown at once. Wider sections pan sideways.")]
+        public float SectionViewWidth = 4.6f;
+        [Range(0f, 0.25f), Tooltip("Screen share at the left/right edge that scrolls the view while carrying or sweeping.")]
+        public float EdgeScrollZone = 0.1f;
+        [Tooltip("Edge scroll speed in metres per second at the very edge.")]
+        public float EdgeScrollSpeed = 5f;
 
         [Header("Drag & drop. Grab radius comes from the Hand tool level.")]
         public float DragLiftHeight = 0.55f;

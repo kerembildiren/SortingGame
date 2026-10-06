@@ -15,7 +15,7 @@ namespace SortingGame.Section
     public class ShelfShowcase : MonoBehaviour
     {
         const float FlyIn = 0.55f;
-        const float Glide = 1.5f;
+        const float Glide = 1.8f;
         const float Hold = 0.25f;
         const float FlyOut = 0.5f;
         const float Pitch = 10f;
@@ -109,7 +109,12 @@ namespace SortingGame.Section
             yield return Animate(Hold, null, true);
         }
 
-        /// <summary>Camera poses in front of the shelf: framing its width, looking at the top row, then the bottom row.</summary>
+        const float MaxFrameWidth = 2.6f;
+
+        /// <summary>
+        /// Camera poses in front of the shelf: top row first, bottom row last. Narrow shelves are framed whole;
+        /// wide ones are framed in part and the glide runs diagonally from the top-left to the bottom-right.
+        /// </summary>
         (Vector3 top, Vector3 bottom, Quaternion rotation) Poses(ShelfView shelf)
         {
             var size = shelf.Size;
@@ -118,11 +123,13 @@ namespace SortingGame.Section
             var rotation = Quaternion.Euler(Pitch, 0f, 0f);
             var forward = rotation * Vector3.forward;
 
+            var frameWidth = Mathf.Min(size.x, MaxFrameWidth);
             var halfHorizontal = Mathf.Atan(Mathf.Tan(_camera.fieldOfView * 0.5f * Mathf.Deg2Rad) * _camera.aspect);
-            var distance = size.x * 0.58f / Mathf.Tan(halfHorizontal); // whole shelf width plus a little air
+            var distance = frameWidth * 0.58f / Mathf.Tan(halfHorizontal); // frame width plus a little air
+            var sideways = (size.x - frameWidth) / 2f;
 
-            var topTarget = new Vector3(origin.x, size.y * 0.8f, frontZ);
-            var bottomTarget = new Vector3(origin.x, size.y * 0.22f, frontZ);
+            var topTarget = new Vector3(origin.x - sideways, size.y * 0.8f, frontZ);
+            var bottomTarget = new Vector3(origin.x + sideways, size.y * 0.22f, frontZ);
             return (topTarget - forward * distance, bottomTarget - forward * distance, rotation);
         }
 

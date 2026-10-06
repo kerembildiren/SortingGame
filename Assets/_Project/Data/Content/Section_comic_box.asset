@@ -14,13 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: SortingGame.Runtime::SortingGame.Data.SectionDefinition
   Id: comic_box
   DisplayNameKey: section.comic_box
-  FloorSize: {x: 3.2, y: 4.6}
+  FloorSize: {x: 6.06, y: 5.6}
   Shelves:
   - Category: {fileID: 11400000, guid: 2e404d478fa03664ab04b422e34e5a08, type: 2}
-    SlotCount: 12
+    SlotCount: 40
+  - Category: {fileID: 11400000, guid: b1a6adf01a6111f4cb9c1a6180a17e63, type: 2}
+    SlotCount: 20
   Containers:
   - Container: {fileID: 11400000, guid: 7c806c7c974acb040915b5bdbaba813b, type: 2}
-    Count: 1
+    Count: 3
   Collectibles:
   - {fileID: 11400000, guid: 1ef146af960feed469ede5bcc1a9ad5a, type: 2}
   - {fileID: 11400000, guid: 1990656a29d9a2244a98016a7147d348, type: 2}

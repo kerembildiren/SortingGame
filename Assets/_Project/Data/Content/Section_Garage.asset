@@ -14,17 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: SortingGame.Runtime::SortingGame.Data.SectionDefinition
   Id: garage
   DisplayNameKey: section.garage
-  FloorSize: {x: 4.3, y: 6.4}
+  FloorSize: {x: 18.300001, y: 6.4}
   Shelves:
   - Category: {fileID: 11400000, guid: 2e404d478fa03664ab04b422e34e5a08, type: 2}
-    SlotCount: 12
+    SlotCount: 50
   - Category: {fileID: 11400000, guid: b1a6adf01a6111f4cb9c1a6180a17e63, type: 2}
-    SlotCount: 12
+    SlotCount: 50
   - Category: {fileID: 11400000, guid: 5875939e49965f2448d9d0325667cb0c, type: 2}
-    SlotCount: 12
+    SlotCount: 50
+  - Category: {fileID: 11400000, guid: d2f9d962d90f09442a2685def81dec75, type: 2}
+    SlotCount: 50
   Containers:
   - Container: {fileID: 11400000, guid: 7c806c7c974acb040915b5bdbaba813b, type: 2}
-    Count: 3
+    Count: 8
   Collectibles:
   - {fileID: 11400000, guid: e4619bd7025a0cd42a11005f1bca4230, type: 2}
   - {fileID: 11400000, guid: e73ca9faa7051284cb5f4b35a0fc9cb3, type: 2}
