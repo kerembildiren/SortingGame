@@ -53,7 +53,16 @@ Update this file at the end of every work chunk, before committing. Newest entry
 
 ## Environment notes
 - Work PC: `C:\Users\keremb\Personal\SortingGame`, Unity 6000.6.3f1 via Unity Hub.
-- **No git remote yet. Never push from the work PC.** The user will ask to push from their personal account at some point.
+- 2026-10-06: the project moves to the user's **personal GitHub repo** and continues on their personal PC with their personal Claude account. Do not push this project from a company account.
+
+### Continuing on a new machine (checklist)
+1. Install Unity Hub + **Unity 6000.6.3f1** with the **Android Build Support** module (for `tools/unity.sh android`).
+2. `git clone` the personal repo. Open the folder in Unity Hub ("Add project from disk"); the first open rebuilds `Library/` (takes a while).
+3. Data and the Main scene are versioned. If anything looks missing, run menu `Sorting Game/Setup/Run Full Setup` (or `tools/unity.sh setup` with the editor closed).
+4. `tools/unity.sh` expects Unity at `C:/Program Files/Unity/Hub/Editor/6000.6.3f1/Editor/Unity.exe`; elsewhere set the `UNITY` environment variable. Needs Git Bash on Windows.
+5. Check: `tools/unity.sh test` (EditMode 48/48) and `tools/unity.sh playtest` (PlayMode 12/12) pass.
+6. graphify (used by the session routine): install graphify, then the setup line below.
+7. Claude Code: start in the project root; `CLAUDE.md` tells Claude to read this file first. Local Claude memory from the work PC does not travel; everything needed is in `CLAUDE.md`, `Docs/` and here. User preferences: talk in Turkish, intermediate Unity level (explain key points, no basics), milestone by milestone with a playtest before the next one, commit locally after each chunk, push only when asked.
 - graphify setup on a new machine (once, in project root): `graphify hook install` (git hooks are not versioned) and `graphify claude install` (writes machine-local `.claude/settings.json`; rename it to `.claude/settings.local.json`, which is git-ignored, and revert any duplicate graphify section it adds to CLAUDE.md). `graphify-out/` itself is versioned.
 
 ## Session log
