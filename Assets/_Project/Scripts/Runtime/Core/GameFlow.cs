@@ -9,7 +9,8 @@ namespace SortingGame.Core
 {
     /// <summary>
     /// Screen flow (GDD 5, 6): Map (venue ladder, a modal over the overview) -> Overview (isometric venue) -> Section.
-    /// Owns transitions, venue purchase/sale and section unlocking. Data lives in <see cref="SaveData"/>.
+    /// Owns transitions, venue progression (all rooms 100% opens the next venue) and section unlocking.
+    /// Data lives in <see cref="SaveData"/>.
     /// </summary>
     public class GameFlow : MonoBehaviour
     {
@@ -50,9 +51,8 @@ namespace SortingGame.Core
 
             _overview.RoomTapped += OnRoomTapped;
             _hud.BackRequested += OnBack;
-            _hud.SellRequested += SellVenue;
+            _hud.NextVenueRequested += GoToNextVenue;
             _hud.VenueOpenRequested += venue => SwitchVenue(venue);
-            _hud.VenueBuyRequested += BuyVenue;
             _hud.UnlockRequested += UnlockWithCoins;
         }
 
@@ -61,20 +61,16 @@ namespace SortingGame.Core
         {
             var ladder = _ctx.Database.Venues;
             if (ladder.Count == 0) return;
-            if (!ladder.Any(v => IsOwned(v)))
-                Data.Venue(ladder[0].Id).Owned = true; // the first place is a gift (tutorial venue)
+            Data.Venue(ladder[0].Id).Owned = true; // the first place is always open (tutorial venue)
 
-            var venue = ladder.FirstOrDefault(v => v.Id == Data.CurrentVenueId && IsOwned(v)) ?? ladder.First(IsOwned);
+            // Last place visited if still open, otherwise the furthest open place.
+            var venue = ladder.FirstOrDefault(v => v.Id == Data.CurrentVenueId && IsOwned(v)) ?? ladder.Last(IsOwned);
             var section = venue.Sections.FirstOrDefault(s => s.Id == Data.CurrentSectionId);
             if (section != null && VenueProgress.IsUnlocked(section, Data)) OpenSectionNow(venue, section);
             else ShowOverviewNow(venue);
         }
 
-        bool IsOwned(VenueDefinition venue)
-        {
-            var save = Data.Venues.Find(v => v.Id == venue.Id);
-            return save != null && save.Owned && !save.Sold;
-        }
+        bool IsOwned(VenueDefinition venue) => VenueProgress.IsOpen(_ctx.Database.Venues, venue, Data);
 
         // ---------- Overview ----------
 
@@ -94,10 +90,23 @@ namespace SortingGame.Core
             if (_camera.TryGetComponent<CameraFitter>(out var fitter)) fitter.enabled = false;
             SfxPlayer.Instance?.SetLoop(Sfx.CleanAmbienceLoop, 0f);
 
+            // All rooms done: the next place opens (announced once).
+            var status = VenueProgress.Venue(venue, Data);
+            var next = VenueProgress.Next(_ctx.Database.Venues, venue);
+            var newlyOpened = status.AllComplete && next != null && !Data.Venue(next.Id).Owned;
+            if (newlyOpened) Data.Venue(next.Id).Owned = true;
+
             _overview.Build(venue, Data);
             _overview.ApplyView();
             _overview.InputEnabled = true;
-            _hud.BindOverview(venue, VenueProgress.Venue(venue, Data), _overview.Rooms, _ctx, _camera, VenueProgress.CanSell(venue, Data));
+            _hud.BindOverview(venue, status, _overview.Rooms, _ctx, _camera, status.AllComplete ? next : null);
+
+            if (newlyOpened)
+            {
+                _hud.ShowCelebration(Loc.Format("hud.venue_opened", Loc.Get(next.DisplayNameKey)));
+                SfxPlayer.Instance?.Play(Sfx.SectionComplete, 0f);
+                Haptics.Strong();
+            }
 
             foreach (var section in unlocked)
             {
@@ -136,10 +145,9 @@ namespace SortingGame.Core
             });
         }
 
-        /// <summary>Tests / debugging: own the venue, open the room and jump straight in without the transition.</summary>
+        /// <summary>Tests / debugging: open the room and jump straight in without the transition (ignores venue locks).</summary>
         public void OpenSectionImmediately(VenueDefinition venue, SectionDefinition section)
         {
-            Data.Venue(venue.Id).Owned = true;
             if (!VenueProgress.IsUnlocked(section, Data)) Data.UnlockedSections.Add(section.Id);
             if (Current == Screen.Section) _section.Unload();
             OpenSectionNow(venue, section);
@@ -148,7 +156,6 @@ namespace SortingGame.Core
         /// <summary>Tests / debugging: show a venue's overview without the transition.</summary>
         public void ShowOverviewImmediately(VenueDefinition venue)
         {
-            Data.Venue(venue.Id).Owned = true;
             if (Current == Screen.Section) _section.Unload();
             ShowOverviewNow(venue);
         }
@@ -172,6 +179,7 @@ namespace SortingGame.Core
         {
             if (Busy || Current != Screen.Section) return;
             Busy = true;
+            _boot.Showcase.StopNow();
             _boot.SaveNow();
             var leaving = ActiveSection;
             _hud.Fade(1f, FadeTime, () =>
@@ -211,6 +219,7 @@ namespace SortingGame.Core
         {
             if (Busy || !IsOwned(venue)) return;
             Busy = true;
+            _hud.CloseMap();
             _hud.Fade(1f, FadeTime, () =>
             {
                 if (Current == Screen.Section) _section.Unload();
@@ -219,39 +228,11 @@ namespace SortingGame.Core
             });
         }
 
-        public void BuyVenue(VenueDefinition venue)
+        /// <summary>From a finished venue's overview: straight to the next place.</summary>
+        public void GoToNextVenue()
         {
-            var ladder = _ctx.Database.Venues;
-            var index = ladder.IndexOf(venue);
-            if (index < 0 || VenueProgress.State(ladder, index, Data) != VenueProgress.VenueState.ForSale) return;
-            if (!_ctx.Wallet.TrySpend(venue.PurchasePrice))
-            {
-                SfxPlayer.Instance?.Play(Sfx.Wrong, 0f);
-                _hud.ShowToast(Loc.Get("hud.not_enough"));
-                return;
-            }
-            Data.Venue(venue.Id).Owned = true;
-            SfxPlayer.Instance?.Play(Sfx.Purchase, 0f);
-            Haptics.Medium();
-            _hud.CloseMap();
-            _boot.MarkDirty();
-            SwitchVenue(venue);
-            _hud.ShowCelebration(Loc.Format("hud.bought_venue", Loc.Get(venue.DisplayNameKey)));
-        }
-
-        /// <summary>GDD 5.6: every room at 100% -> sell the restored place, big payout, next place goes on sale.</summary>
-        public void SellVenue()
-        {
-            if (Busy || Venue == null || !VenueProgress.CanSell(Venue, Data)) return;
-            var venue = Venue;
-            Data.Venue(venue.Id).Sold = true;
-            _ctx.Wallet.Add(venue.SellValue);
-            SfxPlayer.Instance?.Play(Sfx.SectionComplete, 0f);
-            Haptics.Strong();
-            _hud.ShowCelebration(Loc.Format("hud.sold_venue", Loc.Get(venue.DisplayNameKey), venue.SellValue));
-            _boot.MarkDirty();
-            _boot.SaveNow();
-            ShowMap();
+            var next = Venue != null ? VenueProgress.Next(_ctx.Database.Venues, Venue) : null;
+            if (next != null && IsOwned(next)) SwitchVenue(next);
         }
 
         /// <summary>GDD 5.4: pay coins instead of waiting for the other rooms.</summary>

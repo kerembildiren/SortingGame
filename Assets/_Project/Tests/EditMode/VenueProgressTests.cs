@@ -59,19 +59,20 @@ namespace SortingGame.Tests
             data.SetSection(new SectionSave { SectionId = id, PlacedItems = placed, TotalItems = total, Fraction = (float)placed / total, Completed = completed });
 
         [Test]
-        public void Ladder_FirstIsForSale_NextOnlyAfterSelling()
+        public void Ladder_FirstIsOpen_NextOpensWhenPreviousIsComplete()
         {
             var data = new SaveData();
-            Assert.AreEqual(VenueProgress.VenueState.ForSale, VenueProgress.State(_ladder, 0, data));
+            Assert.AreEqual(VenueProgress.VenueState.Open, VenueProgress.State(_ladder, 0, data));
             Assert.AreEqual(VenueProgress.VenueState.Locked, VenueProgress.State(_ladder, 1, data));
 
-            data.Venue("box").Owned = true;
-            Assert.AreEqual(VenueProgress.VenueState.Owned, VenueProgress.State(_ladder, 0, data));
-            Assert.AreEqual(VenueProgress.VenueState.Locked, VenueProgress.State(_ladder, 1, data));
+            SetSection(data, "box_room", 11, 12);
+            Assert.AreEqual(VenueProgress.VenueState.Locked, VenueProgress.State(_ladder, 1, data), "No coins, no shortcuts: finish it.");
 
-            data.Venue("box").Sold = true;
-            Assert.AreEqual(VenueProgress.VenueState.Sold, VenueProgress.State(_ladder, 0, data));
-            Assert.AreEqual(VenueProgress.VenueState.ForSale, VenueProgress.State(_ladder, 1, data));
+            SetSection(data, "box_room", 12, 12, true);
+            Assert.AreEqual(VenueProgress.VenueState.Completed, VenueProgress.State(_ladder, 0, data));
+            Assert.AreEqual(VenueProgress.VenueState.Open, VenueProgress.State(_ladder, 1, data));
+            Assert.AreSame(_ladder[1], VenueProgress.Next(_ladder, _ladder[0]));
+            Assert.IsNull(VenueProgress.Next(_ladder, _ladder[1]));
         }
 
         [Test]
@@ -85,20 +86,6 @@ namespace SortingGame.Tests
             Assert.AreEqual(10, status.Placed);
             Assert.AreEqual(50, status.Total);
             Assert.IsFalse(status.AllComplete);
-        }
-
-        [Test]
-        public void CanSell_OnlyWhenOwnedAndEverySectionComplete()
-        {
-            var data = new SaveData();
-            data.Venue("box").Owned = true;
-            Assert.IsFalse(VenueProgress.CanSell(_ladder[0], data));
-
-            SetSection(data, "box_room", 12, 12, true);
-            Assert.IsTrue(VenueProgress.CanSell(_ladder[0], data));
-
-            data.Venue("box").Sold = true;
-            Assert.IsFalse(VenueProgress.CanSell(_ladder[0], data), "Cannot sell twice.");
         }
 
         [Test]

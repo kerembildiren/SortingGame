@@ -128,6 +128,20 @@ namespace SortingGame.Tests
         }
 
         [Test]
+        public void FoundCollectibles_AreLeftOut()
+        {
+            var (section, items) = MakeSection(6, 6, 2, 20, 0.2f);
+            var found = MakeCollectible("found");
+            var fresh = MakeCollectible("fresh");
+            section.Collectibles.AddRange(new[] { found, fresh });
+
+            var layout = SectionLayoutGenerator.Generate(section, c => items[c], 5, c => c != found);
+
+            var all = layout.BuriedCollectibles.Concat(layout.LooseCollectibles).Concat(layout.Containers.SelectMany(c => c.Collectibles)).ToList();
+            CollectionAssert.AreEqual(new[] { fresh }, all);
+        }
+
+        [Test]
         public void Collectibles_AreHidden_AndNotCountedInTotal()
         {
             var (section, items) = MakeSection(6, 6, 2, 20, 0.2f);

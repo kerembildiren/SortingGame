@@ -4,12 +4,19 @@ Living notes so any session (any machine, any Claude account) can pick up where 
 Update this file at the end of every work chunk, before committing. Newest entry on top in the log.
 
 ## Current state
-- **Active milestone:** M4 (venue structure): implemented, tests green (EditMode 43/43, PlayMode 8/8), screenshots reviewed. NOT committed yet (commit after user approval).
-- **Last approved milestone:** M3 (2026-10-06, commit af3fdca). Hand stack + Magnet pull not yet playtested by the user.
-- **Next concrete step:** user playtests M4; apply feedback; commit; then M5 (helpers, offline progress, ad/IAP interfaces with fake providers, localisation infrastructure).
-- **Blocking / waiting on user:** M4 playtest.
-- **Deferred:** on-device test (no Android device yet). Performance matters more from here (Warehouse).
-- **User intent:** mechanics first, limits/numbers later (they tune thresholds and prices themselves).
+- **Active milestone:** M4.2 (big rooms + horizontal pan + more variety), in progress. M4.1 done (tests green), committed, waiting for user playtest together with M4.2.
+- **Last committed:** M4 checkpoint b24c6d3 (playtested by the user, follow-ups requested).
+- **Blocking / waiting on user:** nothing.
+- **Deferred:** on-device test (no Android device yet). Performance matters a lot with 300-item rooms (M4.2).
+- **User intent:** mechanics first, limits/numbers later. Economy (what coins are for besides upgrades) to be redesigned later.
+
+## M4.1 task list (tick as done)
+- [x] Section complete requires all collectibles picked up (SectionProgress tracks remaining collectibles; 99% + hint toast until then)
+- [x] Generator skips collectibles already in the book (no duplicates)
+- [x] Remove venue sale/purchase; all rooms 100% -> next venue owned for free; map shows Restored / Open / Locked; overview button "Go to next place"
+- [x] Shelf-complete showcase camera (zoom to the shelf, pan top -> bottom, return; tap to skip; queued)
+- [x] Book flies in and opens on the venue page when its collection is complete
+- [x] Tests + docs + GDD decision log updated
 
 ## M4 architecture (quick map)
 - `GameFlow` (Core): screen state Overview/Section, transitions, buy/sell venue, unlock rooms, `Resume()` on start. Test helpers: `OpenSectionImmediately`, `ShowOverviewImmediately`.
@@ -37,6 +44,13 @@ Update this file at the end of every work chunk, before committing. Newest entry
 - graphify setup on a new machine (once, in project root): `graphify hook install` (git hooks are not versioned) and `graphify claude install` (writes machine-local `.claude/settings.json`; rename it to `.claude/settings.local.json`, which is git-ignored, and revert any duplicate graphify section it adds to CLAUDE.md). `graphify-out/` itself is versioned.
 
 ## Session log
+### 2026-10-06 — M4.1 implemented (playtest follow-ups)
+- `SectionProgress.CollectiblesRemaining`: room ends only when collectibles are picked up; "something shiny" hint at 99%.
+- Generator `includeCollectible` filter: found collectibles never respawn (no duplicates).
+- Venue ladder without money: `VenueProgress.State` Locked/Open/Completed; finishing every room opens the next venue; overview button "Next place"; map shows 100% / Open / "Restore X first".
+- `ShelfShowcase` (camera component): full shelf -> fly in, glide top->bottom, return; tap skips; queued; stops when leaving the section.
+- `SectionHud.PlayCollectionComplete`: book flies from its button, opens on the venue page, pieces pop in. Section banner waits for rare moment / showcase / book.
+
 ### 2026-10-06 — M4 implemented
 - M3 approved and committed (af3fdca).
 - Map / Overview / Section flow with zoom + fade transitions, room labels, sell button, venue purchase, locked Basement (60% rule or 150 coins), 3 venues of content, book paging, resume.

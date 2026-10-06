@@ -10,7 +10,7 @@ namespace SortingGame.Tests
 {
     /// <summary>
     /// M4 end to end: a fresh game starts on the Comic Box overview; zoom into the room, finish it, come back,
-    /// sell the venue, buy the Garage; Warehouse locked room opens by coins and by progress.
+    /// the Garage opens for free; a room needs its collectibles to finish; Warehouse locked room opens by coins and by progress.
     /// </summary>
     public class VenueFlowTests
     {
@@ -25,7 +25,7 @@ namespace SortingGame.Tests
         public void TearDown() => TestGame.RestoreSave();
 
         [UnityTest, Timeout(180000)]
-        public IEnumerator FinishSellAndBuy_WalksUpTheVenueLadder()
+        public IEnumerator FinishVenue_OpensTheNextPlace()
         {
             yield return TestGame.LoadMain();
             Assert.AreEqual(GameFlow.Screen.Overview, Flow.Current, "A fresh game starts on the overview.");
@@ -42,31 +42,54 @@ namespace SortingGame.Tests
             yield return FinishSection();
             Assert.IsTrue(Section.IsComplete);
 
-            // Back out: the overview now shows the room at 100% and offers the sale.
+            // Back out: the room is at 100%, which completes the venue and opens the next place for free.
             Flow.BackToOverview();
             yield return new WaitForSeconds(1.5f);
             Assert.AreEqual(GameFlow.Screen.Overview, Flow.Current);
             Assert.IsFalse(Section.IsLoaded, "Only the active section is loaded.");
             Assert.IsTrue(Boot.Overview.Rooms[0].Status.Completed);
-            Assert.IsTrue(VenueProgress.CanSell(Flow.Venue, Boot.Data));
-            yield return TestSnapshots.Capture("m4_02_ready_to_sell");
+            var ladder = Boot.Context.Database.Venues;
+            Assert.AreEqual(VenueProgress.VenueState.Completed, VenueProgress.State(ladder, 0, Boot.Data));
+            Assert.AreEqual(VenueProgress.VenueState.Open, VenueProgress.State(ladder, 1, Boot.Data));
+            Assert.AreEqual(VenueProgress.VenueState.Locked, VenueProgress.State(ladder, 2, Boot.Data));
+            yield return TestSnapshots.Capture("m4_02_venue_complete");
 
             var coins = Boot.Wallet.Coins;
-            var comicBox = Flow.Venue;
-            Flow.SellVenue();
-            yield return new WaitForSeconds(0.5f);
-            Assert.AreEqual(coins + comicBox.SellValue, Boot.Wallet.Coins);
-            Assert.IsTrue(Boot.Data.Venue("comic_box").Sold);
-            yield return TestSnapshots.Capture("m4_03_map_after_sale");
-
-            var garage = TestGame.Venue("garage");
-            var ladder = Boot.Context.Database.Venues;
-            Assert.AreEqual(VenueProgress.VenueState.ForSale, VenueProgress.State(ladder, 1, Boot.Data));
-            Flow.BuyVenue(garage);
+            Flow.GoToNextVenue();
             yield return new WaitForSeconds(1f);
             Assert.AreEqual("garage", Flow.Venue.Id);
             Assert.AreEqual(GameFlow.Screen.Overview, Flow.Current);
-            Assert.AreEqual(coins + comicBox.SellValue - garage.PurchasePrice, Boot.Wallet.Coins);
+            Assert.AreEqual(coins, Boot.Wallet.Coins, "No purchase: moving on is free.");
+
+            Flow.ShowMap();
+            yield return TestSnapshots.Capture("m4_03_map");
+        }
+
+        [UnityTest, Timeout(120000)]
+        public IEnumerator Section_DoesNotFinish_WhileACollectibleIsLeft()
+        {
+            yield return TestGame.LoadMain();
+            Flow.OpenSectionImmediately(Flow.Venue, Flow.Venue.Sections[0]);
+            yield return null;
+            var shiny = false;
+            Section.OnlyCollectiblesLeft += () => shiny = true;
+
+            yield return FinishSection(pickUpCollectibles: false, showcaseShot: "m4_05_shelf_showcase");
+            Assert.IsFalse(Section.IsComplete, "A collectible is still on the floor.");
+            Assert.IsTrue(shiny, "Player is told something shiny is left.");
+            Assert.AreEqual(99, Section.Progress.Percent);
+            yield return TestSnapshots.Capture("m4_06_shiny_left");
+
+            foreach (var collectible in Section.Collectibles.ToList())
+            {
+                Section.FindCollectible(collectible);
+                yield return new WaitForSeconds(1f);
+                Boot.RareFind.Dismiss();
+                yield return new WaitForSeconds(0.8f);
+            }
+            Assert.IsTrue(Section.IsComplete);
+            yield return new WaitForSeconds(1.2f);
+            yield return TestSnapshots.Capture("m4_07_collection_complete");
         }
 
         [UnityTest, Timeout(120000)]
@@ -104,7 +127,7 @@ namespace SortingGame.Tests
         }
 
         /// <summary>Open boxes, sweep everything, find collectibles, shelve everything.</summary>
-        IEnumerator FinishSection()
+        IEnumerator FinishSection(bool pickUpCollectibles = true, string showcaseShot = null)
         {
             foreach (var container in Section.Containers.ToList()) Section.OpenContainer(container);
             yield return new WaitForSeconds(2.5f);
@@ -115,7 +138,7 @@ namespace SortingGame.Tests
                 Section.Sweep(new Vector3(x, 0f, z), 0.2f);
             yield return new WaitForSeconds(1f);
 
-            foreach (var collectible in Section.Collectibles.ToList())
+            foreach (var collectible in pickUpCollectibles ? Section.Collectibles.ToList() : new System.Collections.Generic.List<ItemView>())
             {
                 Section.FindCollectible(collectible);
                 yield return new WaitForSeconds(1f);
@@ -129,7 +152,14 @@ namespace SortingGame.Tests
                 Section.TryPlace(item, shelf, shelf.transform.position);
                 yield return null;
             }
-            yield return new WaitForSeconds(3f);
+            if (showcaseShot != null)
+            {
+                yield return new WaitForSeconds(1.3f); // mid-glide
+                Assert.IsTrue(Boot.Showcase.IsPlaying, "A full shelf gets its camera showcase.");
+                yield return TestSnapshots.Capture(showcaseShot);
+            }
+            yield return new WaitForSeconds(4f); // last flight + showcase (~3 s)
+            Assert.IsFalse(Boot.Showcase.IsPlaying);
         }
     }
 }

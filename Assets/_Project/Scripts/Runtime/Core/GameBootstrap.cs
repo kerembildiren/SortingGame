@@ -33,6 +33,7 @@ namespace SortingGame.Core
         public CollectionViewer Viewer { get; private set; }
         public OverviewController Overview { get; private set; }
         public GameFlow Flow { get; private set; }
+        public ShelfShowcase Showcase { get; private set; }
         public SaveData Data => _data;
 
         Camera _camera;
@@ -96,6 +97,9 @@ namespace SortingGame.Core
             Overview = new GameObject("Overview").AddComponent<OverviewController>();
             Overview.Init(Context, _camera, Hud.IsOverUi);
             Flow = gameObject.AddComponent<GameFlow>();
+
+            Showcase = _camera.gameObject.AddComponent<ShelfShowcase>();
+            Showcase.Init(_camera, _database.Feel, on => Drag.InputEnabled = on);
         }
 
         /// <summary>Viewer/rare moment pause world input; give it back to whichever screen is active.</summary>
@@ -115,7 +119,9 @@ namespace SortingGame.Core
             Hud.CollectibleViewRequested += Viewer.Open;
             Hud.ViewerClosed += Viewer.Close;
             RareFind.CardRequested += Hud.ShowRareCard;
-            RareFind.Finished += _ => Hud.OnCollectibleStored();
+            RareFind.Finished += OnCollectibleStored;
+            Section.ShelfCompleted += Showcase.Enqueue;
+            Hud.IsBusyWithMoment = () => Showcase.IsPlaying || RareFind.IsPresenting || _bookCelebrationPending;
             Section.CollectibleFound += OnCollectibleFound;
             Section.StateChanged += MarkDirty;
             Wallet.Changed += (_, _) => MarkDirty();
@@ -125,8 +131,32 @@ namespace SortingGame.Core
             Flow.Resume();
         }
 
+        bool _bookCelebrationPending;
+
+        VenueDefinition CompletedPageOf(CollectibleDefinition collectible)
+        {
+            var venue = _database.Venues.FirstOrDefault(v => v.CollectionPage.Contains(collectible));
+            return venue != null && Book.CountFound(venue.CollectionPage) == venue.CollectionPage.Count ? venue : null;
+        }
+
+        /// <summary>After a find has flown into the book: celebrate when that venue's page is now complete.</summary>
+        void OnCollectibleStored(CollectibleDefinition collectible)
+        {
+            Hud.OnCollectibleStored();
+            var venue = CompletedPageOf(collectible);
+            if (venue == null) return;
+            Tween.Delay(this, 0.4f, () =>
+            {
+                Hud.PlayCollectionComplete(venue); // the open book then holds back the section banner
+                _bookCelebrationPending = false;
+            });
+        }
+
         void OnCollectibleFound(ItemView item, CollectionBook.FindResult result)
         {
+            // Known right away, so the section-complete banner waits for the book to open and close.
+            if (result.IsNew && item.Definition is CollectibleDefinition found && CompletedPageOf(found) != null)
+                _bookCelebrationPending = true;
             if (!result.IsNew && item.Definition is CollectibleDefinition collectible)
                 Hud.OnDuplicateSold(collectible, result.DuplicateCoins, item.transform.position);
             RareFind.Present(item, result);

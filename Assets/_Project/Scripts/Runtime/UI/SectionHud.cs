@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using SortingGame.Core;
 using SortingGame.Data;
 using SortingGame.Overview;
@@ -26,9 +27,8 @@ namespace SortingGame.UI
         public event Action ViewerClosed;
         public event Action ResetProgressRequested;
         public event Action BackRequested;
-        public event Action SellRequested;
+        public event Action NextVenueRequested;
         public event Action<VenueDefinition> VenueOpenRequested;
-        public event Action<VenueDefinition> VenueBuyRequested;
         public event Action<SectionDefinition> UnlockRequested;
 
         public enum Mode { Section, Overview }
@@ -89,6 +89,7 @@ namespace SortingGame.UI
         VisualElement _fade;
         Label _bookTitle;
         int _bookPageIndex;
+        VisualElement _bookCard;
 
         class ShelfLabel
         {
@@ -172,6 +173,7 @@ namespace SortingGame.UI
             section.ShelfCompleted += OnShelfCompleted;
             section.SectionCompleted += OnSectionCompleted;
             section.CategoryMastered += OnCategoryMastered;
+            section.OnlyCollectiblesLeft += OnOnlyCollectiblesLeft;
             wallet.Changed += OnCoins;
 
             SetMode(Mode.Section);
@@ -216,6 +218,7 @@ namespace SortingGame.UI
                 _section.ShelfCompleted -= OnShelfCompleted;
                 _section.SectionCompleted -= OnSectionCompleted;
                 _section.CategoryMastered -= OnCategoryMastered;
+                _section.OnlyCollectiblesLeft -= OnOnlyCollectiblesLeft;
             }
             if (_wallet != null) _wallet.Changed -= OnCoins;
         }
@@ -317,8 +320,8 @@ namespace SortingGame.UI
             _banner.AddToClassList("hidden");
         }
 
-        /// <summary>GDD 6.1: venue name + item counter on top, a label per room, sell button when everything is done.</summary>
-        public void BindOverview(VenueDefinition venue, VenueProgress.VenueStatus status, IReadOnlyList<RoomView> rooms, GameContext context, Camera cam, bool canSell)
+        /// <summary>GDD 6.1: venue name + item counter on top, a label per room, "next place" button when everything is done.</summary>
+        public void BindOverview(VenueDefinition venue, VenueProgress.VenueStatus status, IReadOnlyList<RoomView> rooms, GameContext context, Camera cam, VenueDefinition nextOpen)
         {
             Unbind();
             _section = null;
@@ -350,14 +353,14 @@ namespace SortingGame.UI
                 _roomLabels.Add((room, label));
             }
 
-            _sellButton.text = Loc.Format("hud.sell_venue", venue.SellValue);
-            _sellButton.style.display = canSell ? DisplayStyle.Flex : DisplayStyle.None;
+            _sellButton.text = nextOpen != null ? Loc.Format("hud.go_to_venue", Loc.Get(nextOpen.DisplayNameKey)) : "";
+            _sellButton.style.display = nextOpen != null ? DisplayStyle.Flex : DisplayStyle.None;
             RefreshToolbar();
         }
 
         void BuildOverviewUi()
         {
-            _sellButton = Add(_root, new Button(() => SellRequested?.Invoke()), "sell-button");
+            _sellButton = Add(_root, new Button(() => NextVenueRequested?.Invoke()), "sell-button");
             _sellButton.style.display = DisplayStyle.None;
 
             _map = Add(_root, new VisualElement(), "settings");
@@ -381,7 +384,7 @@ namespace SortingGame.UI
             Add(unlockCard, new Button(() => _unlock.AddToClassList("hidden")) { text = Loc.Get("hud.close") }, "secondary-button");
         }
 
-        /// <summary>GDD 5.2 venue ladder: sold trophies, the current venue, the next one for sale, later ones locked.</summary>
+        /// <summary>GDD 5.2 venue ladder: restored places, open places, locked places.</summary>
         public void ShowMap(IReadOnlyList<VenueDefinition> ladder, Func<int, VenueProgress.VenueState> stateOf)
         {
             _mapList.Clear();
@@ -395,29 +398,16 @@ namespace SortingGame.UI
                 Add(info, new Label(Loc.Get(venue.DisplayNameKey)), "shop-name");
                 var detail = state switch
                 {
-                    VenueProgress.VenueState.Sold => Loc.Get("hud.venue_sold"),
-                    VenueProgress.VenueState.Owned => Loc.Format("hud.venue_rooms", venue.Sections.Count),
-                    VenueProgress.VenueState.ForSale => Loc.Format("hud.venue_rooms", venue.Sections.Count),
+                    VenueProgress.VenueState.Completed => Loc.Get("hud.venue_restored"),
+                    VenueProgress.VenueState.Open => Loc.Format("hud.venue_rooms", venue.Sections.Count),
                     _ => Loc.Format("hud.venue_locked", i > 0 ? Loc.Get(ladder[i - 1].DisplayNameKey) : "")
                 };
                 Add(info, new Label(detail), "shop-effect");
 
                 var shown = venue;
-                switch (state)
-                {
-                    case VenueProgress.VenueState.Owned:
-                        Add(row, new Button(() => { CloseMap(); VenueOpenRequested?.Invoke(shown); }) { text = Loc.Get("hud.open") }, "map-open");
-                        break;
-                    case VenueProgress.VenueState.ForSale:
-                        var buy = Add(row, new Button(() => VenueBuyRequested?.Invoke(shown)), "shop-buy");
-                        Add(buy, new VisualElement(), "coin-icon");
-                        Add(buy, new Label(venue.PurchasePrice.ToString("N0", Loc.Culture)), "shop-cost");
-                        buy.EnableInClassList("shop-buy--poor", !_wallet.CanAfford(venue.PurchasePrice));
-                        break;
-                    case VenueProgress.VenueState.Sold:
-                        Add(row, new Label(Loc.Get("hud.sold_tag")), "sold-tag");
-                        break;
-                }
+                if (state == VenueProgress.VenueState.Completed) Add(row, new Label(Loc.Get("hud.restored_tag")), "sold-tag");
+                if (state != VenueProgress.VenueState.Locked)
+                    Add(row, new Button(() => { CloseMap(); VenueOpenRequested?.Invoke(shown); }) { text = Loc.Get("hud.open") }, "map-open");
             }
             _map.RemoveFromClassList("hidden");
         }
@@ -551,19 +541,33 @@ namespace SortingGame.UI
             RefreshToolbar();
         }
 
+        void OnOnlyCollectiblesLeft() => ShowBigToast(Loc.Get("hud.shiny_left"));
+
+        /// <summary>Something full-screen is playing (rare find, shelf showcase): the banner waits for it.</summary>
+        public Func<bool> IsBusyWithMoment;
+
         void OnSectionCompleted()
         {
-            // Let the renovation play before the banner covers it.
-            Tween.Delay(this, 1.4f, () =>
+            // Let the renovation (and any rare find / shelf showcase) play before the banner covers it.
+            Tween.Delay(this, 1.4f, ShowBannerWhenFree);
+        }
+
+        void ShowBannerWhenFree()
+        {
+            if (_section == null || CurrentMode != Mode.Section) return;
+            var bookOrViewerOpen = !_bookPage.ClassListContains("hidden") || !_viewer.ClassListContains("hidden");
+            if (bookOrViewerOpen || (IsBusyWithMoment != null && IsBusyWithMoment()))
             {
-                _banner.RemoveFromClassList("hidden");
-                _banner.style.opacity = 0f;
-                Tween.Run(this, 0.5f, t =>
-                {
-                    _banner.style.opacity = t;
-                    _banner.style.scale = new Scale(Vector3.one * Mathf.LerpUnclamped(0.8f, 1f, t));
-                }, Ease.OutBack);
-            });
+                Tween.Delay(this, 0.3f, ShowBannerWhenFree);
+                return;
+            }
+            _banner.RemoveFromClassList("hidden");
+            _banner.style.opacity = 0f;
+            Tween.Run(this, 0.5f, t =>
+            {
+                _banner.style.opacity = t;
+                _banner.style.scale = new Scale(Vector3.one * Mathf.LerpUnclamped(0.8f, 1f, t));
+            }, Ease.OutBack);
         }
 
         // ---------- Collectibles ----------
@@ -649,6 +653,45 @@ namespace SortingGame.UI
         }
 
         public void CloseBook() => _bookPage.AddToClassList("hidden");
+
+        /// <summary>
+        /// A venue's collection page is complete: the book flies out of its button to the middle of the screen,
+        /// opens on that page and the pieces pop in one by one. Tapping a piece opens the 3D viewer as usual.
+        /// </summary>
+        public void PlayCollectionComplete(VenueDefinition venue)
+        {
+            var venues = _ctx?.Database.Venues;
+            _bookPageIndex = venues != null ? Mathf.Max(0, venues.IndexOf(venue)) : 0;
+            ShowBookPage();
+
+            // Start small at the book button, grow and straighten in the middle.
+            var button = _bookButton.worldBound.center;
+            var middle = _root.layout.center;
+            var offset = button - middle;
+            _bookCard.style.transformOrigin = new TransformOrigin(Length.Percent(50), Length.Percent(50));
+            SfxPlayer.Instance?.Play(Sfx.BookStamp, 0f);
+            Tween.Run(this, 0.6f, t =>
+            {
+                _bookCard.style.translate = new Translate(offset.x * (1f - t), offset.y * (1f - t));
+                _bookCard.style.scale = new Scale(new Vector3(Mathf.LerpUnclamped(0.1f, 1f, t), Mathf.LerpUnclamped(0.1f, 1f, t), 1f));
+                _bookCard.style.rotate = new Rotate(new Angle(Mathf.Lerp(-18f, 0f, t), AngleUnit.Degree));
+            }, Ease.OutBack, () =>
+            {
+                // "Opening": the page content unfolds sideways, then each piece pops in.
+                SfxPlayer.Instance?.Play(Sfx.Mastery, 0f);
+                Haptics.Strong();
+                ShowBigToast(Loc.Format("hud.collection_complete", Loc.Get(venue.DisplayNameKey)));
+                var entries = _bookGrid.Children().ToList();
+                foreach (var entry in entries) entry.style.scale = new Scale(Vector3.zero);
+                Tween.Run(this, 0.3f, t => _bookGrid.style.scale = new Scale(new Vector3(t, 1f, 1f)), Ease.OutCubic);
+                for (var i = 0; i < entries.Count; i++)
+                {
+                    var entry = entries[i];
+                    Tween.Delay(this, 0.25f + i * 0.15f, () =>
+                        Tween.Run(this, 0.35f, t => entry.style.scale = new Scale(Vector3.one * t), Ease.OutBack));
+                }
+            });
+        }
 
         public bool IsBookOpen => !_bookPage.ClassListContains("hidden");
 
@@ -760,6 +803,7 @@ namespace SortingGame.UI
             _bookPage.AddToClassList("hidden");
             var card = Add(_bookPage, new VisualElement(), "banner-card");
             card.AddToClassList("book-card");
+            _bookCard = card;
             Add(card, new Label(Loc.Get("hud.collection_book")), "banner-title");
             var pager = Add(card, new VisualElement(), "book-pager");
             Add(pager, new Button(() => TurnBookPage(-1)) { text = "<" }, "pager-button");

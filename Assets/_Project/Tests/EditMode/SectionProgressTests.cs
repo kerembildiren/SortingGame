@@ -43,6 +43,22 @@ namespace SortingGame.Tests
         }
 
         [Test]
+        public void NotComplete_WhileCollectiblesRemain()
+        {
+            var progress = new SectionProgress(1, false, 0f);
+            progress.SetCollectiblesRemaining(1);
+            progress.AddPlaced();
+
+            Assert.IsFalse(progress.IsComplete);
+            Assert.IsTrue(progress.OnlyCollectiblesLeft);
+            Assert.AreEqual(99, progress.Percent);
+
+            progress.SetCollectiblesRemaining(0);
+            Assert.IsTrue(progress.IsComplete);
+            Assert.AreEqual(100, progress.Percent);
+        }
+
+        [Test]
         public void AddPlaced_DoesNotExceedTotal()
         {
             var progress = new SectionProgress(1, false, 0f);

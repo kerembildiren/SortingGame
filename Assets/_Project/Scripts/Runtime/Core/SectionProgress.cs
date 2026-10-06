@@ -25,7 +25,15 @@ namespace SortingGame.Core
             _dirtWeight = hasDirt ? Math.Clamp(dirtWeight, 0f, 1f) : 0f;
         }
 
-        public bool IsComplete => PlacedItems >= TotalItems && (!HasDirt || DirtCleaned >= 1f);
+        /// <summary>Collectibles still somewhere in the section. The room is not done until they are picked up too.</summary>
+        public int CollectiblesRemaining { get; private set; }
+
+        /// <summary>Everything sorted and swept, only collectibles are left to pick up.</summary>
+        public bool OnlyCollectiblesLeft => SortedAndSwept && CollectiblesRemaining > 0;
+
+        bool SortedAndSwept => PlacedItems >= TotalItems && (!HasDirt || DirtCleaned >= 1f);
+
+        public bool IsComplete => SortedAndSwept && CollectiblesRemaining == 0;
 
         /// <summary>0..1</summary>
         public float Fraction
@@ -41,6 +49,14 @@ namespace SortingGame.Core
 
         /// <summary>0..100, floored so 100 only appears when complete.</summary>
         public int Percent => IsComplete ? 100 : Math.Min(99, (int)Math.Floor(Fraction * 100f));
+
+        public void SetCollectiblesRemaining(int count)
+        {
+            count = Math.Max(0, count);
+            if (count == CollectiblesRemaining) return;
+            CollectiblesRemaining = count;
+            Changed?.Invoke(this);
+        }
 
         public void AddPlaced()
         {

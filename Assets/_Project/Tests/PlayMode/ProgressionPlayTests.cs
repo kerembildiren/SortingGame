@@ -45,7 +45,9 @@ namespace SortingGame.Tests
         [UnityTest, Timeout(120000)]
         public IEnumerator SaveAndReload_KeepsTheRoomAsLeft()
         {
-            yield return LoadMain();
+            // The Comic Box is open in a fresh game, so the game may resume straight into it.
+            yield return TestGame.LoadIntoSection("comic_box", "comic_box");
+            _boot = TestGame.Boot;
             yield return OpenAllBoxesAndSettle();
 
             // Sweep the front half, sort six items, find one collectible.
@@ -83,7 +85,7 @@ namespace SortingGame.Tests
             yield return TestGame.LoadMain();
             _boot = TestGame.Boot;
             Assert.AreEqual(GameFlow.Screen.Section, _boot.Flow.Current);
-            Assert.AreEqual("garage", _boot.Flow.ActiveSection.Id);
+            Assert.AreEqual("comic_box", _boot.Flow.ActiveSection.Id);
             yield return new WaitForSeconds(0.5f);
 
             Assert.AreEqual(coins, _boot.Wallet.Coins);

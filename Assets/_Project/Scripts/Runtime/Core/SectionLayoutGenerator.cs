@@ -38,7 +38,9 @@ namespace SortingGame.Core
     /// </summary>
     public static class SectionLayoutGenerator
     {
-        public static SectionLayout Generate(SectionDefinition section, Func<CategoryDefinition, IReadOnlyList<ItemDefinition>> itemsOf, int seed)
+        /// <param name="includeCollectible">Filter for collectibles; already-found ones are left out (no duplicates).</param>
+        public static SectionLayout Generate(SectionDefinition section, Func<CategoryDefinition, IReadOnlyList<ItemDefinition>> itemsOf, int seed,
+            Func<CollectibleDefinition, bool> includeCollectible = null)
         {
             var random = new Random(seed);
             var all = new List<ItemDefinition>();
@@ -93,7 +95,7 @@ namespace SortingGame.Core
             // Collectibles: hidden in a box or under the dirt, never just lying in plain sight.
             foreach (var collectible in section.Collectibles)
             {
-                if (collectible == null) continue;
+                if (collectible == null || (includeCollectible != null && !includeCollectible(collectible))) continue;
                 var canBury = hasDirt;
                 var canBox = layout.Containers.Count > 0;
                 if (canBury && (!canBox || random.NextDouble() < 0.5))

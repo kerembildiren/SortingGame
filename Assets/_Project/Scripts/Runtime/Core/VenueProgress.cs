@@ -4,8 +4,9 @@ using SortingGame.Data;
 namespace SortingGame.Core
 {
     /// <summary>
-    /// GDD 5 rules on top of the save: which sections are open, how far a venue is, when it can be sold,
-    /// which venue comes next. Pure (no scene access) so it is unit tested.
+    /// GDD 5 rules on top of the save: which sections are open, how far a venue is, which venues are open.
+    /// Since 2026-10-06 there is no selling or buying: when every room of a venue is 100% the next venue opens.
+    /// Pure (no scene access) so it is unit tested.
     /// </summary>
     public static class VenueProgress
     {
@@ -29,10 +30,9 @@ namespace SortingGame.Core
 
         public enum VenueState
         {
-            Locked,     // previous venue not sold yet
-            ForSale,    // can be bought now
-            Owned,
-            Sold
+            Locked,     // the previous venue is not finished yet
+            Open,       // playable
+            Completed   // every room at 100%, stays visitable
         }
 
         public static SectionStatus Section(SectionDefinition section, SaveData data)
@@ -90,22 +90,32 @@ namespace SortingGame.Core
             return result;
         }
 
-        /// <summary>GDD 5.2 linear ladder: venue N is for sale once venue N-1 is sold. The first one is free.</summary>
+        /// <summary>Linear ladder: the first venue is open; each next one opens when the previous is fully complete.</summary>
         public static VenueState State(IReadOnlyList<VenueDefinition> ladder, int index, SaveData data)
         {
-            var save = data.Venues.Find(v => v.Id == ladder[index].Id);
-            if (save != null && save.Sold) return VenueState.Sold;
-            if (save != null && save.Owned) return VenueState.Owned;
-            if (index == 0) return VenueState.ForSale;
-            var previous = data.Venues.Find(v => v.Id == ladder[index - 1].Id);
-            return previous != null && previous.Sold ? VenueState.ForSale : VenueState.Locked;
+            if (Venue(ladder[index], data).AllComplete) return VenueState.Completed;
+            if (index == 0 || Venue(ladder[index - 1], data).AllComplete) return VenueState.Open;
+            return VenueState.Locked;
         }
 
-        /// <summary>GDD 5.6: sell only when every section is at 100%.</summary>
-        public static bool CanSell(VenueDefinition venue, SaveData data)
+        public static bool IsOpen(IReadOnlyList<VenueDefinition> ladder, VenueDefinition venue, SaveData data)
         {
-            var save = data.Venues.Find(v => v.Id == venue.Id);
-            return save != null && save.Owned && !save.Sold && Venue(venue, data).AllComplete;
+            var index = IndexOf(ladder, venue);
+            return index >= 0 && State(ladder, index, data) != VenueState.Locked;
+        }
+
+        /// <summary>The venue after <paramref name="venue"/>, or null at the end of the ladder.</summary>
+        public static VenueDefinition Next(IReadOnlyList<VenueDefinition> ladder, VenueDefinition venue)
+        {
+            var index = IndexOf(ladder, venue);
+            return index >= 0 && index + 1 < ladder.Count ? ladder[index + 1] : null;
+        }
+
+        static int IndexOf(IReadOnlyList<VenueDefinition> ladder, VenueDefinition venue)
+        {
+            for (var i = 0; i < ladder.Count; i++)
+                if (ladder[i] == venue) return i;
+            return -1;
         }
     }
 }

@@ -120,18 +120,12 @@ namespace SortingGame.Tests
             yield return new WaitForSeconds(1.2f);
             yield return Snapshot("m2_08_complete");
 
-            // Replay: the same collectibles are duplicates now and sell automatically (GDD 9.3).
+            // Replay (dev reshuffle): collectibles already in the book never come back.
             _boot.Restart();
             yield return null;
             yield return OpenAllBoxes();
             yield return SweepFloor(1f);
-            var duplicate = Section.Collectibles.First();
-            var value = ((SortingGame.Data.CollectibleDefinition)duplicate.Definition).DuplicateSellValue;
-            var coinsBeforeDuplicate = _boot.Wallet.Coins;
-            Section.FindCollectible(duplicate);
-            yield return new WaitForSeconds(0.6f);
-            Assert.IsFalse(_boot.RareFind.IsPresenting, "Duplicates do not open the full moment.");
-            Assert.AreEqual(coinsBeforeDuplicate + value, _boot.Wallet.Coins);
+            Assert.IsEmpty(Section.Collectibles.ToList(), "Found collectibles do not spawn again.");
             Assert.AreEqual(collectibleCount, _boot.Book.FoundIds.Count);
         }
 

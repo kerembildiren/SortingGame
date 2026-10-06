@@ -10,6 +10,8 @@ Each milestone ends with a playtest by the user in the editor. Next one starts o
 | M2+ | Collection viewer (GDD 9.1.1): tap a found item in the book -> 3D view on a dimmed screen, rotate / zoom / pan, double-tap reset | ✅ Approved 2026-10-06 |
 | M3 | Tools (Magnet, Hand capacity; Magnifier dropped), Category Mastery auto-fly, coin upgrades, JSON save (sorted stays sorted) | ✅ Approved 2026-10-06 (mastery playtested; Hand stack + Magnet pull not yet playtested by user) |
 | M4 | Venue structure: isometric overview of 4-section warehouse, zoom transition, section locks, venue sale, 3 venues as data | ✅ Playtested 2026-10-06; follow-up changes in M4.1 / M4.2 |
+| M4.1 | Playtest follow-ups: section only completes when every collectible in it is picked up; a found collectible never appears again; no venue selling/buying: all rooms 100% -> next venue opens for free; shelf-complete camera showcase (zoom + top-to-bottom pan); book flies in and opens when a venue's collection is complete | ✅ Implemented 2026-10-06 (tests green; user playtest pending) |
+| M4.2 | Big rooms: ~60 items (Comic Box), ~200 (Garage), ~300 per Warehouse room; horizontal camera pan in wide sections; item variety grows along the ladder | 🔄 In progress |
 | M5 | Helpers, offline progress, ad/IAP interfaces with fake providers, localisation infrastructure | ⏳ |
 
 ## Decisions taken during development
@@ -53,3 +55,8 @@ Each milestone ends with a playtest by the user in the editor. Next one starts o
 | 2026-10-06 | Section 100% banner button is now "Back to overview"; "Restart section" (reshuffle) stays in Settings as a dev helper | Fits the venue flow |
 | 2026-10-06 | Game resumes where it was left: last venue, and the section if the player was inside one | GDD 15.4 |
 | 2026-10-06 | Collection Book has one page per venue with < > paging | GDD 9.1 |
+| 2026-10-06 | (user) A section is complete only when every collectible in it has been picked up as well | Auto-sort could finish a room while a collectible was still lying on the floor |
+| 2026-10-06 | (user) A collectible already in the book never spawns again; no duplicates, no duplicate sales | Replaying to farm duplicates was not wanted |
+| 2026-10-06 | (user) Cleaned rooms stay clean and are not replayable ("Restart section" stays as a dev tool only) | GDD principle 1 |
+| 2026-10-06 | (user) No venue sale / purchase: when every room of a venue is 100%, the next venue opens for free. Coins are for tools and room unlocks for now; economy redesign later | Progress through rooms, not through a coin wall |
+| 2026-10-06 | (user) Room sizes "Big": ~60 / ~200 / ~300 per Warehouse room | Rooms should take much longer to clean |

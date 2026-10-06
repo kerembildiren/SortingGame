@@ -474,3 +474,6 @@ Arayüz dili İngilizce **[VARSAYILAN]**. Türkçe sonradan eklenecek; tüm meti
 | 2026-10-06 | Mıknatıs sürekli çeker: taşıma sırasında küçük yarıçapa giren aynı kategori eşyalar ele gelir (1. seviyede 2) | Oyuncu parmağını gezdirerek toplar; pasif ve tatmin edici. |
 | 2026-10-06 | Kategori Ustalığı: süpürülerek ortaya çıkan ve yeni oyunda yerde duran ustalaşılmış eşyalar da kendiliğinden rafa gider | Ustalık sonrası o kategoride elle iş kalmamalı. |
 | 2026-10-06 | Prototipte mekân merdiveni küçük sayılarla kuruldu: Çizgi Roman Kutusu (12 eşya), Garaj (36), Depo (4 bölüm, 84). Her mekânda kostümlü bir Chubby (Captain / Mechanic / Night Guard). | Mekaniği test edilebilir tutmak; GDD 5.3 sayıları [VARSAYILAN]. |
+| 2026-10-06 | Mekân satışı kaldırıldı: bir mekânın tüm bölümleri %100 olunca sonraki mekân ücretsiz açılır. Coin şimdilik alet ve oda kilidi için; ekonomi sonra yeniden düşünülecek. (5.6 ve 11 bu karara göre güncellenecek.) | Oyun sahibi kararı: ilerleme odaları temizleyerek olmalı. |
+| 2026-10-06 | Bulunan bir koleksiyon parçası bir daha çıkmaz (kopya ve kopya satışı yok). Bir bölüm, içindeki tüm koleksiyon parçaları alınmadan bitmez. | Oyun sahibi kararı; 9.3 kopya kuralının yerini alır. |
+| 2026-10-06 | Temizlenen odalar tekrar oynanmaz. Oda büyüklükleri: ~60 / ~200 / ~300 eşya. | Oyun sahibi kararı; odalar daha uzun sürmeli. |

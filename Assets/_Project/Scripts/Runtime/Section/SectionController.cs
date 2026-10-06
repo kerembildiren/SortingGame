@@ -27,6 +27,8 @@ namespace SortingGame.Section
         public event Action<ItemView> ItemRevealed;
         public event Action<ItemView, CollectionBook.FindResult> CollectibleFound;
         public event Action<CategoryDefinition> CategoryMastered;
+        /// <summary>Everything is sorted and swept but a collectible is still waiting to be picked up.</summary>
+        public event Action OnlyCollectiblesLeft;
         /// <summary>Something worth saving happened (placement, sweep, box opened, find...).</summary>
         public event Action StateChanged;
 
@@ -64,6 +66,7 @@ namespace SortingGame.Section
         bool _completed;
         float _mood;
         int _seed;
+        bool _shinyHintShown;
         readonly Dictionary<ItemView, MeshRenderer> _lensMarkers = new();
 
         DirtMask _dirt;
@@ -98,7 +101,8 @@ namespace SortingGame.Section
             }
             else
             {
-                var layout = SectionLayoutGenerator.Generate(definition, c => _database.CommonItemsOf(c).ToList(), seed);
+                // A collectible already in the book never shows up again (user decision 2026-10-06).
+                var layout = SectionLayoutGenerator.Generate(definition, c => _database.CommonItemsOf(c).ToList(), seed, c => !_book.Has(c));
                 var random = new Random(seed);
                 BuildDirt(definition, seed);
                 PlaceContainers(layout, random);
@@ -110,6 +114,7 @@ namespace SortingGame.Section
 
             Progress = new SectionProgress(totalItems, HasDirt, _database.Balance.DirtProgressWeight);
             Progress.Restore(_shelves.Sum(s => s.FilledCount), DirtCleaned);
+            Progress.SetCollectiblesRemaining(CountCollectiblesLeft());
             Progress.Changed += OnProgressChanged;
             _completed = Progress.IsComplete;
 
@@ -149,6 +154,7 @@ namespace SortingGame.Section
             _lensMarkers.Clear();
             _placeStreak = 0;
             _completed = false;
+            _shinyHintShown = false;
         }
 
         // ---------- Rules: shelves ----------
@@ -402,7 +408,17 @@ namespace SortingGame.Section
             var result = _book.Register(collectible);
             if (!result.IsNew) _wallet.Add(result.DuplicateCoins);
             CollectibleFound?.Invoke(item, result);
+            Progress.SetCollectiblesRemaining(CountCollectiblesLeft());
             StateChanged?.Invoke();
+        }
+
+        /// <summary>Collectibles on the floor, under the dirt or still inside closed boxes.</summary>
+        int CountCollectiblesLeft()
+        {
+            var count = _items.Count(i => i != null && i.IsCollectible && i.State != ItemState.Found);
+            foreach (var container in _containers)
+                if (container != null) count += container.Contents.Count(c => c.IsCollectible);
+            return count;
         }
 
         // ---------- Progress, mood, renovation ----------
@@ -420,6 +436,11 @@ namespace SortingGame.Section
             }
             // Principle 1: every action makes the place visibly nicer, a little.
             ApplyMood(progress.Fraction * _feel.ProgressMoodShare);
+            if (progress.OnlyCollectiblesLeft && !_shinyHintShown)
+            {
+                _shinyHintShown = true;
+                OnlyCollectiblesLeft?.Invoke();
+            }
         }
 
         /// <summary>GDD 5.5: dust gone, lights up, colours come alive, warm music layer fades in.</summary>
