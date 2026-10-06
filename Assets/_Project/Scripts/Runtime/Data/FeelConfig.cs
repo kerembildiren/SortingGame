@@ -17,14 +17,15 @@ namespace SortingGame.Data
         [Range(0f, 0.3f), Tooltip("Screen share reserved for the tool bar.")]
         public float BottomSafeArea = 0.15f;
 
-        [Header("Drag & drop")]
-        [Tooltip("Pick tolerance around the finger, in metres. Larger = easier to grab small items.")]
-        public float PickRadius = 0.1f;
+        [Header("Drag & drop. Grab radius comes from the Hand tool level.")]
         public float DragLiftHeight = 0.55f;
         [Tooltip("Carried item is drawn this many reference pixels above the finger so the finger does not hide it.")]
         public float FingerOffsetPixels = 110f;
         public float DragFollowSharpness = 28f;
         public float DragScale = 1.2f;
+
+        [Tooltip("Seconds resting over a shelf before the carried items that belong there jump in. The rest stay in hand.")]
+        public float ShelfDepositDwell = 0.3f;
 
         [Header("Placement")]
         public float PlaceDuration = 0.22f;
@@ -41,9 +42,7 @@ namespace SortingGame.Data
         [Tooltip("Seconds after spilling before the empty container shrinks away.")]
         public float EmptyContainerVanishDelay = 1.0f;
 
-        [Header("Broom & dirt (GDD 7.1, 7.3)")]
-        [Tooltip("Brush radius in metres.")]
-        public float BroomRadius = 0.38f;
+        [Header("Broom & dirt (GDD 7.1, 7.3). Brush radius comes from the Broom tool level.")]
         [Tooltip("Dirt removed per second at the brush centre (1 = a full layer).")]
         public float BroomStrength = 6f;
         [Range(0.5f, 1f), Tooltip("Once this much is clean, the rest fades away by itself. Nobody wants to hunt the last speck.")]

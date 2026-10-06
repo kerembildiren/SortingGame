@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using SortingGame.Core;
 using SortingGame.Data;
 using UnityEngine;
@@ -6,63 +7,64 @@ using UnityEngine.InputSystem;
 
 namespace SortingGame.Section
 {
-    /// <summary>GDD 10.1 tools. Magnet and Magnifier arrive in M3.</summary>
-    public enum ToolType
-    {
-        Hand,
-        Broom
-    }
-
     /// <summary>
-    /// GDD 7.1 gestures, one finger: Hand drags items to shelves, Broom sweeps the dirt layer.
-    /// With any tool, a tap opens a box or picks up a glowing collectible.
-    /// Pointer.current makes mouse and touch behave the same.
+    /// GDD 7.1 gestures with the GDD 10.1 tools, one finger:
+    /// Hand: press on an item to carry it; pass over more items to pick them up too (any kind, up to the Hand capacity).
+    /// Magnet: like Hand, but same-category items within the magnet radius are pulled in automatically (up to its limit).
+    /// While carrying, rest over a shelf for a moment (or let go) and the items that belong there jump in; the rest stay
+    /// in hand for the next shelf. Broom sweeps the dirt. With any tool, a tap opens a box or picks up a glowing collectible.
     /// </summary>
     public class DragController : MonoBehaviour
     {
         const float TapMaxMovePixels = 30f;
         const float DustInterval = 0.06f;
+        const float StackSpacing = 0.2f;
 
         readonly RaycastHit[] _hits = new RaycastHit[32];
+        /// <summary>Carried items; [0] is under the finger, the rest trail behind.</summary>
+        readonly List<ItemView> _stack = new();
 
         Camera _camera;
         SectionController _section;
+        GameContext _ctx;
         FeelConfig _feel;
         Func<Vector2, bool> _isOverUi;
         Func<float> _uiScale;
         Fx _fx;
-        SectionVisuals _visuals;
 
-        ItemView _dragged;
+        CategoryDefinition _magnetCategory;
         ShelfView _hoveredShelf;
+        float _hoverTime;
         Vector3 _shelfHitPoint;
         ContainerView _tapContainer;
         ItemView _tapCollectible;
         Vector2 _pressPosition;
         Vector2 _lastPosition;
         bool _pressStartedOnUi;
+        bool _carrying;
         bool _sweeping;
         float _dustTimer;
         Transform _broomCursor;
 
         public bool InputEnabled { get; set; } = true;
         public ToolType Tool { get; private set; } = ToolType.Hand;
+        public IReadOnlyList<ItemView> Carried => _stack;
 
-        public void Init(Camera cam, SectionController section, FeelConfig feel, SectionVisuals visuals, Func<Vector2, bool> isOverUi, Func<float> uiScale)
+        public void Init(Camera cam, SectionController section, GameContext context, Func<Vector2, bool> isOverUi, Func<float> uiScale)
         {
             _camera = cam;
             _section = section;
-            _feel = feel;
-            _visuals = visuals;
+            _ctx = context;
+            _feel = context.Feel;
             _isOverUi = isOverUi;
             _uiScale = uiScale;
-            _fx = new Fx(visuals);
+            _fx = new Fx(context.Visuals);
 
-            var factory = new PlaceholderFactory(visuals);
+            var factory = new PlaceholderFactory(context.Visuals);
             var cursor = factory.CreateSoftQuad("BroomCursor", null, new Color(1f, 0.95f, 0.8f, 0.35f), ProceduralTextures.SoftDot);
             cursor.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
+            cursor.gameObject.SetActive(false);
             _broomCursor = cursor.transform;
-            _broomCursor.gameObject.SetActive(false);
         }
 
         public void SetTool(ToolType tool)
@@ -70,6 +72,11 @@ namespace SortingGame.Section
             CancelDrag();
             Tool = tool;
         }
+
+        /// <summary>How many items may be carried at once with the current tool.</summary>
+        int Capacity => Tool == ToolType.Magnet
+            ? 1 + Mathf.RoundToInt(_ctx.ToolStats(ToolType.Magnet).Secondary)
+            : Mathf.Max(1, Mathf.RoundToInt(_ctx.ToolStats(ToolType.Hand).Primary));
 
         void Update()
         {
@@ -99,29 +106,35 @@ namespace SortingGame.Section
             }
 
             _tapContainer = container;
-            if (Tool == ToolType.Hand)
-            {
-                if (item == null) return;
-                _tapContainer = null;
-                _dragged = item;
-                _dragged.BeginDrag();
-                SfxPlayer.Instance?.Play(Sfx.Pickup);
-                OnHold(screen);
-            }
-            else
+            if (Tool == ToolType.Broom)
             {
                 _sweeping = true;
                 OnHold(screen);
+                return;
             }
+
+            if (item == null) return;
+            _tapContainer = null;
+            _carrying = true;
+            _magnetCategory = item.Definition.Category;
+            Attach(item, Sfx.Pickup);
+            OnHold(screen);
+        }
+
+        void Attach(ItemView item, Sfx sound)
+        {
+            item.BeginDrag();
+            _stack.Add(item);
+            SfxPlayer.Instance?.Play(sound, 0.05f, 0.8f);
         }
 
         void OnHold(Vector2 screen)
         {
             if (!InputEnabled) return;
             if (_sweeping) Sweep(screen);
-            if (_dragged == null) return;
+            if (_stack.Count == 0) return;
 
-            // Draw the item a bit above the finger so it stays visible.
+            // Draw the lead item a bit above the finger so it stays visible.
             var offset = _feel.FingerOffsetPixels * (_uiScale?.Invoke() ?? 1f);
             var aim = screen + new Vector2(0f, offset);
             var ray = _camera.ScreenPointToRay(aim);
@@ -136,7 +149,7 @@ namespace SortingGame.Section
             else
             {
                 var plane = new Plane(Vector3.up, new Vector3(0f, _feel.DragLiftHeight, 0f));
-                target = plane.Raycast(ray, out var enter) ? ray.GetPoint(enter) : _dragged.transform.position;
+                target = plane.Raycast(ray, out var enter) ? ray.GetPoint(enter) : _stack[0].transform.position;
                 target = _section.ClampToRoom(target);
             }
 
@@ -145,23 +158,74 @@ namespace SortingGame.Section
                 if (_hoveredShelf != null) _hoveredShelf.SetHovered(false);
                 if (shelf != null) shelf.SetHovered(true);
                 _hoveredShelf = shelf;
+                _hoverTime = 0f;
             }
 
-            _dragged.DragTowards(target, Time.deltaTime);
+            _stack[0].DragTowards(target, Time.deltaTime);
+            TrailStack(ray);
+
+            if (shelf == null) CollectMore();
+            else DepositAfterDwell(shelf);
+        }
+
+        /// <summary>Carried items trail behind the lead one like beads on a string.</summary>
+        void TrailStack(Ray ray)
+        {
+            var previous = _stack[0].transform.position;
+            for (var i = 1; i < _stack.Count; i++)
+            {
+                var follower = _stack[i];
+                var away = follower.transform.position - previous;
+                away = away.sqrMagnitude < 0.0001f ? -ray.direction : away.normalized;
+                follower.DragTowards(previous + away * StackSpacing, Time.deltaTime);
+                previous = follower.transform.position;
+            }
+        }
+
+        /// <summary>
+        /// Hand: anything the carried item passes over is picked up. Magnet: same-category items inside the
+        /// magnet radius are pulled in. Both stop at the capacity.
+        /// </summary>
+        void CollectMore()
+        {
+            if (_stack.Count >= Capacity) return;
+            var hover = HoverPoint(_stack[0].transform.position);
+            var magnet = Tool == ToolType.Magnet;
+            var radius = magnet ? _ctx.ToolStats(ToolType.Magnet).Primary : _ctx.ToolStats(ToolType.Hand).Secondary * 1.5f;
+            var next = _section.FindAttachable(hover, radius, magnet ? _magnetCategory : null, _stack);
+            if (next != null) Attach(next, magnet ? Sfx.Magnet : Sfx.Pickup);
+        }
+
+        /// <summary>Resting over a shelf briefly drops in what belongs there; the rest stays in hand.</summary>
+        void DepositAfterDwell(ShelfView shelf)
+        {
+            _hoverTime += Time.deltaTime;
+            if (_hoverTime < _feel.ShelfDepositDwell) return;
+            _hoverTime = float.MinValue; // once per visit
+            var delivered = _section.DeliverStack(_stack, shelf, _shelfHitPoint, false);
+            foreach (var item in delivered) _stack.Remove(item);
+            if (_stack.Count == 0) EndCarry();
+        }
+
+        /// <summary>Floor point the carried item visually floats over (along the camera ray).</summary>
+        Vector3 HoverPoint(Vector3 carried)
+        {
+            var ray = new Ray(_camera.transform.position, carried - _camera.transform.position);
+            return new Plane(Vector3.up, Vector3.zero).Raycast(ray, out var enter) ? ray.GetPoint(enter) : carried;
         }
 
         void Sweep(Vector2 screen)
         {
             var ray = _camera.ScreenPointToRay(screen);
-            if (!new Plane(Vector3.up, Vector3.zero).Raycast(ray, out var enter))
-                return;
+            if (!new Plane(Vector3.up, Vector3.zero).Raycast(ray, out var enter)) return;
             var point = _section.ClampToRoom(ray.GetPoint(enter));
+            var radius = _ctx.ToolStats(ToolType.Broom).Primary;
 
             _broomCursor.gameObject.SetActive(true);
             _broomCursor.position = point + Vector3.up * 0.01f;
-            _broomCursor.localScale = Vector3.one * (_feel.BroomRadius * 2.2f);
+            _broomCursor.localScale = Vector3.one * (radius * 2.2f);
 
-            var removed = _section.Sweep(point, Time.deltaTime);
+            var removed = _section.Sweep(point, Time.deltaTime, radius);
             var speed = (screen - _lastPosition).magnitude / Mathf.Max(Time.deltaTime, 0.001f) / Mathf.Max(1f, Screen.height);
             SfxPlayer.Instance?.SetLoop(Sfx.SweepLoop, removed ? Mathf.Clamp01(0.25f + speed * 0.6f) * 0.7f : 0.08f, 0.9f + Mathf.Clamp01(speed) * 0.3f);
 
@@ -169,7 +233,7 @@ namespace SortingGame.Section
             if (removed && _dustTimer <= 0f)
             {
                 _dustTimer = DustInterval;
-                _fx.Burst(point + Vector3.up * 0.05f, _visuals.DirtColor * 1.4f, 4, 0.8f, 0.12f, 0.6f, -0.05f);
+                _fx.Burst(point + Vector3.up * 0.05f, _ctx.Visuals.DirtColor * 1.4f, 4, 0.8f, 0.12f, 0.6f, -0.05f);
             }
         }
 
@@ -184,20 +248,14 @@ namespace SortingGame.Section
             var isTap = (screen - _pressPosition).magnitude <= TapMaxMovePixels;
             StopSweeping();
 
-            if (_dragged != null)
+            if (_carrying)
             {
-                var item = _dragged;
-                _dragged = null;
-                if (_hoveredShelf != null)
+                if (_stack.Count > 0)
                 {
-                    _hoveredShelf.SetHovered(false);
-                    _section.TryPlace(item, _hoveredShelf, _shelfHitPoint);
-                    _hoveredShelf = null;
+                    if (_hoveredShelf != null) _section.DeliverStack(_stack, _hoveredShelf, _shelfHitPoint, true);
+                    else foreach (var item in _stack) item.Drop();
                 }
-                else
-                {
-                    item.Drop();
-                }
+                EndCarry();
             }
             else if (isTap && InputEnabled)
             {
@@ -207,6 +265,15 @@ namespace SortingGame.Section
 
             _tapCollectible = null;
             _tapContainer = null;
+        }
+
+        void EndCarry()
+        {
+            _stack.Clear();
+            _carrying = false;
+            _magnetCategory = null;
+            if (_hoveredShelf != null && _hoveredShelf) _hoveredShelf.SetHovered(false);
+            _hoveredShelf = null;
         }
 
         void StopSweeping()
@@ -221,7 +288,8 @@ namespace SortingGame.Section
         (ItemView item, ItemView collectible, ContainerView container) Pick(Vector2 screen)
         {
             var ray = _camera.ScreenPointToRay(screen);
-            var count = Physics.SphereCastNonAlloc(ray, _feel.PickRadius, _hits, 100f, ~0, QueryTriggerInteraction.Ignore);
+            var radius = Mathf.Max(0.02f, _ctx.ToolStats(ToolType.Hand).Secondary);
+            var count = Physics.SphereCastNonAlloc(ray, radius, _hits, 100f, ~0, QueryTriggerInteraction.Ignore);
 
             ItemView bestItem = null, bestCollectible = null;
             ContainerView bestContainer = null;
@@ -272,10 +340,9 @@ namespace SortingGame.Section
         /// <summary>Called when the section is rebuilt, the tool changes or input is interrupted.</summary>
         public void CancelDrag()
         {
-            if (_dragged != null && _dragged) _dragged.Drop();
-            _dragged = null;
-            if (_hoveredShelf != null && _hoveredShelf) _hoveredShelf.SetHovered(false);
-            _hoveredShelf = null;
+            foreach (var item in _stack)
+                if (item != null) item.Drop();
+            EndCarry();
             _tapContainer = null;
             _tapCollectible = null;
             StopSweeping();

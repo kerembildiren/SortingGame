@@ -18,4 +18,12 @@ namespace SortingGame.Data
         Cylinder,  // cans, jars
         Rod        // long thin tools
     }
+
+    /// <summary>GDD 10.1 tools in the tool bar. The Magnifier was dropped after playtesting (2026-10-06).</summary>
+    public enum ToolType
+    {
+        Hand,
+        Broom,
+        Magnet
+    }
 }

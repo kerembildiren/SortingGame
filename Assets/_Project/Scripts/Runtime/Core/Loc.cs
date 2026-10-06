@@ -20,8 +20,9 @@ namespace SortingGame.Core
             ["tool.hand"] = "Hand",
             ["tool.broom"] = "Broom",
             ["tool.magnet"] = "Magnet",
-            ["tool.magnifier"] = "Magnifier",
-            ["tool.coming_soon"] = "coming in M3",
+            ["tool.hand.effect"] = "carry {0:0} items at once (any kind)",
+            ["tool.broom.effect"] = "brush {0:0.##} m wide",
+            ["tool.magnet.effect"] = "pulls up to {1:0} same items within {0:0.##} m",
 
             ["hud.section_complete"] = "Section complete!",
             ["hud.shelf_full"] = "{0} shelf full!",
@@ -39,6 +40,16 @@ namespace SortingGame.Core
             ["hud.rare_find"] = "Rare find!",
             ["hud.continue"] = "Continue",
             ["hud.duplicate_sold"] = "Duplicate {0} sold +{1}",
+            ["hud.shop"] = "Shop",
+            ["hud.shop_title"] = "Tools",
+            ["hud.locked"] = "locked",
+            ["hud.unlock"] = "Unlock",
+            ["hud.next"] = "Next",
+            ["hud.max"] = "MAX",
+            ["hud.bought"] = "{0} level {1}!",
+            ["hud.not_enough"] = "Not enough coins yet",
+            ["hud.mastered"] = "{0} mastered! They sort themselves now.",
+            ["hud.reset_progress"] = "Reset all progress",
             ["hud.view_hint"] = "Drag to turn  ·  Pinch to zoom  ·  Two fingers to move  ·  Double-tap to reset",
 
             // Collectibles: original names only (GDD 13).
@@ -52,9 +63,12 @@ namespace SortingGame.Core
             ["collectible.lucky_wrench.desc"] = "Someone engraved a tiny star on it. Fixes bolts, and maybe luck too.",
         };
 
+        /// <summary>Number formatting follows the UI language, not the device region (English for now).</summary>
+        public static readonly System.Globalization.CultureInfo Culture = System.Globalization.CultureInfo.InvariantCulture;
+
         public static string Get(string key) =>
             !string.IsNullOrEmpty(key) && English.TryGetValue(key, out var value) ? value : key;
 
-        public static string Format(string key, params object[] args) => string.Format(Get(key), args);
+        public static string Format(string key, params object[] args) => string.Format(Culture, Get(key), args);
     }
 }

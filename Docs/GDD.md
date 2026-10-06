@@ -146,7 +146,7 @@ Oyunda iki ana görünüm vardır. Ayrı bir "çalışma masası" ekranı **yokt
 - Oyunun asıl oynandığı ekran. Kamera bölüme 3/4 açıyla yukarıdan bakar.
 - Bölümün **gerçek rafları** ekrandadır, her rafın bir kategori etiketi vardır. Raflardaki boş yuvalar kesikli çizgili silüetlerle gösterilir.
 - Zemin; kutular, çantalar, mobilyalar ve dağınık eşyalarla doludur.
-- Üstte bölüm adı ve yüzdesi; altta alet çubuğu (El, Süpürge, Mıknatıs, Büyüteç).
+- Üstte bölüm adı ve yüzdesi; altta alet çubuğu (El, Süpürge, Mıknatıs).
 - Büyük bölümlerde kamera parmakla yana kaydırılabilir **[VARSAYILAN]**; küçük bölümler tek ekrana sığar. Pinch-zoom **[AÇIK]**.
 - Referans: `concept/02_section_garage.png`
 
@@ -240,10 +240,9 @@ Oyuncunun kendi elini güçlendirir. Alet çubuğunda seçilir, Coin ile seviye 
 
 | Alet | Temel işlev | Yükseltme örnekleri |
 |---|---|---|
-| El (`Hand`) | Eşya taşıma | Aynı anda daha çok eşya taşıma, daha hızlı yerleştirme |
+| El (`Hand`) | Eşya taşıma. Taşırken üzerinden geçilen eşyalar da ele alınır (her türden, kapasite kadar). Bir rafın üzerinde kısa süre beklenince eldekilerden o rafa ait olanlar yerleşir, diğerleri elde kalır. | Aynı anda taşınabilen eşya sayısı (1 → 2 → 3) |
 | Süpürge (`Broom`) | Kirlilik katmanını temizleme | Daha geniş süpürme alanı |
-| Mıknatıs (`Magnet`) | Bir eşyayı sürüklerken aynı kategoriden yakındaki eşyaların peşinden gelmesi | Daha geniş çekim alanı, daha çok eşya |
-| Büyüteç (`Magnifier`) | Nadir eşyaların parıltısını belirginleştirme, doğru rafı gösterme | Daha uzun süre, daha geniş alan |
+| Mıknatıs (`Magnet`) | Bir eşya taşınırken, parmak hareket ettikçe küçük çekim yarıçapına giren aynı kategoriden eşyalar ele çekilir | Daha çok eşya (1. seviyede 2), biraz daha geniş yarıçap |
 
 ### 10.2 Kategori Ustalığı (`CategoryMastery`) [KARAR]
 Oyunun imza mekaniği.
@@ -314,7 +313,7 @@ Tüm fiyat, ödül ve eşik değerleri koda gömülmez; veri dosyalarından okun
 
 **`concept/01_overview_warehouse.png` — Genel bakış.** İzometrik kesit görünümünde dört bölümlü bir depo. Sol üstte tamamen temizlenmiş, sıcak ışıklı "Office 100%" bölümü. Sağ üstte kutular, bisiklet ve eşyalarla dolu, loş "Garage 42%". Sol ortada yüksek metal raflar ve kutularla dolu "Aisle 8%". Sağ altta karanlık, kilit simgeli "Basement". Dağınık bölümlerde kutu taşıyan küçük yardımcı karakterler. Üstte "1,240 / 8,000 items" ilerleme çubuğu; köşelerde geri, ayarlar, ana sayfa ve "Items" butonları.
 
-**`concept/02_section_garage.png` — Bölüm görünümü.** Garaj bölümünün içi, 3/4 üstten görünüm. Üstte "Comics", "Toys", "Tools" etiketli üç ahşap raf; kısmen dolu, boş yuvalar kesikli çizgili. Zeminin ortasında devrilmiş bir karton kutu ve etrafına saçılmış çizgi romanlar, oyuncaklar, aletler. Bir çizgi roman kesikli bir izle "Comics" rafına doğru sürükleniyor. Yığının içinde altın renkte parlayan küçük bir figür. Zeminde süpürülmüş temiz bir iz. Altta "Hand" (seçili), "Broom", "Magnet", "Magnifier" alet çubuğu; üstte "Garage 42%".
+**`concept/02_section_garage.png` — Bölüm görünümü.** Garaj bölümünün içi, 3/4 üstten görünüm. Üstte "Comics", "Toys", "Tools" etiketli üç ahşap raf; kısmen dolu, boş yuvalar kesikli çizgili. Zeminin ortasında devrilmiş bir karton kutu ve etrafına saçılmış çizgi romanlar, oyuncaklar, aletler. Bir çizgi roman kesikli bir izle "Comics" rafına doğru sürükleniyor. Yığının içinde altın renkte parlayan küçük bir figür. Zeminde süpürülmüş temiz bir iz. Altta "Hand" (seçili), "Broom", "Magnet", "Magnifier" alet çubuğu; üstte "Garage 42%". (Büyüteç sonradan çıkarıldı, bkz. karar günlüğü.)
 
 **`concept/03_rare_find_popup.png` — Nadir eşya bulma anı.** Bulanık, kararmış garaj arka planında, çizgi roman yığınının üstünde ışık huzmeleri ve parıltılar içinde yükselen süper kahraman kostümlü maskot. Altta "Rare find!" başlıklı kart, "Captain Chubby" adı, kısa açıklama. (Kartta görünen "Add to collection / Sell" seçimi geçersizdir, bkz. 9.3.)
 
@@ -390,7 +389,7 @@ Arayüz dili İngilizce **[VARSAYILAN]**. Türkçe sonradan eklenecek; tüm meti
 - 3 mekân: Çizgi Roman Kutusu (öğretici), Garaj, Depo (4 bölüm).
 - Genel bakış ve Bölüm görünümleri.
 - Dokun-aç, sürükle-bırak, süpür hareketleri.
-- 4 alet ve temel yükseltmeleri.
+- 3 alet (El, Süpürge, Mıknatıs) ve temel yükseltmeleri.
 - Kategori Ustalığı.
 - Yardımcılar ve çevrimdışı ilerleme.
 - Koleksiyon Kitabı (3 sayfa) ve maskotun 3 kostümü.
@@ -428,7 +427,7 @@ Arayüz dili İngilizce **[VARSAYILAN]**. Türkçe sonradan eklenecek; tüm meti
 | Koleksiyon Kitabı | `CollectionBook` | Tüm nadir eşyaların toplandığı albüm |
 | Vitrin | `CollectionViewer` | Kitaptaki bir parçayı 3D döndürüp yakınlaştırarak inceleme ekranı |
 | Set bonusu | `SetBonus` | Tamamlanan sayfanın kalıcı ödülü |
-| Alet | `Tool` | El, Süpürge, Mıknatıs, Büyüteç |
+| Alet | `Tool` | El, Süpürge, Mıknatıs |
 | Kategori Ustalığı | `CategoryMastery` | Kategoriyi öğrenince gelen otomatik yerleştirme |
 | Yardımcı | `Helper` | Bölüme atanıp kendi başına düzenleyen karakter |
 | Genel bakış | `OverviewView` | İzometrik mekân görünümü |
@@ -470,3 +469,7 @@ Arayüz dili İngilizce **[VARSAYILAN]**. Türkçe sonradan eklenecek; tüm meti
 | 2026-10-06 | Gelir modeli: ödüllü reklam + IAP; koleksiyon parayla alınamaz | Cozy deneyimi bozmadan gelir. |
 | 2026-10-06 | Yardımcılar maskottan ayrı karakterler | Konsept görsellerdeki karışıklığı gidermek. |
 | 2026-10-06 | Koleksiyon Kitabı'na 3D Vitrin eklendi (döndür, yakınlaştır, kaydır) | Toplanan parçaları istendiği an sergilemek koleksiyon motivasyonunu güçlendirir (oyun sahibi isteği). |
+| 2026-10-06 | Büyüteç (`Magnifier`) aletten çıkarıldı | Prototip testinde gereksiz bulundu (oyun sahibi kararı). |
+| 2026-10-06 | El yükseltmesi = aynı anda taşıma kapasitesi (farklı türler birlikte); raf üzerinde bekleyince ait olanlar yerleşir | Birkaç eşyayı toplayıp raf raf dağıtmak; Mıknatıs'tan farklı bir rol. |
+| 2026-10-06 | Mıknatıs sürekli çeker: taşıma sırasında küçük yarıçapa giren aynı kategori eşyalar ele gelir (1. seviyede 2) | Oyuncu parmağını gezdirerek toplar; pasif ve tatmin edici. |
+| 2026-10-06 | Kategori Ustalığı: süpürülerek ortaya çıkan ve yeni oyunda yerde duran ustalaşılmış eşyalar da kendiliğinden rafa gider | Ustalık sonrası o kategoride elle iş kalmamalı. |

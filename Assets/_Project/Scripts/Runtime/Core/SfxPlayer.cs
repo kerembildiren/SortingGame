@@ -23,7 +23,10 @@ namespace SortingGame.Core
         DuplicateSold,
         BookStamp,
         SweepLoop,
-        CleanAmbienceLoop
+        CleanAmbienceLoop,
+        Magnet,
+        Mastery,
+        Purchase
     }
 
     /// <summary>
@@ -189,6 +192,20 @@ namespace SortingGame.Core
                 var swell = 0.75f + 0.25f * Mathf.Sin(2 * Mathf.PI * 0.25f * t);
                 return sum * swell * 0.05f;
             }, fadeEdges: false);
+
+            // Rising "whoop" when followers snap onto the carried item.
+            _clips[Sfx.Magnet] = Make("magnet", 0.25f, (t, i) =>
+                Mathf.Sin(2 * Mathf.PI * Mathf.Lerp(220f, 880f, t / 0.25f) * t) * Mathf.Exp(-t * 6f) * 0.35f);
+
+            // Bigger than a shelf: category mastered (GDD 10.2 celebration).
+            _clips[Sfx.Mastery] = Arpeggio("mastery", new[] { 392f, 523f, 659f, 784f, 1047f, 784f, 1047f, 1319f }, 0.08f);
+
+            _clips[Sfx.Purchase] = Make("purchase", 0.35f, (t, i) =>
+            {
+                var bell = Mathf.Sin(2 * Mathf.PI * 1568f * t) * Mathf.Exp(-t * 10f);
+                var second = t > 0.08f ? Mathf.Sin(2 * Mathf.PI * 2093f * (t - 0.08f)) * Mathf.Exp(-(t - 0.08f) * 10f) : 0f;
+                return (bell + second) * 0.25f;
+            });
 
             _clips[Sfx.ShelfFull] = Arpeggio("shelf_full", new[] { 784f, 988f, 1175f }, 0.08f);
             _clips[Sfx.SectionComplete] = Arpeggio("section_complete", new[] { 523f, 659f, 784f, 1047f, 1319f }, 0.11f);

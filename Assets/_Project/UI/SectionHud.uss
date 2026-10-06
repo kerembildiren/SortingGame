@@ -391,3 +391,109 @@
     -unity-text-align: middle-center;
     margin-bottom: 8px;
 }
+
+/* ---------- M3: shelf labels with mastery progress (GDD 10.2) ---------- */
+.shelf-label { align-items: center; }
+
+.shelf-label-text {
+    font-size: 34px;
+    -unity-font-style: bold;
+    color: rgb(74, 59, 42);
+    margin: 0; padding: 0;
+}
+
+.shelf-label--mastered .shelf-label-text { color: rgb(196, 128, 0); }
+
+.mastery-track {
+    width: 120px;
+    height: 10px;
+    margin-top: 2px;
+    border-radius: 5px;
+    background-color: rgba(74, 59, 42, 0.25);
+    overflow: hidden;
+}
+
+.mastery-fill {
+    height: 100%;
+    width: 0;
+    background-color: rgb(245, 196, 67);
+}
+
+.big-toast {
+    position: absolute;
+    top: 38%; left: 8%; right: 8%;
+    padding: 30px 36px;
+    border-radius: 48px;
+    background-color: rgb(245, 196, 67);
+    color: rgb(74, 59, 42);
+    font-size: 46px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    white-space: normal;
+    opacity: 0;
+    scale: 0.8 0.8;
+    transition-property: opacity, scale;
+    transition-duration: 0.25s;
+}
+
+.big-toast--visible { opacity: 1; scale: 1 1; }
+
+/* ---------- M3: shop ---------- */
+.shop-list { width: 100%; }
+
+.shop-row {
+    flex-direction: row;
+    align-items: center;
+    margin: 10px 0;
+    padding: 18px 22px;
+    border-radius: 34px;
+    background-color: rgb(246, 238, 224);
+}
+
+.shop-info { flex-grow: 1; flex-shrink: 1; }
+
+.shop-name {
+    font-size: 38px;
+    -unity-font-style: bold;
+    margin: 0; padding: 0;
+}
+
+.shop-effect {
+    font-size: 28px;
+    color: rgb(130, 112, 92);
+    white-space: normal;
+    margin: 4px 0 0 0; padding: 0;
+}
+
+.shop-buy {
+    flex-direction: row;
+    align-items: center;
+    height: 96px;
+    margin: 0 0 0 16px;
+    padding: 0 26px 0 16px;
+    border-width: 0;
+    border-radius: 34px;
+    background-color: rgb(245, 196, 67);
+}
+
+.shop-buy--poor { opacity: 0.5; }
+
+.shop-cost {
+    margin-left: 10px;
+    font-size: 36px;
+    -unity-font-style: bold;
+}
+
+.shop-max {
+    margin-left: 16px;
+    font-size: 34px;
+    -unity-font-style: bold;
+    color: rgb(130, 112, 92);
+}
+
+.tool-price {
+    font-size: 26px;
+    -unity-font-style: bold;
+    color: rgb(196, 128, 0);
+    margin: 0; padding: 0;
+}

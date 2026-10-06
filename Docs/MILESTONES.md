@@ -8,7 +8,7 @@ Each milestone ends with a playtest by the user in the editor. Next one starts o
 | M1 | Core loop in one grey-box section: shelves with dashed slots, tap-to-tip containers, drag & drop (correct = snap + coin, wrong = soft return + hint), section %, basic juice/haptics. Android build at the end. | ✅ Approved 2026-10-06 (editor/Simulator; device test deferred, no device yet) |
 | M2 | Broom + dirt layer, items under dirt, rare item glow, "Rare find!" moment, Collection Book data (first copy to book, duplicates sold), section 100% before/after | ✅ Approved 2026-10-06 |
 | M2+ | Collection viewer (GDD 9.1.1): tap a found item in the book -> 3D view on a dimmed screen, rotate / zoom / pan, double-tap reset | ✅ Approved 2026-10-06 |
-| M3 | Tools (Magnet, Magnifier, Hand upgrade), Category Mastery auto-fly, coin upgrades, JSON save (sorted stays sorted) | ⏳ |
+| M3 | Tools (Magnet, Hand capacity; Magnifier dropped), Category Mastery auto-fly, coin upgrades, JSON save (sorted stays sorted) | ✅ Approved 2026-10-06 (mastery playtested; Hand stack + Magnet pull not yet playtested by user) |
 | M4 | Venue structure: isometric overview of 4-section warehouse, zoom transition, section locks, venue sale, 3 venues as data | ⏳ |
 | M5 | Helpers, offline progress, ad/IAP interfaces with fake providers, localisation infrastructure | ⏳ |
 
@@ -33,3 +33,14 @@ Each milestone ends with a playtest by the user in the editor. Next one starts o
 | 2026-10-06 | Rare find moment: no blur, a 3D dimmer behind the item instead | Blur needs post-processing on mobile; dim reads the same |
 | 2026-10-06 | Collection Book is in-memory until M3 (save) | Save system is M3 scope |
 | 2026-10-06 | Collection viewer added to M2 (user request): own camera-parented stage, own key light, game input paused while open, returns to the book on close | Builds on the rare-find stage; lighting independent of room mood |
+| 2026-10-06 | ~~ Hand upgrade = faster placement + bigger grab radius; carrying several items is the Magnet's job | GDD 10.1 lists "carry more at once" for Hand, but with one finger that would duplicate Magnet~~ (superseded after playtest) |
+| 2026-10-06 | ~~ Magnet = a tool: carried item pulls up to N same-category items within R; they trail behind and land one after another (wrong shelf: all go back) | GDD 10.1~~ (superseded after playtest) |
+| 2026-10-06 | ~~ Magnifier = a tool: on the floor it is a lens that marks buried items (rares in gold); when carrying an item the right shelf lights up. Upgrade = lens size. No timer/cooldown | Principle 2 (no waiting); keeps the treasure hunt active~~ (superseded after playtest) |
+| 2026-10-06 | Magnet starts locked, bought in the Shop (Tools panel); tapping a locked tool opens the Shop | GDD 5.3: first tool upgrades in the Garage |
+| 2026-10-06 | Category Mastery: single tier, threshold 20 per category (prototype; GDD example is 100). On mastery: loose items of that category fly to the shelf; later box spills of it skip the floor. Shelf label shows progress bar, "*" when mastered | GDD 10.2 tiers stay [AÇIK] |
+| 2026-10-06 | Save: local JSON (`persistentDataPath/save.json`), autosave 1.5 s after any change + on pause/quit. Stores coins, book, mastery, tool levels and the full section (shelf slots, floor poses, buried items, unopened boxes, gzip dirt mask). Opened boxes do not come back | GDD 15.4, principle 1 |
+| 2026-10-06 | "Play again" keeps coins/book/tools/mastery and reshuffles the section; Settings has "Reset all progress" for testing | Prototype convenience |
+| 2026-10-06 | UI numbers use invariant (English) formatting regardless of device region | UI is English (GDD 15.6); Turkish formatting comes with localisation |
+| 2026-10-06 | Invisible guard in front of the shelves stops spilled items from landing on shelf boards | Items on a board looked sorted but were not counted |
+| 2026-10-06 | After M3 playtest: Magnifier removed; Hand = carry capacity 1/2/3 (any kinds, pass over items to pick up); Magnet = continuous pull of same-category items within a small radius (0.35/0.45/0.55 m) while carrying, limit 2/4/6; rest over a shelf `ShelfDepositDwell` (0.3 s) to drop in the matching carried items, the rest stay in hand | User feedback |
+| 2026-10-06 | Mastery also auto-sorts items revealed by sweeping and floor items at the start of a new game / after loading | User feedback (bug) |

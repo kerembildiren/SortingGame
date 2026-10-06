@@ -126,6 +126,15 @@ namespace SortingGame.EditorTools
             database.Categories = new List<CategoryDefinition> { comics, toys, tools };
             database.Items = items;
             database.Containers = new List<ContainerDefinition> { box };
+
+            // ---- Tools (GDD 10.1). Level 1 cost = unlock price. Values: see ToolDefinition. ----
+            database.Tools = new List<ToolDefinition>
+            {
+                // Hand: carry capacity / pick-up radius. Magnet: pull radius / extra items pulled.
+                Tool("hand", ToolType.Hand, overwrite, (0, 1f, 0.10f), (60, 2f, 0.11f), (180, 3f, 0.12f)),
+                Tool("broom", ToolType.Broom, overwrite, (0, 0.38f, 0f), (50, 0.5f, 0f), (150, 0.65f, 0f)),
+                Tool("magnet", ToolType.Magnet, overwrite, (40, 0.35f, 2f), (120, 0.45f, 4f), (300, 0.55f, 6f)),
+            };
             database.Venues = new List<VenueDefinition> { venue };
             EditorUtility.SetDirty(database);
 
@@ -145,7 +154,7 @@ namespace SortingGame.EditorTools
             category.BaseCoinValue = coins;
             category.SlotSize = slotSize;
             category.PlaceSound = sound;
-            category.MasteryThreshold = 100;
+            category.MasteryThreshold = 20; // prototype value: reachable in two playthroughs of the garage
             EditorUtility.SetDirty(category);
             return category;
         }
@@ -177,6 +186,21 @@ namespace SortingGame.EditorTools
             collectible.CostumeColor = new Color(0.90f, 0.22f, 0.22f);
             EditorUtility.SetDirty(collectible);
             return collectible;
+        }
+
+        static ToolDefinition Tool(string id, ToolType type, bool overwrite, params (int cost, float primary, float secondary)[] levels)
+        {
+            var tool = Load<ToolDefinition>($"{ContentFolder}/Tool_{id}.asset", out var isNew);
+            if (!isNew && !overwrite) return tool;
+            tool.Id = id;
+            tool.Type = type;
+            tool.DisplayNameKey = $"tool.{id}";
+            tool.EffectKey = $"tool.{id}.effect";
+            tool.Levels = new List<ToolDefinition.Level>();
+            foreach (var (cost, primary, secondary) in levels)
+                tool.Levels.Add(new ToolDefinition.Level { Cost = cost, Primary = primary, Secondary = secondary });
+            EditorUtility.SetDirty(tool);
+            return tool;
         }
 
         static ContainerDefinition Container(string id, int capacity, bool overwrite)

@@ -49,6 +49,13 @@ namespace SortingGame.Core
             Changed?.Invoke(this);
         }
 
+        /// <summary>Loading a save: set state without raising Changed.</summary>
+        public void Restore(int placedItems, float dirtCleaned)
+        {
+            PlacedItems = Math.Clamp(placedItems, 0, TotalItems);
+            DirtCleaned = HasDirt ? Math.Clamp(dirtCleaned, 0f, 1f) : 0f;
+        }
+
         public void SetDirtCleaned(float fraction)
         {
             if (!HasDirt) return;

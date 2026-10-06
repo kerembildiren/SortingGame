@@ -158,7 +158,10 @@ namespace SortingGame.Section
             }, Ease.InOutQuad, () => SetResting(to, _pickupRotation));
         }
 
-        public void FlyToSlot(ShelfSlot slot, Action onLanded)
+        /// <param name="duration">Defaults to FeelConfig.PlaceDuration.</param>
+        /// <param name="arcHeight">Height of the flight curve; mastery auto-sort uses a visible arc.</param>
+        /// <param name="delay">Wait before taking off (staggered chains); the slot is reserved immediately.</param>
+        public void FlyToSlot(ShelfSlot slot, Action onLanded, float duration = -1f, float arcHeight = 0f, float delay = 0f)
         {
             StopMotion();
             SetPhysics(false);
@@ -166,28 +169,56 @@ namespace SortingGame.Section
             State = ItemState.Flying;
             slot.Reserve();
 
-            var height = Definition.Prefab != null ? 0f : Definition.Placeholder.Size.y * 0.5f;
-            var target = slot.Shelf.transform.TransformPoint(slot.LocalBase + Vector3.up * height);
-            var targetRotation = slot.Shelf.transform.rotation;
-            var from = transform.position;
-            var fromRotation = transform.rotation;
-            var fromScale = transform.localScale;
+            void TakeOff()
+            {
+                var (target, targetRotation) = SlotPose(slot);
+                var from = transform.position;
+                var fromRotation = transform.rotation;
+                var fromScale = transform.localScale;
 
-            _motion = Tween.Run(this, _feel.PlaceDuration, t =>
-            {
-                transform.position = Vector3.Lerp(from, target, t);
-                transform.rotation = Quaternion.Slerp(fromRotation, targetRotation, t);
-                transform.localScale = Vector3.Lerp(fromScale, Vector3.one, t);
-            }, Ease.OutCubic, () =>
-            {
-                transform.SetPositionAndRotation(target, targetRotation);
-                transform.SetParent(slot.Shelf.transform, true);
-                State = ItemState.Placed;
-                slot.Fill(this);
-                Punch();
-                onLanded?.Invoke();
-            });
+                _motion = Tween.Run(this, duration > 0f ? duration : _feel.PlaceDuration, t =>
+                {
+                    transform.position = Vector3.Lerp(from, target, t) + Vector3.up * (Ease.Pulse(t) * arcHeight);
+                    transform.rotation = Quaternion.Slerp(fromRotation, targetRotation, t);
+                    transform.localScale = Vector3.Lerp(fromScale, Vector3.one, t);
+                }, Ease.OutCubic, () =>
+                {
+                    transform.SetPositionAndRotation(target, targetRotation);
+                    transform.SetParent(slot.Shelf.transform, true);
+                    State = ItemState.Placed;
+                    slot.Fill(this);
+                    Punch();
+                    onLanded?.Invoke();
+                });
+            }
+
+            if (delay > 0f) _motion = Tween.Delay(this, delay, TakeOff);
+            else TakeOff();
         }
+
+        /// <summary>Loading a save: straight onto the shelf, no animation, no events.</summary>
+        public void PlaceInstant(ShelfSlot slot)
+        {
+            StopMotion();
+            SetPhysics(false);
+            SetCollidersEnabled(false);
+            var (target, rotation) = SlotPose(slot);
+            transform.SetPositionAndRotation(target, rotation);
+            transform.SetParent(slot.Shelf.transform, true);
+            transform.localScale = Vector3.one;
+            State = ItemState.Placed;
+            slot.Fill(this);
+        }
+
+        (Vector3 position, Quaternion rotation) SlotPose(ShelfSlot slot)
+        {
+            var height = Definition.Prefab != null ? 0f : Definition.Placeholder.Size.y * 0.5f;
+            return (slot.Shelf.transform.TransformPoint(slot.LocalBase + Vector3.up * height), slot.Shelf.transform.rotation);
+        }
+
+        /// <summary>Pose to store in a save: where it rests, not where an animation happens to be.</summary>
+        public (Vector3 position, Quaternion rotation) SavePose =>
+            State is ItemState.Dragging or ItemState.Flying ? (_pickupPosition, _pickupRotation) : (transform.position, transform.rotation);
 
         void Punch()
         {

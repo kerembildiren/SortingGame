@@ -121,6 +121,21 @@ namespace SortingGame.Core
             return count == 0 ? 0f : sum / (count * 255f);
         }
 
+        public long InitialTotal => _initialTotal;
+
+        /// <summary>Copy of the raw amounts, for saving.</summary>
+        public byte[] Export() => (byte[])_amount.Clone();
+
+        /// <summary>Restores a saved mask. <paramref name="initialTotal"/> keeps CleanedFraction meaningful.</summary>
+        public void Import(byte[] amounts, long initialTotal)
+        {
+            if (amounts.Length != _amount.Length) throw new ArgumentException("Dirt mask size mismatch.");
+            Array.Copy(amounts, _amount, amounts.Length);
+            _initialTotal = initialTotal;
+            _currentTotal = 0;
+            foreach (var a in _amount) _currentTotal += a;
+        }
+
         public void ClearAll()
         {
             Array.Clear(_amount, 0, _amount.Length);

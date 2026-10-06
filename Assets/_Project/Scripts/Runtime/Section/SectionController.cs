@@ -26,6 +26,9 @@ namespace SortingGame.Section
         public event Action<SectionProgress> ProgressChanged;
         public event Action<ItemView> ItemRevealed;
         public event Action<ItemView, CollectionBook.FindResult> CollectibleFound;
+        public event Action<CategoryDefinition> CategoryMastered;
+        /// <summary>Something worth saving happened (placement, sweep, box opened, find...).</summary>
+        public event Action StateChanged;
 
         public SectionDefinition Definition { get; private set; }
         public SectionProgress Progress { get; private set; }
@@ -44,6 +47,7 @@ namespace SortingGame.Section
         readonly List<ContainerView> _containers = new();
         readonly List<ItemView> _buried = new();
 
+        GameContext _ctx;
         GameDatabase _database;
         SectionVisuals _visuals;
         FeelConfig _feel;
@@ -59,45 +63,67 @@ namespace SortingGame.Section
         Coroutine _moodTween;
         bool _completed;
         float _mood;
+        int _seed;
+        readonly Dictionary<ItemView, MeshRenderer> _lensMarkers = new();
 
         DirtMask _dirt;
         DirtLayerView _dirtView;
         Material _floorMaterial;
         Material _wallMaterial;
 
-        public void Build(SectionDefinition definition, GameDatabase database, SectionVisuals visuals, Wallet wallet, CollectionBook book, int seed)
+        /// <param name="save">Saved state of this section; null = generate a fresh layout from the seed.</param>
+        public void Build(SectionDefinition definition, GameContext context, int seed, SectionSave save = null)
         {
             Clear();
             Definition = definition;
-            _database = database;
-            _visuals = visuals;
-            _feel = database.Feel;
-            _wallet = wallet;
-            _book = book;
-            _factory ??= new PlaceholderFactory(visuals);
-            _fx ??= new Fx(visuals);
+            _ctx = context;
+            _database = context.Database;
+            _visuals = context.Visuals;
+            _feel = context.Feel;
+            _wallet = context.Wallet;
+            _book = context.Book;
+            _seed = seed;
+            _factory ??= new PlaceholderFactory(_visuals);
+            _fx ??= new Fx(_visuals);
             _root = new GameObject($"Section_{definition.Id}").transform;
             _root.SetParent(transform, false);
 
-            var layout = SectionLayoutGenerator.Generate(definition, c => _database.CommonItemsOf(c).ToList(), seed);
-            var random = new Random(seed);
-
             BuildRoom(definition);
-            BuildDirt(definition, seed);
             BuildShelves(definition);
-            PlaceContainers(layout, random);
-            var taken = _containers.Select(c => new Vector2(c.transform.localPosition.x, c.transform.localPosition.z)).ToList();
-            PlaceBuried(layout, random, taken);
-            PlaceLoose(layout, random, taken);
 
-            Progress = new SectionProgress(layout.TotalItems, HasDirt, database.Balance.DirtProgressWeight);
+            int totalItems;
+            if (save != null && save.SectionId == definition.Id)
+            {
+                totalItems = Restore(save);
+            }
+            else
+            {
+                var layout = SectionLayoutGenerator.Generate(definition, c => _database.CommonItemsOf(c).ToList(), seed);
+                var random = new Random(seed);
+                BuildDirt(definition, seed);
+                PlaceContainers(layout, random);
+                var taken = _containers.Select(c => new Vector2(c.transform.localPosition.x, c.transform.localPosition.z)).ToList();
+                PlaceBuried(layout, random, taken);
+                PlaceLoose(layout, random, taken);
+                totalItems = layout.TotalItems;
+            }
+
+            Progress = new SectionProgress(totalItems, HasDirt, _database.Balance.DirtProgressWeight);
+            Progress.Restore(_shelves.Sum(s => s.FilledCount), DirtCleaned);
             Progress.Changed += OnProgressChanged;
+            _completed = Progress.IsComplete;
 
             // Everything the camera needs to see: floor plus the shelves standing on it.
             var tallest = _shelves.Count == 0 ? 1f : _shelves.Max(s => s.Size.y) + 0.35f;
             ViewBounds = new Bounds(new Vector3(0f, tallest / 2f, 0f), new Vector3(_floorSize.x, tallest, _floorSize.y));
-            ApplyMood(0f);
-            SfxPlayer.Instance?.SetLoop(Sfx.CleanAmbienceLoop, 0f);
+
+            ApplyMood(_completed ? 1f : Progress.Fraction * _feel.ProgressMoodShare);
+            var camera = Camera.main;
+            if (camera != null) camera.backgroundColor = _completed ? _visuals.BackgroundColorClean : _visuals.BackgroundColor;
+            SfxPlayer.Instance?.SetLoop(Sfx.CleanAmbienceLoop, _completed ? 0.6f : 0f);
+
+            // Give the player a moment to see the room before mastered items fly.
+            Tween.Delay(_root, 0.8f, AutoSortAllMastered);
         }
 
         public void Clear()
@@ -110,6 +136,7 @@ namespace SortingGame.Section
             _buried.Clear();
             _dirt = null;
             _dirtView = null;
+            _lensMarkers.Clear();
             _placeStreak = 0;
             _completed = false;
         }
@@ -123,7 +150,7 @@ namespace SortingGame.Section
                 var slot = shelf.NearestFreeSlot(nearPoint);
                 if (slot != null)
                 {
-                    item.FlyToSlot(slot, () => OnLanded(item, shelf));
+                    item.FlyToSlot(slot, () => OnLanded(item, shelf), PlaceDuration);
                     return true;
                 }
             }
@@ -136,10 +163,106 @@ namespace SortingGame.Section
             return false;
         }
 
+        float PlaceDuration => _feel.PlaceDuration;
+
         public void OpenContainer(ContainerView container)
         {
             if (container == null || container.IsOpened) return;
             container.Open(_feel);
+            StateChanged?.Invoke();
+        }
+
+        // ---------- Carrying several items (Hand capacity, Magnet) ----------
+
+        /// <summary>
+        /// Closest pickable common item within <paramref name="radius"/> of a floor point, optionally only of one category.
+        /// Used while dragging: Hand collects anything it passes over, Magnet pulls its own category.
+        /// </summary>
+        public ItemView FindAttachable(Vector3 floorPoint, float radius, CategoryDefinition onlyCategory, ICollection<ItemView> exclude)
+        {
+            ItemView best = null;
+            var bestDistance = radius;
+            foreach (var item in _items)
+            {
+                if (item == null || item.IsCollectible || !item.CanPick || exclude.Contains(item)) continue;
+                if (onlyCategory != null && item.Definition.Category != onlyCategory) continue;
+                var distance = FlatDistance(item.transform.position, floorPoint);
+                if (distance > bestDistance) continue;
+                best = item;
+                bestDistance = distance;
+            }
+            return best;
+        }
+
+        /// <summary>
+        /// Puts every carried item that belongs on <paramref name="shelf"/> into its slots, one after another.
+        /// Returns the delivered items. When <paramref name="releasing"/>, the rest go back where they were picked up
+        /// (no penalty, GDD 7.2); otherwise they stay in hand for the next shelf.
+        /// </summary>
+        public List<ItemView> DeliverStack(IReadOnlyList<ItemView> stack, ShelfView shelf, Vector3 nearPoint, bool releasing)
+        {
+            var delivered = new List<ItemView>();
+            foreach (var item in stack)
+            {
+                if (item.Definition.Category != shelf.Category) continue;
+                var slot = shelf.NearestFreeSlot(nearPoint);
+                if (slot == null) break;
+                var landing = item;
+                landing.FlyToSlot(slot, () => OnLanded(landing, shelf), PlaceDuration, delivered.Count == 0 ? 0f : 0.15f, 0.07f * delivered.Count);
+                delivered.Add(item);
+            }
+
+            if (!releasing) return delivered;
+
+            var misses = stack.Where(i => !delivered.Contains(i)).ToList();
+            foreach (var item in misses) item.ReturnToPickup();
+            if (delivered.Count == 0 && misses.Count > 0)
+            {
+                var correct = ShelfFor(misses[0].Definition.Category);
+                if (correct != null && correct != shelf) correct.FlashHint(_feel.WrongShelfHintDuration);
+                SfxPlayer.Instance?.Play(Sfx.Wrong);
+                WrongShelf?.Invoke(misses[0], correct);
+            }
+            return delivered;
+        }
+
+        static float FlatDistance(Vector3 a, Vector3 b) => Vector2.Distance(new Vector2(a.x, a.z), new Vector2(b.x, b.z));
+
+        // ---------- Category Mastery (GDD 10.2) ----------
+
+        /// <summary>A box spilled an item: mastered categories fly straight to their shelf, the rest tumble.</summary>
+        void SpillFromContainer(ItemDefinition definition, Vector3 position, Quaternion rotation, Vector3 velocity, Vector3 angular)
+        {
+            var view = SpawnItem(definition, position, rotation);
+            if (!definition.IsCollectible && _ctx.Mastery.IsMastered(definition.Category) && AutoSort(view, 0f)) return;
+            view.Launch(velocity, angular);
+        }
+
+        bool AutoSort(ItemView item, float delay)
+        {
+            var shelf = ShelfFor(item.Definition.Category);
+            var slot = shelf != null ? shelf.NearestFreeSlot(item.transform.position) : null;
+            if (slot == null) return false;
+            item.FlyToSlot(slot, () => OnLanded(item, shelf), 0.55f, 0.9f, delay);
+            return true;
+        }
+
+        /// <summary>The mastery moment: every loose item of the category flies to its shelf.</summary>
+        bool IsMastered(ItemView item) => !item.IsCollectible && _ctx.Mastery.IsMastered(item.Definition.Category);
+
+        /// <summary>New game or loaded save: mastered categories lying on the floor tidy themselves up.</summary>
+        void AutoSortAllMastered()
+        {
+            foreach (var category in _database.Categories)
+                if (_ctx.Mastery.IsMastered(category)) AutoSortLoose(category);
+        }
+
+        void AutoSortLoose(CategoryDefinition category)
+        {
+            var loose = CommonItems
+                .Where(i => i.Definition.Category == category && i.State is ItemState.Resting or ItemState.Physics)
+                .ToList();
+            for (var i = 0; i < loose.Count; i++) AutoSort(loose[i], 0.35f + i * 0.08f);
         }
 
         public ShelfView ShelfFor(CategoryDefinition category) => _shelves.FirstOrDefault(s => s.Category == category);
@@ -167,6 +290,14 @@ namespace SortingGame.Section
 
             ItemPlaced?.Invoke(item, shelf, coins);
 
+            if (_ctx.Mastery.RecordPlacement(shelf.Category))
+            {
+                SfxPlayer.Instance?.Play(Sfx.Mastery, 0f);
+                Haptics.Strong();
+                CategoryMastered?.Invoke(shelf.Category);
+                AutoSortLoose(shelf.Category);
+            }
+
             if (shelf.IsFull)
             {
                 shelf.Celebrate();
@@ -176,12 +307,15 @@ namespace SortingGame.Section
             }
 
             Progress.AddPlaced();
+            StateChanged?.Invoke();
         }
 
         // ---------- Rules: dirt ----------
 
         /// <summary>Broom stroke at a floor point. Returns true if any dirt was removed (drives dust + sound).</summary>
-        public bool Sweep(Vector3 worldPoint, float deltaTime)
+        public bool Sweep(Vector3 worldPoint, float deltaTime) => Sweep(worldPoint, deltaTime, _ctx.ToolStats(ToolType.Broom).Primary);
+
+        public bool Sweep(Vector3 worldPoint, float deltaTime, float radius)
         {
             if (_dirt == null || !_dirt.HasDirt || _dirt.CleanedFraction >= 1f) return false;
 
@@ -190,7 +324,7 @@ namespace SortingGame.Section
             var v = local.z / _floorSize.y + 0.5f;
             if (u < -0.1f || u > 1.1f || v < -0.1f || v > 1.1f) return false;
 
-            var rect = _dirt.Brush(u, v, _feel.BroomRadius / _floorSize.x, _feel.BroomStrength * deltaTime);
+            var rect = _dirt.Brush(u, v, radius / _floorSize.x, _feel.BroomStrength * deltaTime);
             if (rect == null) return false;
             var r = rect.Value;
             _dirtView.RefreshRect(r.xMin, r.yMin, r.xMax, r.yMax);
@@ -217,10 +351,18 @@ namespace SortingGame.Section
         void Reveal(ItemView item)
         {
             item.Reveal();
+            if (_lensMarkers.TryGetValue(item, out var marker))
+            {
+                if (marker != null) Destroy(marker.gameObject);
+                _lensMarkers.Remove(item);
+            }
             _fx.Burst(item.transform.position + Vector3.up * 0.1f, _visuals.DirtSpeckColor, 10, 1.2f, 0.07f, 0.5f, 0.5f);
             SfxPlayer.Instance?.Play(Sfx.Reveal);
             Haptics.Light();
             ItemRevealed?.Invoke(item);
+            // Swept free and already mastered: straight to the shelf once it has popped out.
+            if (IsMastered(item)) AutoSort(item, 0.4f);
+            StateChanged?.Invoke();
         }
 
         /// <summary>The last few specks dissolve by themselves (FeelConfig.DirtAutoFinish).</summary>
@@ -250,6 +392,7 @@ namespace SortingGame.Section
             var result = _book.Register(collectible);
             if (!result.IsNew) _wallet.Add(result.DuplicateCoins);
             CollectibleFound?.Invoke(item, result);
+            StateChanged?.Invoke();
         }
 
         // ---------- Progress, mood, renovation ----------
@@ -318,6 +461,103 @@ namespace SortingGame.Section
             if (_wallMaterial != null) _wallMaterial.SetColor("_BaseColor", Color.Lerp(_visuals.WallColor, _visuals.WallColorClean, clean));
         }
 
+        // ---------- Save / load (GDD 15.4) ----------
+
+        public SectionSave Capture()
+        {
+            var save = new SectionSave { SectionId = Definition.Id, Seed = _seed, Completed = _completed };
+
+            for (var s = 0; s < _shelves.Count; s++)
+            for (var k = 0; k < _shelves[s].Slots.Count; k++)
+            {
+                var occupant = _shelves[s].Slots[k].Occupant;
+                if (occupant == null) continue;
+                save.Items.Add(new ItemSave { Id = occupant.Definition.Id, State = ItemSaveState.Placed, Shelf = s, Slot = k });
+            }
+
+            foreach (var item in _items)
+            {
+                if (item == null || item.State is ItemState.Placed or ItemState.Found) continue;
+                var (position, rotation) = item.SavePose;
+                save.Items.Add(new ItemSave
+                {
+                    Id = item.Definition.Id,
+                    State = item.State == ItemState.Buried ? ItemSaveState.Buried : ItemSaveState.Floor,
+                    Position = position,
+                    Rotation = rotation
+                });
+            }
+
+            foreach (var container in _containers)
+            {
+                if (container == null || container.IsOpened) continue;
+                var entry = new ContainerSave
+                {
+                    Id = container.Definition.Id,
+                    Position = container.transform.localPosition,
+                    Yaw = container.transform.localEulerAngles.y
+                };
+                entry.Contents.AddRange(container.Contents.Select(c => c.Id));
+                save.Containers.Add(entry);
+            }
+
+            if (_dirt != null)
+            {
+                save.DirtWidth = _dirt.Width;
+                save.DirtHeight = _dirt.Height;
+                save.DirtInitialTotal = _dirt.InitialTotal;
+                save.DirtData = SaveSystem.Pack(_dirt.Export());
+            }
+            return save;
+        }
+
+        /// <summary>Rebuilds items, boxes and dirt from a save. Returns the number of common items (for the %).</summary>
+        int Restore(SectionSave save)
+        {
+            _seed = save.Seed;
+            if (!string.IsNullOrEmpty(save.DirtData) && save.DirtWidth > 0)
+            {
+                _dirt = new DirtMask(save.DirtWidth, save.DirtHeight);
+                _dirt.Import(SaveSystem.Unpack(save.DirtData), save.DirtInitialTotal);
+                CreateDirtView();
+            }
+
+            var total = 0;
+            foreach (var entry in save.Containers)
+            {
+                var definition = _database.ContainerById(entry.Id);
+                if (definition == null) continue;
+                var contents = entry.Contents.Select(_database.ItemById).Where(i => i != null).ToList();
+                total += contents.Count(i => !i.IsCollectible);
+                CreateContainer(definition, contents, entry.Position, entry.Yaw);
+            }
+
+            foreach (var entry in save.Items)
+            {
+                var definition = _database.ItemById(entry.Id);
+                if (definition == null) continue;
+                if (!definition.IsCollectible) total++;
+                var view = SpawnItem(definition, entry.Position, entry.Rotation);
+                var placeable = entry.State == ItemSaveState.Placed && entry.Shelf < _shelves.Count
+                                && entry.Slot < _shelves[entry.Shelf].Slots.Count && _shelves[entry.Shelf].Slots[entry.Slot].IsFree;
+                if (placeable)
+                {
+                    view.PlaceInstant(_shelves[entry.Shelf].Slots[entry.Slot]);
+                }
+                else if (entry.State == ItemSaveState.Buried && _dirt != null)
+                {
+                    view.Bury(entry.Position, entry.Rotation);
+                    _buried.Add(view);
+                }
+                else
+                {
+                    view.SetResting(entry.Position, entry.Rotation);
+                    if (entry.Position.y > 0.6f) view.Launch(Vector3.zero, Vector3.zero); // saved mid-air
+                }
+            }
+            return total;
+        }
+
         // ---------- Construction ----------
 
         void BuildRoom(SectionDefinition definition)
@@ -350,11 +590,15 @@ namespace SortingGame.Section
             var height = Mathf.Max(16, Mathf.RoundToInt(width * _floorSize.y / _floorSize.x));
             _dirt = new DirtMask(width, height);
             _dirt.Generate(definition.DirtCoverage, seed);
+            CreateDirtView();
+        }
 
+        void CreateDirtView()
+        {
             var go = new GameObject("DirtLayer");
             go.transform.SetParent(_root, false);
             _dirtView = go.AddComponent<DirtLayerView>();
-            _dirtView.Build(_dirt, _floorSize, _visuals, seed);
+            _dirtView.Build(_dirt, _floorSize, _visuals, _seed);
         }
 
         void AddInvisibleWall(string name, Vector3 center, Vector3 size)
@@ -385,6 +629,11 @@ namespace SortingGame.Section
                 _shelves.Add(shelf);
                 x += sizes[i].x + ShelfGap;
             }
+
+            // Spilled items must not land on shelf boards: they would look sorted without being sorted.
+            // Drags and slot flights ignore physics, so this only stops tumbling items.
+            if (_shelves.Count > 0)
+                AddInvisibleWall("ShelfGuard", new Vector3(0f, 1.5f, _floorSize.y / 2f - _shelfZoneDepth - 0.06f), new Vector3(_floorSize.x + 0.4f, 3f, 0.1f));
         }
 
         /// <summary>Free floor: everything in front of the shelves, minus a margin.</summary>
@@ -406,25 +655,30 @@ namespace SortingGame.Section
                 var spot = FindSpot(free, placed, 1.1f, random, null);
                 placed.Add(spot);
 
-                var go = new GameObject($"Container_{content.Container.Id}");
-                go.transform.SetParent(_root, false);
-                go.transform.localPosition = new Vector3(spot.x, 0f, spot.y);
-
                 // Tip towards the open middle of the room and slightly towards the camera, so the spill is visible.
                 var toCentre = new Vector3(free.center.x - spot.x, 0f, free.center.y - spot.y - 0.6f);
                 var yaw = Mathf.Atan2(toCentre.x, toCentre.z) * Mathf.Rad2Deg + Range(random, -25f, 25f);
-                go.transform.localRotation = Quaternion.Euler(0f, yaw, 0f);
 
                 // Collectibles hide among the commons inside the box.
                 var contents = new List<ItemDefinition>(content.Items);
                 foreach (var collectible in content.Collectibles)
                     contents.Insert(random.Next(contents.Count + 1), collectible);
 
-                var view = go.AddComponent<ContainerView>();
-                view.Build(content.Container, contents, _factory);
-                view.SpawnItem = SpawnItem;
-                _containers.Add(view);
+                CreateContainer(content.Container, contents, new Vector3(spot.x, 0f, spot.y), yaw);
             }
+        }
+
+        void CreateContainer(ContainerDefinition definition, List<ItemDefinition> contents, Vector3 localPosition, float yaw)
+        {
+            var go = new GameObject($"Container_{definition.Id}");
+            go.transform.SetParent(_root, false);
+            go.transform.localPosition = localPosition;
+            go.transform.localRotation = Quaternion.Euler(0f, yaw, 0f);
+            var view = go.AddComponent<ContainerView>();
+            view.Build(definition, contents, _factory);
+            view.Spill = SpillFromContainer;
+            view.Emptied += _ => StateChanged?.Invoke();
+            _containers.Add(view);
         }
 
         void PlaceBuried(SectionLayout layout, Random random, List<Vector2> taken)

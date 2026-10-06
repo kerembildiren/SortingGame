@@ -23,6 +23,7 @@ namespace SortingGame.UI
         public event Action RareCardClosed;
         public event Action<CollectibleDefinition> CollectibleViewRequested;
         public event Action ViewerClosed;
+        public event Action ResetProgressRequested;
 
         UIDocument _document;
         VisualElement _root;
@@ -60,7 +61,21 @@ namespace SortingGame.UI
         CollectionBook _book;
         VenueDefinition _venue;
         Camera _camera;
-        readonly List<(ShelfView shelf, Label label)> _shelfLabels = new();
+        readonly List<ShelfLabel> _shelfLabels = new();
+        GameContext _ctx;
+        VisualElement _shop;
+        VisualElement _shopList;
+        Label _bigToast;
+        IVisualElementScheduledItem _bigToastHide;
+
+        class ShelfLabel
+        {
+            public ShelfView Shelf;
+            public VisualElement Root;
+            public Label Name;
+            public VisualElement MasteryTrack;
+            public VisualElement MasteryFill;
+        }
 
         /// <summary>Panel units per screen pixel is 1/UiScale. Used to convert reference-pixel tunables.</summary>
         public float UiScale => Screen.width / ReferenceWidth;
@@ -92,6 +107,8 @@ namespace SortingGame.UI
             // Second row: Collection Book button + coins (GDD 6.1 "Items" button, 9.1 north star).
             _coinRow = Add(_root, new VisualElement(), "coin-row");
             _coinRow.pickingMode = PickingMode.Ignore;
+            var shopButton = Add(_coinRow, new Button(OpenShop), "book-button");
+            Add(shopButton, new Label(Loc.Get("hud.shop")), "book-button-text");
             _bookButton = Add(_coinRow, new Button(OpenBook), "book-button");
             Add(_bookButton, new Label(Loc.Get("hud.book")), "book-button-text");
             _bookBadge = Add(_bookButton, new Label("!"), "book-badge");
@@ -108,37 +125,59 @@ namespace SortingGame.UI
             BuildViewer();
             BuildBanner();
             BuildSettings();
+            BuildShop();
+            _bigToast = Add(_root, new Label(), "big-toast");
             ApplySafeArea();
         }
 
-        public void Bind(SectionController section, Wallet wallet, CollectionBook book, VenueDefinition venue, Camera cam)
+        public void Bind(SectionController section, GameContext context, VenueDefinition venue, Camera cam)
         {
             Unbind();
             _section = section;
-            _wallet = wallet;
-            _book = book;
+            _ctx = context;
+            _wallet = context.Wallet;
+            _book = context.Book;
             _venue = venue;
             _camera = cam;
+            var wallet = _wallet;
 
             _title.text = Loc.Get(section.Definition.DisplayNameKey);
             section.ProgressChanged += OnProgress;
             section.ItemPlaced += OnItemPlaced;
             section.ShelfCompleted += OnShelfCompleted;
             section.SectionCompleted += OnSectionCompleted;
+            section.CategoryMastered += OnCategoryMastered;
             wallet.Changed += OnCoins;
 
             _worldLayer.Clear();
             _shelfLabels.Clear();
             foreach (var shelf in section.Shelves)
             {
-                var label = Add(_worldLayer, new Label(Loc.Get(shelf.Category.DisplayNameKey)), "shelf-label");
-                _shelfLabels.Add((shelf, label));
+                var entry = new ShelfLabel { Shelf = shelf };
+                entry.Root = Add(_worldLayer, new VisualElement(), "shelf-label");
+                entry.Name = Add(entry.Root, new Label(), "shelf-label-text");
+                entry.MasteryTrack = Add(entry.Root, new VisualElement(), "mastery-track");
+                entry.MasteryFill = Add(entry.MasteryTrack, new VisualElement(), "mastery-fill");
+                entry.Root.pickingMode = PickingMode.Ignore;
+                entry.MasteryTrack.pickingMode = PickingMode.Ignore;
+                entry.MasteryFill.pickingMode = PickingMode.Ignore;
+                _shelfLabels.Add(entry);
             }
+            RefreshMastery();
 
             _banner.AddToClassList("hidden");
             SetMomentMode(false);
             OnProgress(section.Progress);
-            _coins.text = wallet.Coins.ToString("N0");
+            _coins.text = wallet.Coins.ToString("N0", Loc.Culture);
+            RefreshToolbar();
+        }
+
+        /// <summary>Loaded straight into a finished section: show the banner without replaying the renovation.</summary>
+        public void ShowCompleteBanner()
+        {
+            _banner.RemoveFromClassList("hidden");
+            _banner.style.opacity = 1f;
+            _banner.style.scale = new Scale(Vector3.one);
         }
 
         void Unbind()
@@ -149,6 +188,7 @@ namespace SortingGame.UI
                 _section.ItemPlaced -= OnItemPlaced;
                 _section.ShelfCompleted -= OnShelfCompleted;
                 _section.SectionCompleted -= OnSectionCompleted;
+                _section.CategoryMastered -= OnCategoryMastered;
             }
             if (_wallet != null) _wallet.Changed -= OnCoins;
         }
@@ -175,12 +215,12 @@ namespace SortingGame.UI
         void LateUpdate()
         {
             if (_camera == null || _root?.panel == null) return;
-            foreach (var (shelf, label) in _shelfLabels)
+            foreach (var entry in _shelfLabels)
             {
-                if (shelf == null) continue;
-                var p = WorldToPanel(shelf.LabelAnchor);
-                label.style.left = p.x;
-                label.style.top = p.y;
+                if (entry.Shelf == null) continue;
+                var p = WorldToPanel(entry.Shelf.LabelAnchor);
+                entry.Root.style.left = p.x;
+                entry.Root.style.top = p.y;
             }
         }
 
@@ -205,12 +245,14 @@ namespace SortingGame.UI
 
         void OnCoins(long total, long delta)
         {
-            _coins.text = total.ToString("N0");
+            _coins.text = total.ToString("N0", Loc.Culture);
             Pulse(_coinPill);
+            if (!_shop.ClassListContains("hidden")) RefreshShop();
         }
 
         void OnItemPlaced(ItemView item, ShelfView shelf, int coins)
         {
+            RefreshMastery();
             if (coins > 0) CoinPopup(item.transform.position, coins);
         }
 
@@ -230,6 +272,104 @@ namespace SortingGame.UI
 
         void OnShelfCompleted(ShelfView shelf) =>
             ShowToast(Loc.Format("hud.shelf_full", Loc.Get(shelf.Category.DisplayNameKey)));
+
+        // ---------- Category Mastery (GDD 10.2) ----------
+
+        void RefreshMastery()
+        {
+            if (_ctx == null) return;
+            foreach (var entry in _shelfLabels)
+            {
+                var category = entry.Shelf.Category;
+                var mastered = _ctx.Mastery.IsMastered(category);
+                entry.Name.text = mastered ? $"{Loc.Get(category.DisplayNameKey)} *" : Loc.Get(category.DisplayNameKey);
+                entry.Root.EnableInClassList("shelf-label--mastered", mastered);
+                entry.MasteryTrack.style.display = mastered ? DisplayStyle.None : DisplayStyle.Flex;
+                entry.MasteryFill.style.width = Length.Percent(_ctx.Mastery.ProgressOf(category) * 100f);
+            }
+        }
+
+        void OnCategoryMastered(CategoryDefinition category)
+        {
+            RefreshMastery();
+            ShowBigToast(Loc.Format("hud.mastered", Loc.Get(category.DisplayNameKey)));
+        }
+
+        void ShowBigToast(string text)
+        {
+            _bigToast.text = text;
+            _bigToast.AddToClassList("big-toast--visible");
+            _bigToastHide?.Pause();
+            _bigToastHide = _bigToast.schedule.Execute(() => _bigToast.RemoveFromClassList("big-toast--visible"));
+            _bigToastHide.ExecuteLater(2600);
+        }
+
+        // ---------- Shop (GDD 10.1 coin upgrades) ----------
+
+        public void OpenShop()
+        {
+            RefreshShop();
+            _shop.RemoveFromClassList("hidden");
+        }
+
+        public void CloseShop() => _shop.AddToClassList("hidden");
+
+        void BuildShop()
+        {
+            _shop = Add(_root, new VisualElement(), "settings");
+            _shop.AddToClassList("hidden");
+            var card = Add(_shop, new VisualElement(), "banner-card");
+            card.AddToClassList("book-card");
+            Add(card, new Label(Loc.Get("hud.shop_title")), "banner-title");
+            _shopList = Add(card, new VisualElement(), "shop-list");
+            Add(card, new Button(CloseShop) { text = Loc.Get("hud.close") }, "primary-button");
+        }
+
+        void RefreshShop()
+        {
+            _shopList.Clear();
+            if (_ctx == null) return;
+            foreach (var tool in _ctx.Database.Tools)
+            {
+                var level = _ctx.Tools.LevelOf(tool);
+                var row = Add(_shopList, new VisualElement(), "shop-row");
+                var info = Add(row, new VisualElement(), "shop-info");
+                Add(info, new Label($"{Loc.Get(tool.DisplayNameKey)}  {(level == 0 ? Loc.Get("hud.locked") : $"Lv {level}/{tool.MaxLevel}")}"), "shop-name");
+
+                var maxed = _ctx.Tools.IsMaxed(tool);
+                var shown = maxed ? tool.Stats(level) : tool.Stats(level + 1);
+                var effect = Loc.Format(tool.EffectKey, shown.Primary, shown.Secondary);
+                Add(info, new Label(maxed ? effect : $"{(level == 0 ? Loc.Get("hud.unlock") : Loc.Get("hud.next"))}: {effect}"), "shop-effect");
+
+                if (maxed)
+                {
+                    Add(row, new Label(Loc.Get("hud.max")), "shop-max");
+                    continue;
+                }
+                var cost = _ctx.Tools.NextCost(tool);
+                var buy = Add(row, new Button(() => Buy(tool)), "shop-buy");
+                Add(buy, new VisualElement(), "coin-icon");
+                Add(buy, new Label(cost.ToString("N0", Loc.Culture)), "shop-cost");
+                buy.EnableInClassList("shop-buy--poor", !_wallet.CanAfford(cost));
+            }
+        }
+
+        void Buy(ToolDefinition tool)
+        {
+            if (_ctx.Tools.TryUpgrade(tool, _wallet))
+            {
+                SfxPlayer.Instance?.Play(Sfx.Purchase, 0f);
+                Haptics.Medium();
+                ShowToast(Loc.Format("hud.bought", Loc.Get(tool.DisplayNameKey), _ctx.Tools.LevelOf(tool)));
+            }
+            else
+            {
+                SfxPlayer.Instance?.Play(Sfx.Wrong, 0f);
+                ShowToast(Loc.Get("hud.not_enough"));
+            }
+            RefreshShop();
+            RefreshToolbar();
+        }
 
         void OnSectionCompleted()
         {
@@ -351,37 +491,58 @@ namespace SortingGame.UI
         void BuildToolbar()
         {
             _toolbar = Add(_root, new VisualElement(), "toolbar");
-            (string key, string glyph, ToolType? tool)[] tools =
+            (string key, string glyph, ToolType tool)[] tools =
             {
                 ("tool.hand", "H", ToolType.Hand),
                 ("tool.broom", "B", ToolType.Broom),
-                ("tool.magnet", "M", null),
-                ("tool.magnifier", "?", null),
+                ("tool.magnet", "M", ToolType.Magnet),
             };
             foreach (var (key, glyph, tool) in tools)
             {
                 var button = Add(_toolbar, new Button(), "tool");
                 Add(button, new Label(glyph), "tool-glyph");
                 Add(button, new Label(Loc.Get(key)), "tool-name");
-                if (tool is { } type)
-                {
-                    _toolButtons[type] = button;
-                    button.clicked += () => SelectTool(type);
-                }
-                else
-                {
-                    button.AddToClassList("tool--locked");
-                    button.clicked += () => ShowToast($"{Loc.Get(key)}: {Loc.Get("tool.coming_soon")}");
-                }
+                var price = Add(button, new Label(), "tool-price");
+                price.name = "price";
+                _toolButtons[tool] = button;
+                button.clicked += () => OnToolClicked(tool);
             }
             SelectTool(ToolType.Hand);
         }
 
+        ToolType _selectedTool = ToolType.Hand;
+
+        void OnToolClicked(ToolType tool)
+        {
+            if (_ctx != null && !_ctx.Owns(tool))
+            {
+                OpenShop(); // locked tools are bought, not waited for (GDD 11.4)
+                return;
+            }
+            SelectTool(tool);
+        }
+
         public void SelectTool(ToolType tool)
         {
+            _selectedTool = tool;
             foreach (var (type, button) in _toolButtons)
                 button.EnableInClassList("tool--selected", type == tool);
             ToolSelected?.Invoke(tool);
+        }
+
+        void RefreshToolbar()
+        {
+            if (_ctx == null) return;
+            foreach (var (type, button) in _toolButtons)
+            {
+                var owned = _ctx.Owns(type);
+                button.EnableInClassList("tool--locked", !owned);
+                var price = button.Q<Label>("price");
+                var definition = _ctx.Database.ToolFor(type);
+                price.text = owned || definition == null ? "" : _ctx.Tools.NextCost(definition).ToString("N0", Loc.Culture);
+                price.style.display = owned ? DisplayStyle.None : DisplayStyle.Flex;
+            }
+            if (!_ctx.Owns(_selectedTool)) SelectTool(ToolType.Hand);
         }
 
         void BuildRareCard()
@@ -455,6 +616,11 @@ namespace SortingGame.UI
                 ToggleSettings();
                 RestartRequested?.Invoke();
             }) { text = Loc.Get("hud.restart") }, "secondary-button");
+            Add(card, new Button(() =>
+            {
+                ToggleSettings();
+                ResetProgressRequested?.Invoke();
+            }) { text = Loc.Get("hud.reset_progress") }, "secondary-button");
             Add(card, new Button(ToggleSettings) { text = Loc.Get("hud.close") }, "primary-button");
             RefreshSettings();
         }

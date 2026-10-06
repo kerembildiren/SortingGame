@@ -23,8 +23,11 @@ namespace SortingGame.Section
         BoxCollider _collider;
         Vector3 _size;
 
-        /// <summary>Called for every spilled item; the section creates the ItemView.</summary>
-        public Func<ItemDefinition, Vector3, Quaternion, ItemView> SpawnItem;
+        /// <summary>
+        /// Called for every spilled item with (definition, position, rotation, velocity, angular velocity).
+        /// The section decides: tumble onto the floor, or fly straight to the shelf when the category is mastered.
+        /// </summary>
+        public Action<ItemDefinition, Vector3, Quaternion, Vector3, Vector3> Spill;
         public event Action<ContainerView> Emptied;
 
         public void Build(ContainerDefinition definition, IEnumerable<ItemDefinition> contents, PlaceholderFactory factory)
@@ -105,14 +108,10 @@ namespace SortingGame.Section
                 var spawn = mouth
                             + side * Random.Range(-_size.x * 0.35f, _size.x * 0.35f)
                             + Vector3.up * Random.Range(0.02f, _size.z * 0.4f);
-                var view = SpawnItem?.Invoke(item, spawn, Random.rotation);
-                if (view != null)
-                {
-                    var velocity = outward * Random.Range(feel.SpillForwardSpeed.x, feel.SpillForwardSpeed.y)
-                                   + Vector3.up * Random.Range(feel.SpillUpSpeed.x, feel.SpillUpSpeed.y)
-                                   + side * Random.Range(-feel.SpillSideSpeed, feel.SpillSideSpeed);
-                    view.Launch(velocity, Random.insideUnitSphere * 8f);
-                }
+                var velocity = outward * Random.Range(feel.SpillForwardSpeed.x, feel.SpillForwardSpeed.y)
+                               + Vector3.up * Random.Range(feel.SpillUpSpeed.x, feel.SpillUpSpeed.y)
+                               + side * Random.Range(-feel.SpillSideSpeed, feel.SpillSideSpeed);
+                Spill?.Invoke(item, spawn, Random.rotation, velocity, Random.insideUnitSphere * 8f);
                 yield return new WaitForSeconds(feel.SpillInterval);
             }
             Contents.Clear();

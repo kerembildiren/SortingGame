@@ -13,6 +13,13 @@ namespace SortingGame.Data
         public List<CategoryDefinition> Categories = new();
         public List<ItemDefinition> Items = new();
         public List<ContainerDefinition> Containers = new();
+        public List<ToolDefinition> Tools = new();
+
+        public ToolDefinition ToolFor(ToolType type) => Tools.Find(t => t != null && t.Type == type);
+
+        public ItemDefinition ItemById(string id) => Items.Find(i => i != null && i.Id == id);
+        public CategoryDefinition CategoryById(string id) => Categories.Find(c => c != null && c.Id == id);
+        public ContainerDefinition ContainerById(string id) => Containers.Find(c => c != null && c.Id == id);
 
         public IEnumerable<ItemDefinition> CommonItemsOf(CategoryDefinition category)
         {
@@ -31,6 +38,9 @@ namespace SortingGame.Data
             CheckUniqueIds(Items, i => i.Id, "Item", errors);
             CheckUniqueIds(Containers, c => c.Id, "Container", errors);
             CheckUniqueIds(Venues, v => v.Id, "Venue", errors);
+            CheckUniqueIds(Tools, t => t.Id, "Tool", errors);
+            foreach (var tool in Tools)
+                if (tool != null && tool.Levels.Count == 0) errors.Add($"Tool '{tool.Id}' has no levels.");
 
             foreach (var item in Items)
                 if (item != null && !item.IsCollectible && item.Category == null)
