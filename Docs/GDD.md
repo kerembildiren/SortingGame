@@ -4,7 +4,7 @@
 |---|---|
 | Sürüm | 0.2 (ilerleme kuralları yenilendi: yardımcılar, Oto Sort güçlendirmesi, sade koleksiyon) |
 | Tarih | 2026-10-06 |
-| Durum | Prototip M4.3'e kadar oynandı ve onaylandı; M5 öncesi ilerleme kuralları güncellendi |
+| Durum | MVP mekanikleri (M0–M7) placeholder görsellerle tamamlandı, editörde oynandı ve onaylandı. Açık kalan: cihaz testi |
 | Platform | iOS ve Android (mobil), dikey ekran |
 | Motor | Unity |
 | Tür | Cozy / düzenleme / koleksiyon / hafif idle |

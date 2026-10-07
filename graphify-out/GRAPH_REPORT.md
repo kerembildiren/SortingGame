@@ -1,29 +1,28 @@
 # Graph Report - SortingGame  (2026-10-07)
 
 ## Corpus Check
-- 87 files · ~64,887 words
+- 87 files · ~65,024 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 299 file(s) not represented in the graph (top: .meta 199, .asset 83, (none) 4)
 
 ## Summary
-- 1573 nodes · 4100 edges · 88 communities (57 shown, 31 thin omitted)
-- Extraction: 88% EXTRACTED · 12% INFERRED · 0% AMBIGUOUS · INFERRED: 490 edges (avg confidence: 0.89)
+- 1575 nodes · 4103 edges · 88 communities (56 shown, 32 thin omitted)
+- Extraction: 88% EXTRACTED · 12% INFERRED · 0% AMBIGUOUS · INFERRED: 492 edges (avg confidence: 0.89)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `54a699c8`
+- Built from commit: `39e6245b`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
-- .PlaceBuried
 - GDD — Chubby's Clutter (çalışma adı)
 - ShelfInspector
 - unityengine
 - ContentBuilder
-- ItemView
+- .FlyToSlot
 - Sfx
-- DragController
+- ToolType
 - SectionProgress
 - 5. Mekânlar ve bölümler
 - CollectionViewer
@@ -36,63 +35,60 @@
 - ShelfShowcase
 - SectionHud
 - SectionController
-- ToolDefinition
-- GameContext
+- SaveSystem
+- RoomView
 - .Capture
 - 11. Ekonomi ve gelir modeli
 - 7. Etkileşim ve kontroller
 - 16. MVP kapsamı
 - 6. Görünümler ve kamera
-- .Awake
+- Loc
 - DirtMask
 - OverviewController
 - PlaceholderFactory
 - GameDatabase
 - M5 architecture (quick map)
 - GameBootstrap
-- SaveData
+- VenueProgressTests
 - Session log
 - .Run
-- SectionDefinition
+- VenueProgress
 - HelperView
 - ShelfView
 - ItemDefinition
 - RareFindPresenter
 - PlaceholderVisual
-- .ShowOverviewNow
 - ProceduralTextures
-- 15. Teknik notlar (Unity)
+- CategoryDefinition
 - EconomyTests
 - .LoadIntoSection
-- SectionSave
+- SaveData
 - CoreLoopTests
-- CategoryDefinition
-- VenueFlowTests
+- .CreateMainScene
+- .UseTestSave
 - ItemState
-- VenueState
-- DirtLayerView
+- AutoSortBoost
+- .Sweep
 - HelperDefinition
-- .Get
-- M1 architecture (quick map)
+- .Format
+- ToolDefinition
 - MonoBehaviour
 - CameraFitter
-- ShelfInspectTests
 - HelperTests
-- ToolType
-- RoomView
-- Haptics
-- BalanceConfig
+- .Bind
+- .ShowOverviewNow
 - Sorting Game (working title: Chubby's Clutter)
 - Mode
-- .SwitchingLanguage_ReloadsInPlace_WithEveryTextTranslated
-- Progress & Handoff
-- .Bind
-- SectionVisuals
-- Activity
-- FeelConfig
+- DragController
+- VenueDefinition
+- .Awake
+- .Build
+- ContainerView
 - 8. Eşyalar ve kategoriler
-- ShelfSlot
-- 10. Otomasyon ve ilerleme
+- ItemView
+- Wallet
+- 9. Koleksiyon sistemi
+- SectionDefinition
 
 ## God Nodes (most connected - your core abstractions)
 1. `SectionHud` - 119 edges
@@ -113,15 +109,15 @@
   Docs/GDD.md → Assets/_Project/Scripts/Runtime/Core/CollectionBook.cs
 - `8.1 Eşya türleri` --references--> `ContainerDefinition`  [INFERRED]
   Docs/GDD.md → Assets/_Project/Scripts/Runtime/Data/ContainerDefinition.cs
+- `9.1.1 Vitrin (`CollectionViewer`) [KARAR]` --references--> `CollectionViewer`  [INFERRED]
+  Docs/GDD.md → Assets/_Project/Scripts/Runtime/Section/CollectionViewer.cs
 - `Economy report` --references--> `ContentBuilder`  [INFERRED]
   Docs/ECONOMY.md → Assets/_Project/Scripts/Editor/ContentBuilder.cs
-- `M1 architecture (quick map)` --references--> `ContentBuilder`  [INFERRED]
-  Docs/PROGRESS.md → Assets/_Project/Scripts/Editor/ContentBuilder.cs
 
 ## Import Cycles
 - None detected.
 
-## Communities (88 total, 31 thin omitted)
+## Communities (88 total, 32 thin omitted)
 
 ### Community 1 - "GDD — Chubby's Clutter (çalışma adı)"
 Cohesion: 0.20
@@ -132,23 +128,23 @@ Cohesion: 0.09
 Nodes (13): ShelfInspectView, Distance, FitDistance, Focus, IsGliding, PanLimit, ShelfInspector, IsOpen (+5 more)
 
 ### Community 3 - "unityengine"
-Cohesion: 0.07
-Nodes (7): SortingGame.Tests, SortingGame.Data, SortingGame.UI, SortingGame.Core, SortingGame.Overview, SortingGame.EditorTools, SortingGame.Section
+Cohesion: 0.06
+Nodes (9): BuildTools, SortingGame.Tests, SortingGame.Data, SortingGame.UI, SortingGame.Core, SortingGame.Overview, SortingGame.EditorTools, SortingGame.Section (+1 more)
 
-### Community 5 - "ItemView"
-Cohesion: 0.14
-Nodes (9): ItemView, CanPick, CanTapToFind, Definition, IsCollectible, IsRare, SavePose, State (+1 more)
+### Community 5 - ".FlyToSlot"
+Cohesion: 0.15
+Nodes (5): ShelfSlot, IsFree, IsReserved, Occupant, WorldBase
 
 ### Community 6 - "Sfx"
 Cohesion: 0.06
 Nodes (29): Sfx, BookStamp, CleanAmbienceLoop, Coin, HelperChirp, Magnet, Mastery, Pickup (+21 more)
 
-### Community 7 - "DragController"
-Cohesion: 0.12
-Nodes (6): DragController, Capacity, Carried, Fitter, InputEnabled, Tool
+### Community 7 - "ToolType"
+Cohesion: 0.32
+Nodes (4): ToolType, Broom, Hand, Magnet
 
 ### Community 8 - "SectionProgress"
-Cohesion: 0.14
+Cohesion: 0.15
 Nodes (12): SectionProgress, CollectiblesRemaining, DirtCleaned, Fraction, HasDirt, IsComplete, OnlyCollectiblesLeft, Percent (+4 more)
 
 ### Community 9 - "5. Mekânlar ve bölümler"
@@ -156,12 +152,12 @@ Cohesion: 0.29
 Nodes (7): 5.1 Yapı [KARAR], 5.2 İlerleme sırası [VARSAYILAN], 5.3 Mekân merdiveni (taslak), 5.4 Bölüm kilitleri [VARSAYILAN], 5.5 Hafif renovasyon [KARAR], 5.6 Mekânın tamamlanması [KARAR], 5. Mekânlar ve bölümler
 
 ### Community 10 - "CollectionViewer"
-Cohesion: 0.08
-Nodes (20): OrbitView, IsIdleSpinning, Pan, Pitch, Yaw, Zoom, CollectionViewer, FrustumHeight (+12 more)
+Cohesion: 0.09
+Nodes (13): OrbitView, IsIdleSpinning, Pan, Pitch, Yaw, Zoom, CollectionViewer, FrustumHeight (+5 more)
 
 ### Community 13 - "GameFlow"
 Cohesion: 0.12
-Nodes (9): GameFlow, ActiveSection, Busy, Current, Data, Venue, Screen, Overview (+1 more)
+Nodes (10): GameFlow, ActiveSection, Busy, Current, Data, Venue, Screen, Overview (+2 more)
 
 ### Community 14 - "12. Görsel yön"
 Cohesion: 0.40
@@ -172,24 +168,24 @@ Cohesion: 0.40
 Nodes (5): 4.1 Anlık döngü (saniyeler), 4.2 Oturum döngüsü (1–5 dakika), 4.3 Meta döngü (günler/haftalar), 4.4 Kaynak akışı, 4. Oyun döngüleri
 
 ### Community 18 - "SectionHud"
-Cohesion: 0.08
-Nodes (9): SectionHud, CurrentMode, IsBannerVisible, IsBookOpen, IsBoostOpen, IsInspecting, IsMapOpen, TitleText (+1 more)
+Cohesion: 0.06
+Nodes (10): SectionHud, CurrentMode, IsBannerVisible, IsBookOpen, IsBoostOpen, IsInspecting, IsMapOpen, TitleText (+2 more)
 
 ### Community 19 - "SectionController"
-Cohesion: 0.06
+Cohesion: 0.07
 Nodes (17): SectionController, AutoSortCategory, CanStartAutoSort, Collectibles, Containers, Definition, DirtCleaned, HasDirt (+9 more)
 
-### Community 20 - "ToolDefinition"
-Cohesion: 0.07
-Nodes (13): AutoSortBoost, Charges, FileSaveStorage, ISaveStorage, SaveSystem, ToolProgress, Level, ToolDefinition (+5 more)
+### Community 20 - "SaveSystem"
+Cohesion: 0.13
+Nodes (5): FileSaveStorage, ISaveStorage, SaveSystem, MemoryStorage, 2026-10-06 — M3 implemented
 
-### Community 21 - "GameContext"
-Cohesion: 0.16
-Nodes (5): GameContext, Feel, HelperCrew, Fx, Helpers
+### Community 21 - "RoomView"
+Cohesion: 0.13
+Nodes (7): SectionVisuals, RoomView, Centre, LabelAnchor, Section, Size, Status
 
 ### Community 22 - ".Capture"
 Cohesion: 0.13
-Nodes (4): TestGame, Boot, TestSnapshots, 2026-10-06 — M4.3 implemented (pre-M5 user requests)
+Nodes (6): TestSnapshots, VenueFlowTests, Boot, Flow, Section, 2026-10-06 — M4 implemented
 
 ### Community 23 - "11. Ekonomi ve gelir modeli"
 Cohesion: 0.33
@@ -207,45 +203,41 @@ Nodes (4): 16.1 Dahil, 16.2 Dahil değil, 16.3 MVP başarı kriteri [VARSAYILAN]
 Cohesion: 0.50
 Nodes (4): 6.1 Genel bakış (`OverviewView`) [KARAR], 6.2 Bölüm görünümü (`SectionView`) [KARAR], 6.3 Ekran yönü [KARAR], 6. Görünümler ve kamera
 
-### Community 27 - ".Awake"
-Cohesion: 0.07
-Nodes (14): EconomyReport, LanguageInfo, Loc, Culture, Language, Languages, SavedLanguage, LocTests (+6 more)
+### Community 27 - "Loc"
+Cohesion: 0.09
+Nodes (9): LanguageInfo, Loc, Culture, Language, Languages, SavedLanguage, LocTests, Database (+1 more)
 
 ### Community 28 - "DirtMask"
 Cohesion: 0.15
 Nodes (7): DirtMask, CleanedFraction, HasDirt, Height, InitialTotal, Width, DirtMaskTests
 
 ### Community 29 - "OverviewController"
-Cohesion: 0.11
-Nodes (6): OverviewController, BuildingBounds, InputEnabled, IsActive, Rooms, M4 architecture (quick map)
+Cohesion: 0.14
+Nodes (5): OverviewController, BuildingBounds, InputEnabled, IsActive, Rooms
 
 ### Community 31 - "GameDatabase"
-Cohesion: 0.18
+Cohesion: 0.22
 Nodes (4): GameDatabase, Album, LanguageEntry, GameDatabaseTests
 
 ### Community 32 - "M5 architecture (quick map)"
-Cohesion: 0.14
-Nodes (10): FakeAdProvider, IsRewardedReady, ShownCount, FakeStoreProvider, LastProductId, IAdProvider, IsRewardedReady, IStoreProvider (+2 more)
+Cohesion: 0.11
+Nodes (15): FakeAdProvider, IsRewardedReady, ShownCount, FakeStoreProvider, LastProductId, IAdProvider, IsRewardedReady, IStoreProvider (+7 more)
 
 ### Community 33 - "GameBootstrap"
-Cohesion: 0.09
+Cohesion: 0.10
 Nodes (15): GameBootstrap, Book, Context, Crew, Data, Drag, Flow, Hud (+7 more)
-
-### Community 34 - "SaveData"
-Cohesion: 0.17
-Nodes (7): SaveData, SectionStatus, Percent, VenueProgress, VenueStatus, Fraction, VenueProgressTests
 
 ### Community 35 - "Session log"
 Cohesion: 0.15
-Nodes (11): BuildTools, 2026-10-06 — M0 done, approved, 2026-10-06 — M1 implemented and approved (committed), 2026-10-06 — M2 implemented, 2026-10-06 — M3 round 2 (user feedback), 2026-10-06 — M4.1 implemented (playtest follow-ups), 2026-10-06 — M4.x approved; progression redesign written down (no code), 2026-10-06 — M5 approved; M6 implemented (helpers) (+3 more)
+Nodes (13): ShelfInspectTests, Boot, Section, 2026-10-06 — M0 done, approved, 2026-10-06 — M1 implemented and approved (committed), 2026-10-06 — M3 round 2 (user feedback), 2026-10-06 — M4.1 implemented (playtest follow-ups), 2026-10-06 — M4.3 implemented (pre-M5 user requests) (+5 more)
 
-### Community 37 - "SectionDefinition"
+### Community 37 - "VenueProgress"
 Cohesion: 0.19
-Nodes (5): RoomIncome, SectionDefinition, TotalSlotCount, VenueDefinition, 15.2 Veri odaklı tasarım
+Nodes (9): SectionStatus, Percent, VenueProgress, VenueState, Completed, Locked, Open, VenueStatus (+1 more)
 
 ### Community 38 - "HelperView"
-Cohesion: 0.13
-Nodes (10): HelperView, Capacity, CarriedCount, Current, Definition, IsHappy, PetCount, RoomNeedsWork (+2 more)
+Cohesion: 0.08
+Nodes (17): Activity, Idle, Picking, Placing, ToItem, ToShelf, Wandering, HelperView (+9 more)
 
 ### Community 39 - "ShelfView"
 Cohesion: 0.15
@@ -253,71 +245,59 @@ Nodes (7): ShelfView, Category, FilledCount, HasFreeSlot, IsFull, LabelAnchor, S
 
 ### Community 40 - "ItemDefinition"
 Cohesion: 0.06
-Nodes (17): CollectionBook, FoundIds, ContainerContent, SectionLayoutGenerator, CollectibleDefinition, IsMascot, ItemRarity, Common (+9 more)
+Nodes (18): CollectionBook, FoundIds, ContainerContent, SectionLayout, TotalItems, SectionLayoutGenerator, CollectibleDefinition, IsMascot (+10 more)
 
 ### Community 41 - "RareFindPresenter"
 Cohesion: 0.17
 Nodes (5): RareFindPresenter, DisplayHeight, DisplaySize, IsPresenting, PresentedItem
 
 ### Community 42 - "PlaceholderVisual"
-Cohesion: 0.15
-Nodes (10): ContainerDefinition, PlaceholderShape, Book, Capsule, Cube, Cylinder, Rod, Sphere (+2 more)
+Cohesion: 0.13
+Nodes (14): PlaceholderShape, Book, Capsule, Cube, Cylinder, Rod, Sphere, PlaceholderVisual (+6 more)
 
 ### Community 44 - "ProceduralTextures"
 Cohesion: 0.29
 Nodes (5): ProceduralTextures, Heart, Rays, SoftDot, 2026-10-06 — Personal PC set up; glow fix
 
-### Community 45 - "15. Teknik notlar (Unity)"
-Cohesion: 0.40
-Nodes (5): 15.1 Genel, 15.3 Performans, 15.4 Kayıt, 15.5 Entegrasyonlar [AÇIK], 15. Teknik notlar (Unity)
+### Community 45 - "CategoryDefinition"
+Cohesion: 0.12
+Nodes (11): AutoSortPack, BalanceConfig, CategoryDefinition, ContainerDefinition, ShelfEntry, 15.1 Genel, 15.2 Veri odaklı tasarım, 15.3 Performans (+3 more)
 
 ### Community 46 - "EconomyTests"
-Cohesion: 0.15
-Nodes (4): EconomyModel, Purchase, EconomyTests, Database
+Cohesion: 0.14
+Nodes (5): EconomyModel, Purchase, RoomIncome, EconomyTests, Database
 
-### Community 48 - "SectionSave"
-Cohesion: 0.21
-Nodes (8): ContainerSave, IdCount, ItemSave, ItemSaveState, Buried, Floor, Placed, SectionSave
+### Community 47 - ".LoadIntoSection"
+Cohesion: 0.20
+Nodes (3): BigRoomTests, TestGame, Boot
 
-### Community 52 - "VenueFlowTests"
-Cohesion: 0.11
-Nodes (5): VenueFlowTests, Boot, Flow, Section, 2026-10-06 — M4 implemented
+### Community 48 - "SaveData"
+Cohesion: 0.20
+Nodes (10): ContainerSave, IdCount, ItemSave, ItemSaveState, Buried, Floor, Placed, SaveData (+2 more)
+
+### Community 50 - "CoreLoopTests"
+Cohesion: 0.26
+Nodes (3): CoreLoopTests, Section, 2026-10-06 — M5 implemented (new progression rules)
 
 ### Community 53 - "ItemState"
 Cohesion: 0.25
 Nodes (8): ItemState, Buried, Dragging, Flying, Found, Physics, Placed, Resting
 
-### Community 54 - "VenueState"
-Cohesion: 0.50
-Nodes (4): VenueState, Completed, Locked, Open
-
 ### Community 56 - "HelperDefinition"
-Cohesion: 0.12
-Nodes (8): HelperProgress, Wallet, Coins, HelperDefinition, MaxLevel, Level, HelperProgressTests, WalletTests
+Cohesion: 0.17
+Nodes (5): HelperProgress, HelperDefinition, MaxLevel, Level, HelperProgressTests
+
+### Community 58 - "ToolDefinition"
+Cohesion: 0.20
+Nodes (6): ToolProgress, Level, ToolDefinition, MaxLevel, StartsOwned, ProgressionTests
 
 ### Community 60 - "CameraFitter"
-Cohesion: 0.18
-Nodes (6): CameraFitter, CanPan, PanMax, PanMin, PanX, 2026-10-06 — M4.2 implemented (big rooms)
-
-### Community 61 - "ShelfInspectTests"
-Cohesion: 0.12
-Nodes (3): ShelfInspectTests, Boot, Section
+Cohesion: 0.14
+Nodes (7): FeelConfig, CameraFitter, CanPan, PanMax, PanMin, PanX, 2026-10-06 — M4.2 implemented (big rooms)
 
 ### Community 62 - "HelperTests"
-Cohesion: 0.25
+Cohesion: 0.24
 Nodes (5): HelperTests, Boot, ClosedBoxes, Placed, Section
-
-### Community 63 - "ToolType"
-Cohesion: 0.29
-Nodes (4): ToolType, Broom, Hand, Magnet
-
-### Community 64 - "RoomView"
-Cohesion: 0.18
-Nodes (6): RoomView, Centre, LabelAnchor, Section, Size, Status
-
-### Community 66 - "BalanceConfig"
-Cohesion: 0.20
-Nodes (3): ProjectSetup, AutoSortPack, BalanceConfig
 
 ### Community 67 - "Sorting Game (working title: Chubby's Clutter)"
 Cohesion: 0.33
@@ -327,49 +307,61 @@ Nodes (5): Git rules, graphify, Session routine, Sorting Game (working title: Ch
 Cohesion: 0.67
 Nodes (3): Mode, Overview, Section
 
-### Community 72 - "Progress & Handoff"
-Cohesion: 0.25
-Nodes (6): Continuing on a new machine (checklist), Current state, Environment notes, M4.2 plan + task list (tick as done), M4.3 architecture (quick map), Progress & Handoff
-
-### Community 75 - "Activity"
-Cohesion: 0.29
-Nodes (7): Activity, Idle, Picking, Placing, ToItem, ToShelf, Wandering
-
-### Community 76 - "FeelConfig"
+### Community 71 - "DragController"
 Cohesion: 0.11
-Nodes (5): Ease, FeelConfig, ContainerView, Definition, IsOpened
+Nodes (6): DragController, Capacity, Carried, Fitter, InputEnabled, Tool
+
+### Community 74 - ".Awake"
+Cohesion: 0.17
+Nodes (5): GameContext, Feel, HelperCrew, Fx, Helpers
+
+### Community 75 - ".Build"
+Cohesion: 0.22
+Nodes (5): EconomyReport, Economy report, Income: coins a room pays when everything is shelved, Reference player, Shop prices
+
+### Community 76 - "ContainerView"
+Cohesion: 0.13
+Nodes (4): Ease, ContainerView, Definition, IsOpened
 
 ### Community 78 - "8. Eşyalar ve kategoriler"
 Cohesion: 0.50
 Nodes (4): 8.1 Eşya türleri, 8.2 Kategoriler [KARAR], 8.3 Eşya çeşitliliği, 8. Eşyalar ve kategoriler
 
-### Community 79 - "ShelfSlot"
-Cohesion: 0.33
-Nodes (5): ShelfSlot, IsFree, IsReserved, Occupant, WorldBase
+### Community 79 - "ItemView"
+Cohesion: 0.10
+Nodes (10): ItemView, CanPick, CanTapToFind, Definition, IsCollectible, IsRare, SavePose, State (+2 more)
 
-### Community 83 - "10. Otomasyon ve ilerleme"
-Cohesion: 0.40
-Nodes (5): 10.1 Aletler (`Tool`) [KARAR], 10.2 Oto Sort güçlendirmesi (`AutoSortBoost`) [KARAR], 10.3 Yardımcılar (`Helper`) [KARAR], 10.4 Ölçek büyüdükçe oyuncunun rolü, 10. Otomasyon ve ilerleme
+### Community 84 - "Wallet"
+Cohesion: 0.38
+Nodes (3): Wallet, Coins, WalletTests
+
+### Community 87 - "9. Koleksiyon sistemi"
+Cohesion: 0.29
+Nodes (7): 9.1.1 Vitrin (`CollectionViewer`) [KARAR], 9.1 Koleksiyon Kitabı (`CollectionBook`) [KARAR], 9.2 Maskot [KARAR], 9.3 Chubby bulma anı [KARAR], 9.4 Nadir (mavi) eşyalar [KARAR], 9.5 Set bonusları [AÇIK], 9. Koleksiyon sistemi
+
+### Community 95 - "SectionDefinition"
+Cohesion: 0.16
+Nodes (3): ContainerEntry, SectionDefinition, TotalSlotCount
 
 ## Knowledge Gaps
 - **301 isolated node(s):** `Charges`, `FoundIds`, `Width`, `Height`, `HasDirt` (+296 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 534 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **31 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 535 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **32 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `SectionController` connect `SectionController` to `.PlaceBuried`, `unityengine`, `ItemView`, `DragController`, `SectionProgress`, `Fx`, `GameFlow`, `.ShelfFor`, `SectionHud`, `GameContext`, `.Awake`, `DirtMask`, `PlaceholderFactory`, `GameDatabase`, `GameBootstrap`, `.Run`, `SectionDefinition`, `HelperView`, `ShelfView`, `ItemDefinition`, `SectionSave`, `CoreLoopTests`, `CategoryDefinition`, `VenueFlowTests`, `DirtLayerView`, `HelperDefinition`, `M1 architecture (quick map)`, `MonoBehaviour`, `ShelfInspectTests`, `HelperTests`, `.Bind`, `SectionVisuals`, `FeelConfig`, `.Restore`?**
-  _High betweenness centrality (0.174) - this node is a cross-community bridge._
+- **Why does `SectionController` connect `SectionController` to `.PlaceBuried`, `unityengine`, `SectionProgress`, `Fx`, `GameFlow`, `.ShelfFor`, `SectionHud`, `RoomView`, `.Capture`, `DirtMask`, `PlaceholderFactory`, `GameDatabase`, `GameBootstrap`, `Session log`, `HelperView`, `ShelfView`, `ItemDefinition`, `Vector3`, `CategoryDefinition`, `SaveData`, `CoreLoopTests`, `.Sweep`, `MonoBehaviour`, `CameraFitter`, `HelperTests`, `.Bind`, `.Restore`, `DragController`, `.Awake`, `ContainerView`, `ItemView`, `Wallet`, `SectionDefinition`?**
+  _High betweenness centrality (0.176) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `SectionHud` (e.g. with `M1 architecture (quick map)` and `M4 architecture (quick map)`) actually correct?**
   _`SectionHud` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `Charges`, `FoundIds`, `Width` to the rest of the system?**
   _301 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `ShelfInspector` be split into smaller, more focused modules?**
-  _Cohesion score 0.08502415458937199 - nodes in this community are weakly interconnected._
-- **Why does `M1 architecture (quick map)` connect `M1 architecture (quick map)` to `ContentBuilder`, `ItemView`, `Sfx`, `DragController`, `SectionProgress`, `CollectionViewer`, `.ShelfFor`, `SectionHud`, `SectionController`, `ToolDefinition`, `GameContext`, `DirtMask`, `PlaceholderFactory`, `GameBootstrap`, `.Run`, `SectionDefinition`, `ShelfView`, `ItemDefinition`, `RareFindPresenter`, `CoreLoopTests`, `DirtLayerView`, `HelperDefinition`, `.Get`, `MonoBehaviour`, `CameraFitter`, `ToolType`, `BalanceConfig`, `Progress & Handoff`, `SectionVisuals`, `FeelConfig`?**
-  _High betweenness centrality (0.118) - this node is a cross-community bridge._
+  _Cohesion score 0.09090909090909091 - nodes in this community are weakly interconnected._
+- **Why does `M1 architecture (quick map)` connect `ItemView` to `ContentBuilder`, `.FlyToSlot`, `Sfx`, `ToolType`, `SectionProgress`, `CollectionViewer`, `SectionHud`, `SectionController`, `RoomView`, `DirtMask`, `PlaceholderFactory`, `M5 architecture (quick map)`, `GameBootstrap`, `.Run`, `ShelfView`, `ItemDefinition`, `RareFindPresenter`, `CategoryDefinition`, `.Get`, `CoreLoopTests`, `.CreateMainScene`, `.Sweep`, `ToolDefinition`, `MonoBehaviour`, `CameraFitter`, `DragController`, `.Awake`, `ContainerView`, `Wallet`, `SectionDefinition`?**
+  _High betweenness centrality (0.117) - this node is a cross-community bridge._
 - **Are the 3 inferred relationships involving `GameBootstrap` (e.g. with `2026-10-06 — M3 implemented` and `M1 architecture (quick map)`) actually correct?**
   _`GameBootstrap` has 3 INFERRED edges - model-reasoned connections that need verification._
 - **Should `unityengine` be split into smaller, more focused modules?**
-  _Cohesion score 0.06795786612300374 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.0638432364096081 - nodes in this community are weakly interconnected._

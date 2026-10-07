@@ -4,11 +4,17 @@ Living notes so any session (any machine, any Claude account) can pick up where 
 Update this file at the end of every work chunk, before committing. Newest entry on top in the log.
 
 ## Current state
-- **Active milestone:** M7 (localisation infrastructure, balance pass) implemented, tests green (EditMode 69/69, PlayMode 18/18), screenshots reviewed, Android APK check: builds (41 MB, 0 errors). **Waiting for the user's playtest.** M6 was playtested and approved on 2026-10-07.
-- **Still open in M7:** the on-device test. There is no Android device yet. When one is there: `tools/unity.sh android`, install `Builds/Android/SortingGame.apk`, and check frame rate in a 300-item room, touch sizes, pinch in the shelf close-up and the collection viewer, haptics, Turkish letters with the device font, safe area.
-- **Next concrete step:** apply M7 playtest feedback. After that the planned milestones are done; what comes next is the user's call (real art and sound, more venues, real ad / store SDKs, the device test).
-- **Blocking / waiting on user:** playtest of M7.
-- **Known issue:** mouse-wheel zoom in the shelf close-up does not work in the editor (user: not important, test pinch on a device).
+- **Active milestone:** none. M0 to M7 are implemented, playtested in the editor and approved (M7 on 2026-10-07). Last full run: EditMode 69/69, PlayMode 18/18, Android development APK builds (41 MB).
+- **Open item: on-device test.** There is no Android device yet. When one is there: `tools/unity.sh android`, install `Builds/Android/SortingGame.apk`, and check
+  - frame rate in a 300-item room (Warehouse), with both helpers and Auto Sort running,
+  - touch sizes: picking small items, the tool bar, the Shop and Auto Sort rows,
+  - pinch and two-finger gestures in the shelf close-up and the collection viewer (mouse-wheel zoom does not work in the editor; never checked on touch),
+  - haptics, sound levels,
+  - Turkish letters with the device font (fine in the editor), text that does not fit,
+  - safe area on a notched screen.
+- **Next concrete step:** nothing is planned. Ask the user what comes next. Candidates from the GDD: real models and sounds instead of placeholders (12, 14), more venues (5.3), real ad and store SDKs behind `IAdProvider` / `IStoreProvider` (15.5), final Turkish translation, open questions in GDD 18 (set bonus, premium currency, cloud save).
+- **Blocking / waiting on user:** the next direction; an Android device for the device test.
+- **Pushed:** `origin/main` has everything up to M7 (2026-10-07). Still: push only when the user asks.
 - **User intent:** mechanics first, limits/numbers later. Helpers and upgrades should not be cheap; the game should stay playable for a long time.
 
 ## M7 architecture (quick map)
@@ -100,6 +106,10 @@ Update this file at the end of every work chunk, before committing. Newest entry
 - graphify setup on a new machine (once, in project root): `graphify hook install` (git hooks are not versioned) and `graphify claude install` (writes machine-local `.claude/settings.json`; rename it to `.claude/settings.local.json`, which is git-ignored, and revert any duplicate graphify section it adds to CLAUDE.md). `graphify-out/` itself is versioned.
 
 ## Session log
+### 2026-10-07 — M7 approved
+- User playtested M7 in the editor: approved as it is. Commits up to M7 were pushed to `origin/main` at the user's request.
+- All planned milestones are done; the device test is the only open item.
+
 ### 2026-10-07 — M6 approved; M7 implemented (localisation, balance)
 - User playtested M6: approved as it is.
 - String tables in text files, language switch in Settings, Turkish draft table. Own small system instead of the Unity Localization package (decision in MILESTONES).
