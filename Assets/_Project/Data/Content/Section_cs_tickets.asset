@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a5b8d5a3cd7834896200dca1053b20, type: 3}
+  m_Name: Section_cs_tickets
+  m_EditorClassIdentifier: SortingGame.Runtime::SortingGame.Data.SectionDefinition
+  Id: cs_tickets
+  DisplayNameKey: section.cs_tickets
+  FloorSize: {x: 32.100002, y: 6.4}
+  Shelves:
+  - Category: {fileID: 11400000, guid: 93e484f8b21c4404e83a47787f00c501, type: 2}
+    SlotCount: 50
+  - Category: {fileID: 11400000, guid: 8df65882394cf604ca3d38b9423128bb, type: 2}
+    SlotCount: 50
+  - Category: {fileID: 11400000, guid: 3559ff22e181914479ab1129aec8a56d, type: 2}
+    SlotCount: 50
+  - Category: {fileID: 11400000, guid: be6f474598137c040b55947082746d94, type: 2}
+    SlotCount: 50
+  - Category: {fileID: 11400000, guid: 8f0b5a991127b7744a7c7d8144fa3eec, type: 2}
+    SlotCount: 50
+  - Category: {fileID: 11400000, guid: 2e404d478fa03664ab04b422e34e5a08, type: 2}
+    SlotCount: 50
+  - Category: {fileID: 11400000, guid: a4e1495a8a925a744844f519e10c853b, type: 2}
+    SlotCount: 50
+  - Category: {fileID: 11400000, guid: 3160d9035b5c3af43bfe34a2cf0e481c, type: 2}
+    SlotCount: 50
+  Containers:
+  - Container: {fileID: 11400000, guid: 7c806c7c974acb040915b5bdbaba813b, type: 2}
+    Count: 16
+  Collectibles: []
+  RareItems:
+  - {fileID: 11400000, guid: a8355955b5a9d6e46a18183cadbc482d, type: 2}
+  LooseItemRatio: 0.25
+  DirtCoverage: 0.5
+  BuriedItemRatio: 0.15
+  Seed: 6
+  StartsLocked: 0
+  UnlockCoinCost: 0
+  UnlockAtVenuePercent: 0

@@ -76,14 +76,16 @@ namespace SortingGame.Core
         }
 
         /// <summary>GDD 5.4: a locked section opens when the venue's other open sections reach its threshold.</summary>
-        public static bool MeetsAutoUnlock(SectionDefinition section, VenueDefinition venue, SaveData data)
+        /// <param name="alsoOpen">Sections to count as open although the save does not say so yet.</param>
+        public static bool MeetsAutoUnlock(SectionDefinition section, VenueDefinition venue, SaveData data, ICollection<SectionDefinition> alsoOpen = null)
         {
             if (!section.StartsLocked || section.UnlockAtVenuePercent <= 0) return false;
             var sum = 0f;
             var count = 0;
             foreach (var other in venue.Sections)
             {
-                if (other == section || !IsUnlocked(other, data)) continue;
+                var open = IsUnlocked(other, data) || (alsoOpen != null && alsoOpen.Contains(other));
+                if (other == section || !open) continue;
                 var s = Section(other, data);
                 sum += s.Completed ? 1f : s.Fraction;
                 count++;
@@ -91,12 +93,16 @@ namespace SortingGame.Core
             return count > 0 && sum / count * 100f >= section.UnlockAtVenuePercent;
         }
 
-        /// <summary>Sections that just became eligible; caller records them in data.UnlockedSections.</summary>
+        /// <summary>
+        /// Sections that just became eligible; caller records them in data.UnlockedSections.
+        /// Checked one after another in venue order: a room that opens here is empty, so it already pulls the
+        /// average down for the next one. Big venues open room by room instead of several at once.
+        /// </summary>
         public static List<SectionDefinition> NewlyUnlockable(VenueDefinition venue, SaveData data)
         {
             var result = new List<SectionDefinition>();
             foreach (var section in venue.Sections)
-                if (!IsUnlocked(section, data) && MeetsAutoUnlock(section, venue, data))
+                if (!IsUnlocked(section, data) && MeetsAutoUnlock(section, venue, data, result))
                     result.Add(section);
             return result;
         }

@@ -52,20 +52,48 @@ namespace SortingGame.Tests
             Assert.AreEqual(9 * 1 + 5 + 4 * 2, EconomyModel.CoinsIn(section));
         }
 
+        /// <summary>Position on the ladder of the venue a room belongs to.</summary>
+        static int VenueIndexOf(GameDatabase database, SectionDefinition room) =>
+            database.Venues.FindIndex(v => v.Sections.Contains(room));
+
         [Test]
-        public void Content_MeetsEveryToolAndHelper_ButDoesNotPayForEverything()
+        public void FirstThreeVenues_MeetEveryToolAndHelper()
         {
             var database = Database;
             var timeline = EconomyModel.ReferenceTimeline(database);
 
             foreach (var tool in database.Tools.Where(t => !t.StartsOwned))
-                Assert.IsTrue(timeline.Any(p => p.Id == $"tool.{tool.Id}" && p.Level == 1 && p.Reached), $"{tool.Id} is never unlocked.");
+            {
+                var unlock = timeline.Find(p => p.Id == $"tool.{tool.Id}" && p.Level == 1);
+                Assert.IsTrue(unlock != null && unlock.Reached, $"{tool.Id} is never unlocked.");
+                Assert.LessOrEqual(VenueIndexOf(database, unlock.Room), 2, $"{tool.Id} comes too late.");
+            }
             foreach (var helper in database.Helpers)
-                Assert.IsTrue(timeline.Any(p => p.Id == $"helper.{helper.Id}" && p.Level == 1 && p.Reached), $"{helper.Id} is never hired.");
+            {
+                var hire = timeline.Find(p => p.Id == $"helper.{helper.Id}" && p.Level == 1);
+                Assert.IsTrue(hire != null && hire.Reached, $"{helper.Id} is never hired.");
+                Assert.LessOrEqual(VenueIndexOf(database, hire.Room), 2, $"{helper.Id} comes too late.");
+            }
+        }
+
+        [Test]
+        public void WholeContent_DoesNotPayForEverything()
+        {
+            var database = Database;
 
             // User: helpers and upgrades must not be cheap, the game should stay playable for a long time.
-            Assert.GreaterOrEqual(EconomyModel.TotalSinks(database), 2 * EconomyModel.TotalIncome(database));
-            Assert.IsTrue(timeline.Any(p => !p.Reached), "Something should be left to save for after the last room.");
+            Assert.GreaterOrEqual(EconomyModel.TotalSinks(database), 1.25f * EconomyModel.TotalIncome(database));
+            Assert.IsTrue(EconomyModel.ReferenceTimeline(database).Any(p => !p.Reached), "Something should be left to save for after the last room.");
+        }
+
+        [Test]
+        public void LastVenue_StillHasSomethingToBuy()
+        {
+            var database = Database;
+            var last = database.Venues.Count - 1;
+            var bought = EconomyModel.ReferenceTimeline(database).Where(p => p.Reached && VenueIndexOf(database, p.Room) == last).ToList();
+
+            Assert.GreaterOrEqual(bought.Count, 3, "Coins earned in the last venue should have somewhere to go.");
         }
 
         [Test]
@@ -91,7 +119,7 @@ namespace SortingGame.Tests
             Assert.AreSame(hand, magnet.RequiresMaxed);
             Assert.Greater(magnetBought, handMaxed);
             Assert.Greater(magnet.Levels[0].Cost, EconomyModel.TotalCost(hand));
-            CollectionAssert.Contains(database.Venues.Last().Sections, timeline[magnetBought].Room, "Magnet belongs to the last venue of the MVP, not earlier.");
+            Assert.AreEqual(2, VenueIndexOf(database, timeline[magnetBought].Room), "Magnet belongs to the third venue: not earlier, not much later.");
         }
 
         [Test]

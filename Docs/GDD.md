@@ -2,7 +2,7 @@
 
 | Alan | Değer |
 |---|---|
-| Sürüm | 0.2 (ilerleme kuralları yenilendi: yardımcılar, Oto Sort güçlendirmesi, sade koleksiyon) |
+| Sürüm | 0.3 (dördüncü mekân: Terk Edilmiş Sirk) |
 | Tarih | 2026-10-06 |
 | Durum | MVP mekanikleri (M0–M7) placeholder görsellerle tamamlandı, editörde oynandı ve onaylandı. Açık kalan: cihaz testi |
 | Platform | iOS ve Android (mobil), dikey ekran |
@@ -106,15 +106,17 @@ Mekânlar doğrusal sırayla açılır: bir mekân tamamlanınca bir sonraki aç
 | 1 | Çizgi Roman Kutusu | 1 | 50 | Öğretici. Tek ekran, 2–3 dakika. |
 | 2 | Garaj | 1–2 | 500 | İlk alet yükseltmeleri (El, Süpürge). |
 | 3 | Depo | 4 (Ofis, Garaj, Raf Koridoru, Bodrum) | 8.000 | İlk yardımcı, Mıknatıs'ın alınabilir hale gelmesi. |
-| 4 | Kapanmış Oyuncakçı | 3–4 | — | MVP sonrası |
-| 5 | Tavan Arası / Eski Ev | 3–4 | — | MVP sonrası |
-| 6 | Terk Edilmiş Sirk | 4–5 (Kostüm Odası, Bilet Gişesi, Palyaço Karavanı, Ana Çadır...) | — | MVP sonrası |
-| 7+ | Eski Tiyatro, Lunapark... | — | — | MVP sonrası |
+| 4 | Terk Edilmiş Sirk | 8 (Bilet Gişesi, Büfe, Kostüm Odası, Palyaço Karavanı, Müzik Vagonu, Aksesuar Deposu, Kulis, Ana Çadır) | 3.200 (oda başına ~400) | MVP sonrası ilk mekân; oyunda. 8 yeni kategori, odalar kademeli açılır, Chubby Ana Çadır'da. |
+| 5 | Kapanmış Oyuncakçı | 3–4 | — | Henüz yok |
+| 6 | Tavan Arası / Eski Ev | 3–4 | — | Henüz yok |
+| 7+ | Eski Tiyatro, Lunapark... | — | — | Henüz yok |
 
 Sayılar **[VARSAYILAN]**, dengeleme testlerinde değişecek. Prototipteki güncel büyüklükler: Çizgi Roman Kutusu ~60, Garaj ~200, Depo'nun her odası ~300 eşya (bkz. karar günlüğü).
 
 ### 5.4 Bölüm kilitleri [VARSAYILAN]
 Bir mekân içindeki bazı bölümler kilitli başlar (ör. Depo'daki Bodrum). Kilit, mekân içindeki diğer bölümlerin belli bir yüzdeye ulaşmasıyla veya Coin ile açılır.
+
+Büyük mekânlarda kilitler kademelidir: Sirk'in 8 odasından 3'ü baştan açıktır; diğerleri, açık odaların ortalaması yükseldikçe sırayla açılır (%40, %50, %60, %70, Ana Çadır %85). Böylece oyuncunun önünde her zaman seçebileceği iki üç oda olur ama mekân tek seferde önüne yığılmaz. Her kilidin isteğe bağlı bir Coin kısayolu vardır.
 
 ### 5.5 Hafif renovasyon [KARAR]
 - Oyunda duvar boyama, mobilya seçme gibi iç dekorasyon **yoktur**. Bu, prensip 3 ve 7 ile çelişir ve içerik maliyetini katlar.
@@ -269,7 +271,7 @@ Eski "Kategori Ustalığı"nın yerini alır. Kendiliğinden dizme artık kalıc
 ### 10.3 Yardımcılar (`Helper`) [KARAR]
 Kaldırılan ustalığın bıraktığı boşluğu dolduran kalıcı ilerleme katmanı.
 - **Karakter:** Maskottan ayrı, küçük, tatlı, yuvarlak ve yumuşak (bubbly / squishy) karakterler.
-- **Edinme:** Shop'tan Coin ile alınır. Yardımcı yuvaları mekân ilerlemesiyle açılır. Her mekânda yeni yardımcı gelmez; doz bilinçli olarak düşük tutulur **[VARSAYILAN: MVP'de en fazla 2 yardımcı; ilk yuva Garaj tamamlanınca, ikincisi Depo'nun ortasında açılır]**.
+- **Edinme:** Shop'tan Coin ile alınır. Yardımcı yuvaları mekân ilerlemesiyle açılır. Her mekânda yeni yardımcı gelmez; doz bilinçli olarak düşük tutulur **[VARSAYILAN: toplam 2 yardımcı; ilk yuva Garaj tamamlanınca, ikincisi Depo'nun ortasında açılır. Sirk yeni yardımcı getirmez; kazandırdığı Coin mevcut yardımcıların ve Mıknatıs'ın üst seviyelerine gider]**.
 - **Nerede çalışırlar:** Atama ekranı yoktur. Oyuncu hangi odaya girerse yardımcılar orada belirir; oyuncu çıkınca çalışmazlar.
 - **Ne yaparlar:** Yerde açıkta duran sıradan eşyaları yavaşça, tek tek alıp doğru rafa dizerler. Sonradan ortaya çıkan eşyaları da (oyuncu kutu açtıkça dökülenler, süpürdükçe çıkanlar) görür ve toplarlar; "sonradan gelen eşya atlanır" hatası olmamalıdır.
 - **Neye dokunmazlar:** Kutular, toz, nadir (mavi) eşyalar ve Chubby. Kutu açmak ve süpürmek oyuncunun işidir; nadir eşyalar ve Chubby zeminde parlayarak oyuncuyu bekler.
@@ -311,10 +313,14 @@ Ekonominin kâğıt üstündeki hali içerikten otomatik hesaplanır ve `Docs/EC
 
 Dengelemenin koruduğu hedefler **[KARAR]** (testlerle denetlenir):
 - İlk mekân daha bitmeden ilk yükseltme alınabilir.
-- Mıknatıs, El son seviyeye geldikten sonra ve MVP'nin son mekânında gelir; El'in toplamından pahalıdır.
-- MVP içeriği her aleti açmaya ve her yardımcıyı işe almaya yeter; ama Shop'taki her şeyi almaya yetmez (toplam fiyat, içeriğin kazandırdığının en az iki katıdır). Kalan yükseltmeler sonraki mekânlar içindir.
+- Mıknatıs, El son seviyeye geldikten sonra ve üçüncü mekânda (Depo) gelir; El'in toplamından pahalıdır.
+- İlk üç mekân (MVP) her aleti açmaya ve her yardımcıyı işe almaya yeter.
+- İçeriğin tamamı Shop'taki her şeyi almaya yetmez: toplam fiyat, içeriğin kazandırdığının en az 1,25 katıdır. Oyuncunun önünde her zaman biriktirecek bir şey kalır.
+- Son mekânda kazanılan Coin'in gidecek yeri vardır (referans oyuncu orada en az üç şey alır); Coin boşa birikmez.
 - Yardımcılar tek tek gelir; ikinci yardımcıyı işe almak, ilkini yükseltmekten önce gelir.
 - Nadir eşya, kategorisinin sıradan eşyasından fazla ama en çok altı katı kadar eder.
+
+Yeni bir mekân eklendiğinde bu hedefler yeniden sağlanmalıdır: ya yeni yükseltme seviyeleri eklenir ya da Coin değerleri ayarlanır. Sirk için Mıknatıs'a ve iki yardımcıya 4. seviye eklendi.
 
 ---
 
@@ -432,7 +438,7 @@ Reklam ağı, IAP (Unity IAP önerilir), analitik ve uzaktan yapılandırma (rem
 - Ses ve haptik geri bildirimi.
 
 ### 16.2 Dahil değil
-- Sirk ve diğer büyük mekânlar.
+- Sirk ve diğer büyük mekânlar (Sirk, MVP tamamlandıktan sonra ilk ek mekân olarak eklendi; bkz. 5.3).
 - Premium para birimi.
 - Çevrimdışı ilerleme (MVP sonrası için de planlanmıyor, bkz. prensip 11).
 - Kalıcı Kategori Ustalığı (kaldırıldı, bkz. 10.2).
@@ -525,3 +531,7 @@ Reklam ağı, IAP (Unity IAP önerilir), analitik ve uzaktan yapılandırma (rem
 | 2026-10-07 | Yerelleştirme: dil başına bir düz metin dosyası, Ayarlar'dan dil seçimi, İngilizce yedek. Hazır paket yerine hafif, projeye özel yapı. Türkçe taslak çeviri eklendi. | Metinler elle ve sürüm kontrolünde kolay düzenlenir; ek paket yok. İkinci dil altyapıyı kanıtlar. |
 | 2026-10-07 | Dengeleme hedefleri yazıldı ve testlere bağlandı (11.5); ekonomi raporu içerikten üretilir (`Docs/ECONOMY.md`). | Sayılar değiştikçe tasarımın istediği tempo bozulmasın. |
 | 2026-10-07 | Yardımcı fiyatları modele göre ayarlandı: Pip 400 / 800 / 1300, Dot 750 / 1200 / 1900. | Eski fiyatlarla referans oyuncu MVP içinde ikinci yardımcıya ulaşamıyordu; yeni yardımcıyla tanışmak eskisini yükseltmekten önce gelmeli. |
+| 2026-10-07 | Dördüncü mekân eklendi: Terk Edilmiş Sirk, 8 oda, oda başına ~400 eşya. Merdivendeki sırası Oyuncakçı ve Eski Ev'in önüne alındı. | Oyun sahibi kararı: Depo'dan sonra yeni temalı, 8 odalı, daha büyük bir mekân. |
+| 2026-10-07 | Sirk 8 yeni kategori getirir (Bilet, Atıştırmalık, Şapka, Kostüm, Maske, Jonglör, Enstrüman, Fener); her odada 8 raf vardır ve eski kategoriler de karışır. Her yeni kategorinin kendine ait bir renk ailesi vardır. | Çeşitlilik merdiven boyunca artar (8.2); bir odada 8 kategori olunca bir bakışta ayırt etmek renk ailesiyle mümkün. |
+| 2026-10-07 | Sirk'te odalar kademeli açılır (3 açık, 5 kilitli; Ana Çadır en son). Chubby (Sunucu Chubby) Ana Çadır'dadır. 5 odada birer nadir eşya vardır. | 8 oda tek seferde yığılmasın; final odası hem en zengin oda hem koleksiyonun ödülü olsun. |
+| 2026-10-07 | Sirk yeni yardımcı getirmez. Onun yerine Mıknatıs'a ve iki yardımcıya 4. seviye eklendi (2400 / 2000 / 2600 Coin). | "Her mekânda yeni yardımcı gelmesin" kararı; yine de Sirk'in kazandırdığı Coin'in gidecek yeri olmalı (11.5). |

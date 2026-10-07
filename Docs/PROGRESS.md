@@ -4,18 +4,27 @@ Living notes so any session (any machine, any Claude account) can pick up where 
 Update this file at the end of every work chunk, before committing. Newest entry on top in the log.
 
 ## Current state
-- **Active milestone:** none. M0 to M7 are implemented, playtested in the editor and approved (M7 on 2026-10-07). Last full run: EditMode 69/69, PlayMode 18/18, Android development APK builds (41 MB).
-- **Open item: on-device test.** There is no Android device yet. When one is there: `tools/unity.sh android`, install `Builds/Android/SortingGame.apk`, and check
-  - frame rate in a 300-item room (Warehouse), with both helpers and Auto Sort running,
+- **Active milestone:** M8 (Abandoned Circus, fourth venue) implemented, tests green (EditMode 72/72, PlayMode 20/20), screenshots reviewed. **Waiting for the user's playtest.** M0 to M7 are approved.
+- **Open item from M7: on-device test.** There is no Android device yet. When one is there: `tools/unity.sh android`, install `Builds/Android/SortingGame.apk`, and check
+  - frame rate in a 400-item Circus room (and a 300-item Warehouse room), with both helpers and Auto Sort running,
   - touch sizes: picking small items, the tool bar, the Shop and Auto Sort rows,
   - pinch and two-finger gestures in the shelf close-up and the collection viewer (mouse-wheel zoom does not work in the editor; never checked on touch),
   - haptics, sound levels,
   - Turkish letters with the device font (fine in the editor), text that does not fit,
   - safe area on a notched screen.
-- **Next concrete step:** nothing is planned. Ask the user what comes next. Candidates from the GDD: real models and sounds instead of placeholders (12, 14), more venues (5.3), real ad and store SDKs behind `IAdProvider` / `IStoreProvider` (15.5), final Turkish translation, open questions in GDD 18 (set bonus, premium currency, cloud save).
-- **Blocking / waiting on user:** the next direction; an Android device for the device test.
-- **Pushed:** `origin/main` has everything up to M7 (2026-10-07). Still: push only when the user asks.
+- **Next concrete step:** apply M8 playtest feedback. Nothing is planned after that; ask the user. Candidates from the GDD: real models and sounds instead of placeholders (12, 14), more venues (5.3), real ad and store SDKs behind `IAdProvider` / `IStoreProvider` (15.5), final Turkish translation, open questions in GDD 18.
+- **Blocking / waiting on user:** playtest of M8; an Android device for the device test.
+- **Not built after M8:** the Android APK. Run `tools/unity.sh android` before a device test.
+- **Pushed:** `origin/main` has everything up to M7 (2026-10-07). The M7 approval commit and M8 are local only. Push only when the user asks.
 - **User intent:** mechanics first, limits/numbers later. Helpers and upgrades should not be cheap; the game should stay playable for a long time.
+
+## M8 notes (Abandoned Circus)
+- All content, no new systems: `ContentBuilder` adds 8 categories (32 item variants), 5 rare items, `ringmaster_chubby`, 8 sections `cs_*` and `Venue_Circus`. Room ids: `cs_tickets`, `cs_snacks`, `cs_costumes`, `cs_caravan`, `cs_music`, `cs_props`, `cs_backstage`, `cs_main_tent`.
+- A room is 8 shelves x 50 slots = 400 items, about 34 m wide (seven and a half screens of panning), 16 boxes.
+- `ContentBuilder.Lock(section, percent, coins)` sets up a locked room. `VenueProgress.NewlyUnlockable` now checks rooms one after another (a freshly opened, empty room counts for the next one), so big venues open room by room.
+- Level 4 added to Magnet, Pip and Dot (data only; `ToolDefinition` / `HelperDefinition` level lists).
+- Adding a venue: categories + items + sections + venue in `ContentBuilder`, names in every `Localization/*.txt`, then `tools/unity.sh rebuild` and `tools/unity.sh economy`; `EconomyTests` say whether the pacing goals (GDD 11.5) still hold.
+- The overview lays rooms out in two columns; 8 rooms make a 2 x 4 block that fits a portrait screen.
 
 ## M7 architecture (quick map)
 - **Texts:** `Assets/_Project/Localization/<code>.txt`, one "key = text" line each; `en.txt` is the reference and the fallback. Listed in `GameDatabase.Languages` (filled by `ContentBuilder`). `Loc.Load` + `Loc.SetLanguage` in `GameBootstrap.Awake`; `Loc.Get` / `Loc.Format` everywhere else; `Loc.Culture` for numbers.
@@ -106,6 +115,12 @@ Update this file at the end of every work chunk, before committing. Newest entry
 - graphify setup on a new machine (once, in project root): `graphify hook install` (git hooks are not versioned) and `graphify claude install` (writes machine-local `.claude/settings.json`; rename it to `.claude/settings.local.json`, which is git-ignored, and revert any duplicate graphify section it adds to CLAUDE.md). `graphify-out/` itself is versioned.
 
 ## Session log
+### 2026-10-07 — M8 implemented (Abandoned Circus)
+- User asked for a fourth venue with a new theme and 8 rooms; picked "Abandoned Circus" and "about 400 items per room".
+- Content, staged room locks, level 4 upgrades, economy report regenerated, GDD 0.3.
+- Found by tests / screenshots: two rooms opened at once (now one after another); the venue name ran into the overview counter (counter shortened, name ellipsis).
+- Tests: `CircusTests` (ladder, staged locks, coin unlock, a 400-item room), `VenueProgressTests` staged unlock, `EconomyTests` reworded. EditMode 72/72, PlayMode 20/20.
+
 ### 2026-10-07 — M7 approved
 - User playtested M7 in the editor: approved as it is. Commits up to M7 were pushed to `origin/main` at the user's request.
 - All planned milestones are done; the device test is the only open item.

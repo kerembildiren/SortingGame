@@ -182,6 +182,7 @@ namespace SortingGame.UI
             var wallet = _wallet;
 
             _title.text = Loc.Get(section.Definition.DisplayNameKey);
+            _percent.RemoveFromClassList("percent--count");
             section.ProgressChanged += OnProgress;
             section.ItemPlaced += OnItemPlaced;
             section.ShelfCompleted += OnShelfCompleted;
@@ -349,6 +350,7 @@ namespace SortingGame.UI
 
             _title.text = Loc.Get(venue.DisplayNameKey);
             _percent.text = Loc.Format("hud.items_count", status.Placed, status.Total);
+            _percent.AddToClassList("percent--count");
             _progressFill.style.width = Length.Percent(status.Fraction * 100f);
 
             _worldLayer.Clear();

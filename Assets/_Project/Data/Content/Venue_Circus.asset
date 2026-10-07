@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30f137cd1560cfa4098b6629870cfad1, type: 3}
+  m_Name: Venue_Circus
+  m_EditorClassIdentifier: SortingGame.Runtime::SortingGame.Data.VenueDefinition
+  Id: circus
+  DisplayNameKey: venue.circus
+  ThemeId: circus
+  Sections:
+  - {fileID: 11400000, guid: f29d5466292dd884b98cd0e54590636c, type: 2}
+  - {fileID: 11400000, guid: 233aa8257df3e3043971a2f8e20e3952, type: 2}
+  - {fileID: 11400000, guid: 7c4a5167380eec640b8b7d2dfb4f47b7, type: 2}
+  - {fileID: 11400000, guid: 8f5f4acc2f6fb6f41a0a7697aacf9d28, type: 2}
+  - {fileID: 11400000, guid: 68ac0269a2285484fabe8adbd6d38fc1, type: 2}
+  - {fileID: 11400000, guid: e527e2ca5b45aaf4e8fc889b943081b9, type: 2}
+  - {fileID: 11400000, guid: 4d4d1d404a0821e4f97fb86e98712c5a, type: 2}
+  - {fileID: 11400000, guid: 0d6693202e1746c41b1f18dab3e377b6, type: 2}
+  CollectionPage:
+  - {fileID: 11400000, guid: af69f0eb405b65842aa2159c7067462b, type: 2}

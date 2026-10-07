@@ -10,16 +10,33 @@ category.stationery = Kırtasiye
 category.mugs = Kupa
 category.tyres = Lastik
 category.bottles = Şişe
+category.tickets = Bilet
+category.snacks = Atıştırmalık
+category.hats = Şapka
+category.costumes = Kostüm
+category.masks = Maske
+category.juggling = Jonglör
+category.instruments = Enstrüman
+category.lanterns = Fener
 
 venue.comic_box = Çizgi Roman Kutusu
 venue.garage = Garaj
 venue.warehouse = Depo
+venue.circus = Terk Edilmiş Sirk
 section.comic_box = Çizgi Roman Kutusu
 section.garage = Garaj
 section.wh_office = Ofis
 section.wh_dock = Yükleme Alanı
 section.wh_aisle = Raf Koridoru
 section.wh_basement = Bodrum
+section.cs_tickets = Bilet Gişesi
+section.cs_snacks = Büfe
+section.cs_costumes = Kostüm Odası
+section.cs_caravan = Palyaço Karavanı
+section.cs_music = Müzik Vagonu
+section.cs_props = Aksesuar Deposu
+section.cs_backstage = Kulis
+section.cs_main_tent = Ana Çadır
 
 tool.hand = El
 tool.broom = Süpürge
@@ -38,6 +55,8 @@ collectible.mechanic_chubby = Tamirci Chubby
 collectible.mechanic_chubby.desc = Tulum, bir damla yağ lekesi ve bolca özgüven. Hiçbir şeyi tamir etmez ama herkesi neşelendirir.
 collectible.night_guard_chubby = Gece Bekçisi Chubby
 collectible.night_guard_chubby.desc = Depoya göz kulak olur. Çoğunlukla gözleri kapalı.
+collectible.ringmaster_chubby = Sunucu Chubby
+collectible.ringmaster_chubby.desc = Silindir şapka, altın ceket ve çadırın en gür fısıltısı. Bayanlar baylar... şekerleme vakti!
 
 # Nadir eşyalar (GDD 9.4): kategorisinin geri kalanı gibi rafa dizilir, biraz daha fazla eder.
 item.rare_first_issue = Jelatinli İlk Sayı
@@ -46,6 +65,11 @@ item.rare_lucky_wrench = Şanslı Anahtar
 item.rare_brass_stapler = Pirinç Zımba
 item.rare_chrome_hubcap = Krom Jant Kapağı
 item.rare_message_bottle = Şişedeki Mesaj
+item.rare_golden_ticket = Altın Bilet
+item.rare_sequin_hat = Pullu Silindir Şapka
+item.rare_red_nose = Şanslı Palyaço Burnu
+item.rare_silver_trumpet = Gümüş Trompet
+item.rare_star_lantern = Yıldız Fener
 
 # ---- Genel ----
 hud.close = Kapat
@@ -128,7 +152,7 @@ hud.rare_find = Bir Chubby buldun!
 hud.view_hint = Çevirmek için sürükle  ·  Yakınlaştırmak için sıkıştır  ·  Kaydırmak için iki parmak  ·  Sıfırlamak için çift dokun
 
 # ---- Genel bakış ve harita ----
-hud.items_count = {0:N0} / {1:N0} eşya
+hud.items_count = {0:N0} / {1:N0}
 hud.locked_room = Kilitli
 hud.map_title = Mekânlar
 hud.venue_rooms = Oda sayısı: {0}

@@ -9,16 +9,33 @@ category.stationery = Stationery
 category.mugs = Mugs
 category.tyres = Tyres
 category.bottles = Bottles
+category.tickets = Tickets
+category.snacks = Snacks
+category.hats = Hats
+category.costumes = Costumes
+category.masks = Masks
+category.juggling = Juggling
+category.instruments = Instruments
+category.lanterns = Lanterns
 
 venue.comic_box = Comic Box
 venue.garage = Garage
 venue.warehouse = Warehouse
+venue.circus = Abandoned Circus
 section.comic_box = Comic Box
 section.garage = Garage
 section.wh_office = Office
 section.wh_dock = Loading Dock
 section.wh_aisle = Aisle
 section.wh_basement = Basement
+section.cs_tickets = Ticket Booth
+section.cs_snacks = Snack Stand
+section.cs_costumes = Costume Room
+section.cs_caravan = Clown Caravan
+section.cs_music = Music Wagon
+section.cs_props = Prop Store
+section.cs_backstage = Backstage
+section.cs_main_tent = Main Tent
 
 tool.hand = Hand
 tool.broom = Broom
@@ -37,6 +54,8 @@ collectible.mechanic_chubby = Mechanic Chubby
 collectible.mechanic_chubby.desc = Overalls, a smudge of oil and a lot of confidence. Fixes nothing, cheers everyone up.
 collectible.night_guard_chubby = Night Guard Chubby
 collectible.night_guard_chubby.desc = Keeps watch over the warehouse. Mostly with his eyes closed.
+collectible.ringmaster_chubby = Ringmaster Chubby
+collectible.ringmaster_chubby.desc = Top hat, golden coat and the loudest whisper in the tent. Ladies and gentlemen... nap time!
 
 # Rare items (GDD 9.4): shelved like the rest of their category, worth a bit more.
 item.rare_first_issue = Sealed First Issue
@@ -45,6 +64,11 @@ item.rare_lucky_wrench = Lucky Wrench
 item.rare_brass_stapler = Brass Stapler
 item.rare_chrome_hubcap = Chrome Hubcap
 item.rare_message_bottle = Message in a Bottle
+item.rare_golden_ticket = Golden Ticket
+item.rare_sequin_hat = Sequined Top Hat
+item.rare_red_nose = Lucky Clown Nose
+item.rare_silver_trumpet = Silver Trumpet
+item.rare_star_lantern = Star Lantern
 
 # ---- General ----
 hud.close = Close
@@ -127,7 +151,7 @@ hud.rare_find = You found a Chubby!
 hud.view_hint = Drag to turn  ·  Pinch to zoom  ·  Two fingers to move  ·  Double-tap to reset
 
 # ---- Overview and map ----
-hud.items_count = {0:N0} / {1:N0} items
+hud.items_count = {0:N0} / {1:N0}
 hud.locked_room = Locked
 hud.map_title = Places
 hud.venue_rooms = Rooms: {0}

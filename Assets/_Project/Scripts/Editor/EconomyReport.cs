@@ -76,7 +76,7 @@ namespace SortingGame.EditorTools
             }
             text.AppendLine();
             text.AppendLine($"Everything in the Shop: **{sinks} coins**, {sinks / (float)Mathf.Max(1, income):0.0} times what the content pays.");
-            text.AppendLine("The rest is there for the venues that come after the MVP (GDD 5.3).");
+            text.AppendLine("What the content does not pay for is left for later venues (GDD 5.3, 11.5).");
             text.AppendLine();
 
             text.AppendLine("## Reference player");
@@ -95,8 +95,11 @@ namespace SortingGame.EditorTools
                 text.AppendLine($"| {number} | {Name(purchase.Id)} level {purchase.Level} | {purchase.Cost} | {where} | {at} |");
             }
             text.AppendLine();
-            text.AppendLine("Not in this model: Auto Sort (ads or real money, never coins), the Basement shortcut");
-            text.AppendLine($"({database.Venues.SelectMany(v => v.Sections).Where(s => s.UnlockCoinCost > 0).Select(s => s.UnlockCoinCost).DefaultIfEmpty(0).Max()} coins, optional), and how fast a player actually sorts.");
+            var shortcuts = database.Venues.SelectMany(v => v.Sections).Where(s => s.UnlockCoinCost > 0).Select(s => s.UnlockCoinCost).ToList();
+            text.AppendLine("Not in this model: Auto Sort (ads or real money, never coins), how fast a player actually sorts, and the");
+            text.AppendLine(shortcuts.Count == 0
+                ? "optional room shortcuts (none at the moment)."
+                : $"optional coin shortcuts for locked rooms ({shortcuts.Count} rooms, {shortcuts.Min()} to {shortcuts.Max()} coins, {shortcuts.Sum()} in total).");
             return text.ToString();
         }
 

@@ -56,6 +56,22 @@
     margin: 0; padding: 0;
 }
 
+/* Long venue names must not run into the counter next to them. */
+.title {
+    flex-shrink: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.percent {
+    flex-shrink: 0;
+    margin-left: 16px;
+}
+
+/* Overview: "placed / total" is longer than a percentage. */
+.percent--count { font-size: 36px; }
+
 .progress-track {
     height: 22px;
     margin-top: 10px;

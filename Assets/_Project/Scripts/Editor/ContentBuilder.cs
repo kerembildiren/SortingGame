@@ -8,7 +8,7 @@ using UnityEngine.UIElements;
 namespace SortingGame.EditorTools
 {
     /// <summary>
-    /// Creates the placeholder content: 3 venues (Comic Box, Garage, Warehouse with 4 sections), 7 categories,
+    /// Creates the placeholder content: 4 venues (Comic Box, Garage, Warehouse with 4 sections, Circus with 8), 15 categories,
     /// one costumed Chubby per venue, a few blue rare items, tools, helpers, Auto Sort packs.
     /// "Create" only fills in what is missing, so inspector edits survive.
     /// "Rebuild" overwrites the sample assets with the values below.
@@ -136,6 +136,61 @@ namespace SortingGame.EditorTools
             items.Add(Item("bottle_amber", bottles, PlaceholderShape.Cylinder, new Color(0.80f, 0.55f, 0.20f), new Vector3(0.12f, 0.32f, 0.12f), overwrite));
             items.Add(Item("bottle_rose", bottles, PlaceholderShape.Cylinder, new Color(0.85f, 0.50f, 0.60f), new Vector3(0.11f, 0.38f, 0.11f), overwrite));
 
+            // M8 categories for the Abandoned Circus. Each has its own colour family and shape so it reads at a glance
+            // (GDD 8.2) even with eight categories in one room: tickets = flat yellow strips, snacks = red / cream boxes,
+            // hats = violet, costumes = folded pink cloth, masks = teal faces, juggling = lime clubs / rings / balls,
+            // instruments = brass, lanterns = glowing orange.
+            var tickets = Category("tickets", 2, new Vector3(0.40f, 0.20f, 0.10f), PlaceSoundType.Paper, overwrite);
+            var snacks = Category("snacks", 2, new Vector3(0.30f, 0.36f, 0.26f), PlaceSoundType.Paper, overwrite);
+            var hats = Category("hats", 3, new Vector3(0.40f, 0.34f, 0.38f), PlaceSoundType.Plastic, overwrite);
+            var costumes = Category("costumes", 3, new Vector3(0.38f, 0.20f, 0.32f), PlaceSoundType.Paper, overwrite);
+            var masks = Category("masks", 3, new Vector3(0.32f, 0.36f, 0.20f), PlaceSoundType.Plastic, overwrite);
+            var juggling = Category("juggling", 3, new Vector3(0.36f, 0.46f, 0.34f), PlaceSoundType.Plastic, overwrite);
+            var instruments = Category("instruments", 4, new Vector3(0.36f, 0.48f, 0.34f), PlaceSoundType.Metal, overwrite);
+            var lanterns = Category("lanterns", 3, new Vector3(0.26f, 0.42f, 0.26f), PlaceSoundType.Metal, overwrite);
+
+            var strip = new Vector3(0.34f, 0.15f, 0.025f);
+            items.Add(Item("ticket_yellow", tickets, PlaceholderShape.Cube, new Color(1.00f, 0.86f, 0.30f), strip, overwrite));
+            items.Add(Item("ticket_amber", tickets, PlaceholderShape.Cube, new Color(1.00f, 0.72f, 0.25f), strip, overwrite));
+            items.Add(Item("ticket_cream", tickets, PlaceholderShape.Cube, new Color(1.00f, 0.94f, 0.66f), strip * 0.9f, overwrite));
+            items.Add(Item("ticket_roll", tickets, PlaceholderShape.Cylinder, new Color(0.98f, 0.80f, 0.35f), new Vector3(0.18f, 0.14f, 0.18f), overwrite));
+
+            items.Add(Item("popcorn_red", snacks, PlaceholderShape.Cube, new Color(0.92f, 0.25f, 0.25f), new Vector3(0.20f, 0.30f, 0.20f), overwrite));
+            items.Add(Item("popcorn_cream", snacks, PlaceholderShape.Cube, new Color(0.98f, 0.93f, 0.80f), new Vector3(0.20f, 0.28f, 0.20f), overwrite));
+            items.Add(Item("pretzel_box", snacks, PlaceholderShape.Cube, new Color(0.80f, 0.36f, 0.26f), new Vector3(0.24f, 0.20f, 0.16f), overwrite));
+            items.Add(Item("soda_cup", snacks, PlaceholderShape.Cylinder, new Color(0.95f, 0.45f, 0.42f), new Vector3(0.16f, 0.30f, 0.16f), overwrite));
+
+            items.Add(Item("hat_top", hats, PlaceholderShape.Cylinder, new Color(0.36f, 0.22f, 0.52f), new Vector3(0.22f, 0.28f, 0.22f), overwrite));
+            items.Add(Item("hat_bowler", hats, PlaceholderShape.Sphere, new Color(0.56f, 0.36f, 0.78f), new Vector3(0.30f, 0.20f, 0.30f), overwrite));
+            items.Add(Item("hat_fez", hats, PlaceholderShape.Cylinder, new Color(0.72f, 0.30f, 0.72f), new Vector3(0.20f, 0.20f, 0.20f), overwrite));
+            items.Add(Item("hat_boater", hats, PlaceholderShape.Cylinder, new Color(0.78f, 0.64f, 0.96f), new Vector3(0.34f, 0.08f, 0.34f), overwrite));
+
+            items.Add(Item("costume_pink", costumes, PlaceholderShape.Cube, new Color(1.00f, 0.45f, 0.70f), new Vector3(0.30f, 0.10f, 0.26f), overwrite));
+            items.Add(Item("costume_magenta", costumes, PlaceholderShape.Cube, new Color(0.90f, 0.25f, 0.60f), new Vector3(0.32f, 0.14f, 0.26f), overwrite));
+            items.Add(Item("costume_rose", costumes, PlaceholderShape.Cube, new Color(1.00f, 0.68f, 0.80f), new Vector3(0.28f, 0.08f, 0.24f), overwrite));
+            items.Add(Item("costume_fuchsia", costumes, PlaceholderShape.Cube, new Color(0.80f, 0.20f, 0.70f), new Vector3(0.30f, 0.12f, 0.28f), overwrite));
+
+            var face = new Vector3(0.26f, 0.30f, 0.10f);
+            items.Add(Item("mask_teal", masks, PlaceholderShape.Sphere, new Color(0.20f, 0.72f, 0.70f), face, overwrite));
+            items.Add(Item("mask_aqua", masks, PlaceholderShape.Sphere, new Color(0.50f, 0.90f, 0.88f), face, overwrite));
+            items.Add(Item("mask_sea", masks, PlaceholderShape.Sphere, new Color(0.15f, 0.55f, 0.60f), face * 0.92f, overwrite));
+            items.Add(Item("mask_mint", masks, PlaceholderShape.Cube, new Color(0.62f, 0.95f, 0.85f), new Vector3(0.24f, 0.28f, 0.06f), overwrite));
+
+            items.Add(Item("juggle_club", juggling, PlaceholderShape.Capsule, new Color(0.62f, 0.86f, 0.20f), new Vector3(0.12f, 0.40f, 0.12f), overwrite));
+            items.Add(Item("juggle_pin", juggling, PlaceholderShape.Capsule, new Color(0.80f, 0.95f, 0.35f), new Vector3(0.14f, 0.36f, 0.14f), overwrite));
+            items.Add(Item("juggle_ring", juggling, PlaceholderShape.Cylinder, new Color(0.50f, 0.78f, 0.15f), new Vector3(0.30f, 0.05f, 0.30f), overwrite));
+            items.Add(Item("juggle_ball", juggling, PlaceholderShape.Sphere, new Color(0.72f, 0.92f, 0.25f), new Vector3(0.17f, 0.17f, 0.17f), overwrite));
+
+            items.Add(Item("trumpet", instruments, PlaceholderShape.Rod, new Color(0.88f, 0.68f, 0.22f), new Vector3(0.10f, 0.42f, 0.10f), overwrite));
+            items.Add(Item("horn", instruments, PlaceholderShape.Rod, new Color(0.80f, 0.58f, 0.18f), new Vector3(0.12f, 0.36f, 0.12f), overwrite));
+            items.Add(Item("drum", instruments, PlaceholderShape.Cylinder, new Color(0.84f, 0.62f, 0.26f), new Vector3(0.30f, 0.20f, 0.30f), overwrite));
+            items.Add(Item("tambourine", instruments, PlaceholderShape.Cylinder, new Color(0.92f, 0.76f, 0.32f), new Vector3(0.30f, 0.06f, 0.30f), overwrite));
+
+            items.Add(Item("lantern_round", lanterns, PlaceholderShape.Cylinder, new Color(1.00f, 0.60f, 0.20f), new Vector3(0.18f, 0.32f, 0.18f), overwrite));
+            items.Add(Item("lantern_square", lanterns, PlaceholderShape.Cube, new Color(0.96f, 0.50f, 0.15f), new Vector3(0.20f, 0.30f, 0.20f), overwrite));
+            items.Add(Item("lantern_tall", lanterns, PlaceholderShape.Cylinder, new Color(1.00f, 0.70f, 0.30f), new Vector3(0.16f, 0.36f, 0.16f), overwrite));
+            items.Add(Item("lantern_paper", lanterns, PlaceholderShape.Sphere, new Color(1.00f, 0.56f, 0.28f), new Vector3(0.22f, 0.26f, 0.22f), overwrite));
+
             var box = Container("cardboard_box", 15, overwrite);
 
             // ---- Collectibles (GDD 9.2): one costumed Chubby per venue, nothing else ----
@@ -144,7 +199,8 @@ namespace SortingGame.EditorTools
             var captain = Collectible("captain_chubby", chubbyBlue, mascotSize, overwrite, new Color(0.90f, 0.22f, 0.22f));
             var mechanic = Collectible("mechanic_chubby", chubbyBlue, mascotSize, overwrite, new Color(1.00f, 0.55f, 0.10f));
             var guard = Collectible("night_guard_chubby", chubbyBlue, mascotSize, overwrite, new Color(0.15f, 0.20f, 0.42f));
-            items.AddRange(new ItemDefinition[] { captain, mechanic, guard });
+            var ringmaster = Collectible("ringmaster_chubby", chubbyBlue, mascotSize, overwrite, new Color(0.98f, 0.80f, 0.25f));
+            items.AddRange(new ItemDefinition[] { captain, mechanic, guard, ringmaster });
 
             // ---- Rare items (GDD 9.4): a special member of a category, glows blue, shelved like the rest,
             // worth a bit more. Not every room has one. These were gold collectibles before 2026-10-06.
@@ -154,7 +210,12 @@ namespace SortingGame.EditorTools
             var stapler = RareItem("rare_brass_stapler", stationery, 8, PlaceholderShape.Cube, new Color(0.95f, 0.75f, 0.30f), new Vector3(0.26f, 0.12f, 0.10f), overwrite);
             var hubcap = RareItem("rare_chrome_hubcap", tyres, 12, PlaceholderShape.Cylinder, new Color(1.00f, 0.88f, 0.45f), new Vector3(0.34f, 0.06f, 0.34f), overwrite);
             var bottle = RareItem("rare_message_bottle", bottles, 8, PlaceholderShape.Cylinder, new Color(1.00f, 0.85f, 0.40f), new Vector3(0.13f, 0.38f, 0.13f), overwrite);
-            items.AddRange(new[] { firstIssue, robot, luckyWrench, stapler, hubcap, bottle });
+            var goldenTicket = RareItem("rare_golden_ticket", tickets, 10, PlaceholderShape.Cube, new Color(1.00f, 0.82f, 0.20f), new Vector3(0.34f, 0.15f, 0.03f), overwrite);
+            var sequinHat = RareItem("rare_sequin_hat", hats, 14, PlaceholderShape.Cylinder, new Color(0.95f, 0.80f, 0.35f), new Vector3(0.22f, 0.30f, 0.22f), overwrite);
+            var redNose = RareItem("rare_red_nose", masks, 14, PlaceholderShape.Sphere, new Color(1.00f, 0.78f, 0.30f), new Vector3(0.22f, 0.22f, 0.16f), overwrite);
+            var silverTrumpet = RareItem("rare_silver_trumpet", instruments, 18, PlaceholderShape.Rod, new Color(0.95f, 0.92f, 0.70f), new Vector3(0.11f, 0.44f, 0.11f), overwrite);
+            var starLantern = RareItem("rare_star_lantern", lanterns, 14, PlaceholderShape.Sphere, new Color(1.00f, 0.90f, 0.45f), new Vector3(0.22f, 0.26f, 0.22f), overwrite);
+            items.AddRange(new[] { firstIssue, robot, luckyWrench, stapler, hubcap, bottle, goldenTicket, sequinHat, redNose, silverTrumpet, starLantern });
             DeleteObsolete("Collectible_first_issue", "Collectible_golden_robot", "Collectible_lucky_wrench",
                 "Collectible_brass_stapler", "Collectible_chrome_hubcap", "Collectible_message_bottle");
 
@@ -173,21 +234,46 @@ namespace SortingGame.EditorTools
                 new[] { (toys, 50), (comics, 50), (stationery, 50), (mugs, 50), (tyres, 50), (bottles, 50) }, 4, new[] { guard });
             var basement = Section("wh_basement", 6.4f, overwrite, 0.7f, 0.2f,
                 new[] { (bottles, 50), (stationery, 50), (tools, 50), (tyres, 50), (comics, 50), (toys, 50) }, 5, none, bottle);
-            if (overwrite || basement.UnlockCoinCost == 0)
-            {
-                // GDD 5.4: opens when the other rooms average 60%, or right away for coins.
-                basement.StartsLocked = true;
-                basement.UnlockCoinCost = 150;
-                basement.UnlockAtVenuePercent = 60;
-                EditorUtility.SetDirty(basement);
-            }
+            // GDD 5.4: opens when the other rooms average 60%, or right away for coins.
+            Lock(basement, 60, 150, overwrite);
+
+            // ---- M8: Abandoned Circus. Eight rooms of about 400 items, eight shelves each (user: "bigger").
+            // Three rooms are open from the start; the others open one after another as the open rooms fill up
+            // (or for coins), so there are always two or three rooms to choose from. The Main Tent comes last.
+            var ticketBooth = Section("cs_tickets", 6.4f, overwrite, 0.5f, 0.15f,
+                new[] { (tickets, 50), (stationery, 50), (snacks, 50), (mugs, 50), (bottles, 50), (comics, 50), (lanterns, 50), (hats, 50) }, 6, none, goldenTicket);
+            var snackStand = Section("cs_snacks", 6.4f, overwrite, 0.6f, 0.15f,
+                new[] { (snacks, 50), (bottles, 50), (mugs, 50), (tickets, 50), (toys, 50), (lanterns, 50), (tools, 50), (hats, 50) }, 7, none);
+            var costumeRoom = Section("cs_costumes", 6.4f, overwrite, 0.5f, 0.15f,
+                new[] { (costumes, 50), (hats, 50), (masks, 50), (toys, 50), (stationery, 50), (lanterns, 50), (juggling, 50), (tickets, 50) }, 8, none, sequinHat);
+            var clownCaravan = Section("cs_caravan", 6.4f, overwrite, 0.65f, 0.15f,
+                new[] { (masks, 50), (juggling, 50), (costumes, 50), (hats, 50), (toys, 50), (tyres, 50), (tools, 50), (mugs, 50) }, 9, none, redNose);
+            var musicWagon = Section("cs_music", 6.4f, overwrite, 0.55f, 0.15f,
+                new[] { (instruments, 50), (tickets, 50), (costumes, 50), (lanterns, 50), (bottles, 50), (tools, 50), (tyres, 50), (comics, 50) }, 10, none, silverTrumpet);
+            var propStore = Section("cs_props", 6.4f, overwrite, 0.7f, 0.2f,
+                new[] { (juggling, 50), (instruments, 50), (masks, 50), (toys, 50), (tools, 50), (tyres, 50), (lanterns, 50), (snacks, 50) }, 11, none);
+            var backstage = Section("cs_backstage", 6.4f, overwrite, 0.6f, 0.15f,
+                new[] { (costumes, 50), (masks, 50), (hats, 50), (instruments, 50), (stationery, 50), (mugs, 50), (bottles, 50), (comics, 50) }, 12, none);
+            var mainTent = Section("cs_main_tent", 6.4f, overwrite, 0.7f, 0.2f,
+                new[] { (tickets, 50), (snacks, 50), (hats, 50), (costumes, 50), (masks, 50), (juggling, 50), (instruments, 50), (lanterns, 50) }, 13, new[] { ringmaster }, starLantern);
+            Lock(clownCaravan, 40, 300, overwrite);
+            Lock(musicWagon, 50, 400, overwrite);
+            Lock(propStore, 60, 500, overwrite);
+            Lock(backstage, 70, 600, overwrite);
+            Lock(mainTent, 85, 800, overwrite);
 
             // ---- Venues: GDD 5.3 ladder. Each opens for free when the one before is complete; one Chubby each. ----
             var comicBox = Venue("comic_box", overwrite, new[] { comicBoxSection }, captain);
             var garage = Venue("garage", overwrite, new[] { garageSection }, mechanic);
             var warehouse = Venue("warehouse", overwrite, new[] { office, dock, aisle, basement }, guard);
+            var circus = Venue("circus", overwrite,
+                new[] { ticketBooth, snackStand, costumeRoom, clownCaravan, musicWagon, propStore, backstage, mainTent }, ringmaster);
 
-            database.Categories = new List<CategoryDefinition> { comics, toys, tools, stationery, mugs, tyres, bottles };
+            database.Categories = new List<CategoryDefinition>
+            {
+                comics, toys, tools, stationery, mugs, tyres, bottles,
+                tickets, snacks, hats, costumes, masks, juggling, instruments, lanterns
+            };
             database.Items = items;
             database.Containers = new List<ContainerDefinition> { box };
 
@@ -197,21 +283,23 @@ namespace SortingGame.EditorTools
             // (Hand costs 240 in total; a Warehouse room pays roughly 550).
             var hand = Tool("hand", ToolType.Hand, overwrite, null, (0, 1f, 0.10f), (60, 2f, 0.11f), (180, 3f, 0.12f));
             var broom = Tool("broom", ToolType.Broom, overwrite, null, (0, 0.38f, 0f), (50, 0.5f, 0f), (150, 0.65f, 0f));
-            var magnet = Tool("magnet", ToolType.Magnet, overwrite, hand, (500, 0.35f, 2f), (900, 0.45f, 4f), (1600, 0.55f, 6f));
+            // Level 4 (M8): something to save for once the Circus pays more than the first three venues together.
+            var magnet = Tool("magnet", ToolType.Magnet, overwrite, hand, (500, 0.35f, 2f), (900, 0.45f, 4f), (1600, 0.55f, 6f), (2400, 0.65f, 8f));
             database.Tools = new List<ToolDefinition> { hand, broom, magnet };
-            database.Venues = new List<VenueDefinition> { comicBox, garage, warehouse };
+            database.Venues = new List<VenueDefinition> { comicBox, garage, warehouse, circus };
 
             // ---- Helpers (GDD 10.3). Level 1 cost = hire price; levels are (cost, speed m/s, items per trip).
             // Slots follow venue progress and come sparingly: the first after the Garage, the second halfway
             // through the Warehouse. Not cheap on purpose: the game should stay playable for a long time.
+            // The Circus brings no new helper (user: not every venue should); its coins go into upgrades.
             // Balance pass (Docs/ECONOMY.md): hiring the second helper is cheaper than the first one's upgrade,
             // so the content of the MVP is enough to meet both helpers.
             database.Helpers = new List<HelperDefinition>
             {
                 Helper("pip", overwrite, garage, 100, new Color(0.62f, 0.90f, 0.78f), new Color(1.00f, 0.62f, 0.45f),
-                    (400, 0.9f, 1), (800, 1.1f, 2), (1300, 1.3f, 3)),
+                    (400, 0.9f, 1), (800, 1.1f, 2), (1300, 1.3f, 3), (2000, 1.5f, 4)),
                 Helper("dot", overwrite, warehouse, 50, new Color(1.00f, 0.80f, 0.62f), new Color(0.55f, 0.70f, 1.00f),
-                    (750, 0.9f, 1), (1200, 1.1f, 2), (1900, 1.3f, 3)),
+                    (750, 0.9f, 1), (1200, 1.1f, 2), (1900, 1.3f, 3), (2600, 1.5f, 4)),
             };
             EditorUtility.SetDirty(database);
 
@@ -326,6 +414,16 @@ namespace SortingGame.EditorTools
                 helper.Levels.Add(new HelperDefinition.Level { Cost = cost, Speed = speed, Capacity = capacity });
             EditorUtility.SetDirty(helper);
             return helper;
+        }
+
+        /// <summary>GDD 5.4: the room starts locked; it opens when the venue's other open rooms average this %, or for coins.</summary>
+        static void Lock(SectionDefinition section, int atVenuePercent, int coinCost, bool overwrite)
+        {
+            if (!overwrite && section.UnlockCoinCost != 0) return;
+            section.StartsLocked = true;
+            section.UnlockAtVenuePercent = atVenuePercent;
+            section.UnlockCoinCost = coinCost;
+            EditorUtility.SetDirty(section);
         }
 
         const float LooseShare = 0.25f;

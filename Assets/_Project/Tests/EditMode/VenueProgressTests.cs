@@ -112,6 +112,31 @@ namespace SortingGame.Tests
             Assert.IsEmpty(VenueProgress.NewlyUnlockable(_ladder[1], data));
         }
 
+        [Test]
+        public void LockedSections_OpenOneAfterAnother_NotSeveralAtOnce()
+        {
+            var a = MakeSection("a", 20);
+            var b = MakeSection("b", 20);
+            var c = MakeSection("c", 20);
+            c.StartsLocked = true;
+            c.UnlockAtVenuePercent = 40;
+            var d = MakeSection("d", 20);
+            d.StartsLocked = true;
+            d.UnlockAtVenuePercent = 50;
+            var venue = MakeVenue("big", a, b, c, d);
+            var data = new SaveData();
+            SetSection(data, "a", 10, 20);
+            SetSection(data, "b", 10, 20); // open rooms at 50% on average: enough for c and, on its own, for d
+
+            // c opens; being empty it pulls the average down to 33%, so d waits.
+            CollectionAssert.AreEqual(new[] { c }, VenueProgress.NewlyUnlockable(venue, data));
+
+            data.UnlockedSections.Add("c");
+            Assert.IsEmpty(VenueProgress.NewlyUnlockable(venue, data));
+            SetSection(data, "c", 10, 20);
+            CollectionAssert.AreEqual(new[] { d }, VenueProgress.NewlyUnlockable(venue, data));
+        }
+
         HelperDefinition MakeHelper(VenueDefinition venue, int percent)
         {
             var helper = ScriptableObject.CreateInstance<HelperDefinition>();
