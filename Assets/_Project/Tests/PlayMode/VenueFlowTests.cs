@@ -10,7 +10,7 @@ namespace SortingGame.Tests
 {
     /// <summary>
     /// M4 end to end: a fresh game starts on the Comic Box overview; zoom into the room, finish it, come back,
-    /// the Garage opens for free; a room needs its collectibles to finish; Warehouse locked room opens by coins and by progress.
+    /// the Garage opens for free; a room needs its collectibles to finish; the Warehouse's locked room opens by progress only.
     /// </summary>
     public class VenueFlowTests
     {
@@ -93,7 +93,7 @@ namespace SortingGame.Tests
         }
 
         [UnityTest, Timeout(120000)]
-        public IEnumerator Warehouse_LockedRoom_OpensByCoinsOrProgress()
+        public IEnumerator Warehouse_LockedRoom_OpensByProgressOnly()
         {
             yield return TestGame.LoadMain();
             var warehouse = TestGame.Venue("warehouse");
@@ -104,26 +104,23 @@ namespace SortingGame.Tests
             Assert.AreEqual(4, Boot.Overview.Rooms.Count);
             Assert.IsFalse(Boot.Overview.RoomOf(basement).Status.Unlocked);
 
+            // Tapping it explains what opens it; there is nothing to buy, however many coins the player has.
+            Boot.Wallet.Add(5000);
+            Boot.Hud.ShowUnlock(basement);
+            Assert.IsTrue(Boot.Hud.IsUnlockCardOpen);
+            yield return TestSnapshots.Capture("m4_05_unlock_card");
+            Flow.ShowOverviewImmediately(warehouse);
+            Assert.IsFalse(Boot.Overview.RoomOf(basement).Status.Unlocked, "Coins do not open rooms.");
+            Assert.AreEqual(5000, Boot.Wallet.Coins);
+
             // Progress: other rooms at 60% on average -> opens by itself next time the overview shows.
             foreach (var section in warehouse.Sections.Where(s => s != basement))
                 Boot.Data.SetSection(new SectionSave { SectionId = section.Id, PlacedItems = (int)(section.TotalSlotCount * 0.62f), TotalItems = section.TotalSlotCount, Fraction = 0.62f });
             Flow.ShowOverviewImmediately(warehouse);
             yield return new WaitForSeconds(0.3f);
             Assert.IsTrue(Boot.Overview.RoomOf(basement).Status.Unlocked);
+            Assert.AreEqual(5000, Boot.Wallet.Coins);
             yield return TestSnapshots.Capture("m4_04_warehouse_overview");
-
-            // Coins: a fresh lock opened by paying.
-            Boot.Data.UnlockedSections.Clear();
-            foreach (var section in warehouse.Sections.Where(s => s != basement))
-                Boot.Data.SetSection(new SectionSave { SectionId = section.Id, PlacedItems = 0, TotalItems = section.TotalSlotCount, Fraction = 0f });
-            Flow.ShowOverviewImmediately(warehouse);
-            Assert.IsFalse(Boot.Overview.RoomOf(basement).Status.Unlocked);
-            Boot.Hud.ShowUnlock(basement);
-            yield return TestSnapshots.Capture("m4_05_unlock_card");
-            Boot.Wallet.Add(basement.UnlockCoinCost);
-            Flow.UnlockWithCoins(basement);
-            Assert.IsTrue(Boot.Overview.RoomOf(basement).Status.Unlocked);
-            Assert.AreEqual(0, Boot.Wallet.Coins);
         }
     }
 }

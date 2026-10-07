@@ -4,7 +4,15 @@ Living notes so any session (any machine, any Claude account) can pick up where 
 Update this file at the end of every work chunk, before committing. Newest entry on top in the log.
 
 ## Current state
-- **Active milestone:** M8 (Abandoned Circus) + M8.1 (playtest fixes: no piles, even spread, items drop where released) implemented, tests green (EditMode 72/72, PlayMode 23/23), screenshots reviewed. **Waiting for the user's playtest.** The user has not played the Circus yet (stopped at the pile-up problem). M0 to M7 are approved.
+- **Active milestone:** none in progress. M8 (Abandoned Circus), M8.1 (no piles, even spread, items drop where released) and M8.2 (no coin shortcut for locked rooms) are implemented; tests green (EditMode 72/72, PlayMode 23/23).
+- **Playtest status:** M0 to M7 approved. M8.1 approved on 2026-10-07 ("looks good"). The Circus itself (M8) has not been confirmed room by room yet; the user was on the way there when the M8.1 issues came up.
+- **Next concrete step: ask the user what comes next.** Nothing is planned. Candidates:
+  1. Real models, textures and sounds instead of placeholders (GDD 12, 14): Chubby, the helpers, items per category, shelves, rooms. Biggest visible step; needs art decisions from the user.
+  2. Polish of what exists: tutorial / first-minute guidance in the Comic Box, feedback and juice passes, a calmer drop (items roll for a while), HUD icons instead of the letters H / B / M / A.
+  3. More content: the next venue on the ladder (GDD 5.3), more item variants per category.
+  4. Real ad and store SDKs behind `IAdProvider` / `IStoreProvider` (GDD 15.5); needs the user's accounts and choices.
+  5. Open design questions in GDD 18: set bonus for the album, premium currency, cloud save, automatic language pick.
+  6. The on-device test, as soon as there is a device (checklist below).
 - **Open item from M7: on-device test.** There is no Android device yet. When one is there: `tools/unity.sh android`, install `Builds/Android/SortingGame.apk`, and check
   - frame rate in a 400-item Circus room (and a 300-item Warehouse room), with both helpers and Auto Sort running,
   - touch sizes: picking small items, the tool bar, the Shop and Auto Sort rows,
@@ -12,11 +20,10 @@ Update this file at the end of every work chunk, before committing. Newest entry
   - haptics, sound levels,
   - Turkish letters with the device font (fine in the editor), text that does not fit,
   - safe area on a notched screen.
-- **Next concrete step:** apply M8 playtest feedback. Nothing is planned after that; ask the user. Candidates from the GDD: real models and sounds instead of placeholders (12, 14), more venues (5.3), real ad and store SDKs behind `IAdProvider` / `IStoreProvider` (15.5), final Turkish translation, open questions in GDD 18.
-- **Blocking / waiting on user:** playtest of M8; an Android device for the device test.
+- **Blocking / waiting on user:** the next direction; an Android device for the device test.
 - **Not built after M8:** the Android APK. Run `tools/unity.sh android` before a device test.
-- **Pushed:** `origin/main` has everything up to M7 (2026-10-07). The M7 approval commit and M8 are local only. Push only when the user asks.
-- **User intent:** mechanics first, limits/numbers later. Helpers and upgrades should not be cheap; the game should stay playable for a long time.
+- **Pushed:** `origin/main` has everything up to M8.2 (2026-10-07). Push only when the user asks.
+- **User intent:** mechanics first, limits/numbers later. Helpers and upgrades should not be cheap; the game should stay playable for a long time. Progress comes from playing: no offline progress, no paying past locked rooms.
 
 ## M8.1 notes (where items end up)
 - **Gotcha (cost a pile in the middle of every room):** a Rigidbody keeps its own pose. Setting `transform.position` on an item and starting physics in the same frame makes it jump back to the body's old pose; for a freshly created item that is the room origin. `ItemView.Launch` therefore copies the transform into `_body.position` / `_body.rotation` first. Move items with `SetResting` or `SectionController.DropOnFloor`, never by transform + physics on the same frame elsewhere.
@@ -122,6 +129,11 @@ Update this file at the end of every work chunk, before committing. Newest entry
 - graphify setup on a new machine (once, in project root): `graphify hook install` (git hooks are not versioned) and `graphify claude install` (writes machine-local `.claude/settings.json`; rename it to `.claude/settings.local.json`, which is git-ignored, and revert any duplicate graphify section it adds to CLAUDE.md). `graphify-out/` itself is versioned.
 
 ## Session log
+### 2026-10-07 — M8.1 approved; M8.2 coin shortcut removed; pushed
+- User tested the M8.1 fixes: good. Asked to remove the option to open locked rooms with coins, then commit and push.
+- Removed `UnlockCoinCost`, `GameFlow.UnlockWithCoins`, the buy button and its texts; the unlock card now only says what opens the room. GDD 5.4 / 11.1, economy report footer, tests (`VenueFlowTests`, `CircusTests`).
+- EditMode 72/72, PlayMode 23/23. Pushed to `origin/main`.
+
 ### 2026-10-07 — M8.1 playtest fixes (piles, spread, drops)
 - User feedback while playing towards the Circus: items pile up in the middle of every room; spilled or off-screen items reappear there; a wrong-shelf drop flies all the way back to the pickup spot. Wanted: even spread, and an item always falls and stays where it is.
 - Fixed: physics body sync in `ItemView.Launch` (root cause of the pile), safety net target, stratified placement, box tip direction, solid floor + lid, wrong-shelf drop in place. Details in "M8.1 notes".

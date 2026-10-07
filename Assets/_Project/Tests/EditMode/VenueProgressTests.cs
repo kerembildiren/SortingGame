@@ -20,7 +20,6 @@ namespace SortingGame.Tests
             _basement = MakeSection("basement", 10);
             _basement.StartsLocked = true;
             _basement.UnlockAtVenuePercent = 60;
-            _basement.UnlockCoinCost = 150;
             _ladder = new List<VenueDefinition>
             {
                 MakeVenue("box", MakeSection("box_room", 12)),

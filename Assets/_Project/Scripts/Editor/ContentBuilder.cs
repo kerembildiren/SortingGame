@@ -234,12 +234,12 @@ namespace SortingGame.EditorTools
                 new[] { (toys, 50), (comics, 50), (stationery, 50), (mugs, 50), (tyres, 50), (bottles, 50) }, 4, new[] { guard });
             var basement = Section("wh_basement", 6.4f, overwrite, 0.7f, 0.2f,
                 new[] { (bottles, 50), (stationery, 50), (tools, 50), (tyres, 50), (comics, 50), (toys, 50) }, 5, none, bottle);
-            // GDD 5.4: opens when the other rooms average 60%, or right away for coins.
-            Lock(basement, 60, 150, overwrite);
+            // GDD 5.4: opens when the other rooms average 60%.
+            Lock(basement, 60, overwrite);
 
             // ---- M8: Abandoned Circus. Eight rooms of about 400 items, eight shelves each (user: "bigger").
-            // Three rooms are open from the start; the others open one after another as the open rooms fill up
-            // (or for coins), so there are always two or three rooms to choose from. The Main Tent comes last.
+            // Three rooms are open from the start; the others open one after another as the open rooms fill up,
+            // so there are always two or three rooms to choose from. The Main Tent comes last.
             var ticketBooth = Section("cs_tickets", 6.4f, overwrite, 0.5f, 0.15f,
                 new[] { (tickets, 50), (stationery, 50), (snacks, 50), (mugs, 50), (bottles, 50), (comics, 50), (lanterns, 50), (hats, 50) }, 6, none, goldenTicket);
             var snackStand = Section("cs_snacks", 6.4f, overwrite, 0.6f, 0.15f,
@@ -256,11 +256,11 @@ namespace SortingGame.EditorTools
                 new[] { (costumes, 50), (masks, 50), (hats, 50), (instruments, 50), (stationery, 50), (mugs, 50), (bottles, 50), (comics, 50) }, 12, none);
             var mainTent = Section("cs_main_tent", 6.4f, overwrite, 0.7f, 0.2f,
                 new[] { (tickets, 50), (snacks, 50), (hats, 50), (costumes, 50), (masks, 50), (juggling, 50), (instruments, 50), (lanterns, 50) }, 13, new[] { ringmaster }, starLantern);
-            Lock(clownCaravan, 40, 300, overwrite);
-            Lock(musicWagon, 50, 400, overwrite);
-            Lock(propStore, 60, 500, overwrite);
-            Lock(backstage, 70, 600, overwrite);
-            Lock(mainTent, 85, 800, overwrite);
+            Lock(clownCaravan, 40, overwrite);
+            Lock(musicWagon, 50, overwrite);
+            Lock(propStore, 60, overwrite);
+            Lock(backstage, 70, overwrite);
+            Lock(mainTent, 85, overwrite);
 
             // ---- Venues: GDD 5.3 ladder. Each opens for free when the one before is complete; one Chubby each. ----
             var comicBox = Venue("comic_box", overwrite, new[] { comicBoxSection }, captain);
@@ -416,13 +416,12 @@ namespace SortingGame.EditorTools
             return helper;
         }
 
-        /// <summary>GDD 5.4: the room starts locked; it opens when the venue's other open rooms average this %, or for coins.</summary>
-        static void Lock(SectionDefinition section, int atVenuePercent, int coinCost, bool overwrite)
+        /// <summary>GDD 5.4: the room starts locked; it opens when the venue's other open rooms average this %. Never for coins.</summary>
+        static void Lock(SectionDefinition section, int atVenuePercent, bool overwrite)
         {
-            if (!overwrite && section.UnlockCoinCost != 0) return;
+            if (!overwrite && section.StartsLocked) return;
             section.StartsLocked = true;
             section.UnlockAtVenuePercent = atVenuePercent;
-            section.UnlockCoinCost = coinCost;
             EditorUtility.SetDirty(section);
         }
 
@@ -460,7 +459,6 @@ namespace SortingGame.EditorTools
             section.RareItems = new List<ItemDefinition>(rareItems);
             section.Seed = seed;
             section.StartsLocked = false;
-            section.UnlockCoinCost = 0;
             section.UnlockAtVenuePercent = 0;
             EditorUtility.SetDirty(section);
             return section;

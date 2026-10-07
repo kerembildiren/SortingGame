@@ -39,5 +39,4 @@ MonoBehaviour:
   BuriedItemRatio: 0.2
   Seed: 5
   StartsLocked: 1
-  UnlockCoinCost: 150
   UnlockAtVenuePercent: 60

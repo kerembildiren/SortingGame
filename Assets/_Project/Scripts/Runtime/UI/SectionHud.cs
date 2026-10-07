@@ -30,7 +30,6 @@ namespace SortingGame.UI
         public event Action BackRequested;
         public event Action NextVenueRequested;
         public event Action<VenueDefinition> VenueOpenRequested;
-        public event Action<SectionDefinition> UnlockRequested;
         public event Action InspectBackRequested;
 
         public enum Mode { Section, Overview }
@@ -89,8 +88,6 @@ namespace SortingGame.UI
         VisualElement _unlock;
         Label _unlockTitle;
         Label _unlockText;
-        Button _unlockBuy;
-        SectionDefinition _unlockSection;
         VisualElement _fade;
         VisualElement _bookCard;
 
@@ -391,12 +388,7 @@ namespace SortingGame.UI
             var unlockCard = Add(_unlock, new VisualElement(), "banner-card");
             _unlockTitle = Add(unlockCard, new Label(), "banner-title");
             _unlockText = Add(unlockCard, new Label(), "rare-description");
-            _unlockBuy = Add(unlockCard, new Button(() =>
-            {
-                _unlock.AddToClassList("hidden");
-                UnlockRequested?.Invoke(_unlockSection);
-            }), "primary-button");
-            Add(unlockCard, new Button(() => _unlock.AddToClassList("hidden")) { text = Loc.Get("hud.close") }, "secondary-button");
+            Add(unlockCard, new Button(() => _unlock.AddToClassList("hidden")) { text = Loc.Get("hud.close") }, "primary-button");
         }
 
         /// <summary>GDD 5.2 venue ladder: restored places, open places, locked places.</summary>
@@ -430,19 +422,15 @@ namespace SortingGame.UI
         public void CloseMap() => _map.AddToClassList("hidden");
         public bool IsMapOpen => !_map.ClassListContains("hidden");
 
-        /// <summary>GDD 5.4: locked room card with the auto-unlock rule and the coin shortcut.</summary>
+        /// <summary>GDD 5.4: a locked room says what opens it. Progress only; there is nothing to buy here.</summary>
         public void ShowUnlock(SectionDefinition section)
         {
-            _unlockSection = section;
             _unlockTitle.text = Loc.Get(section.DisplayNameKey);
-            _unlockText.text = section.UnlockAtVenuePercent > 0
-                ? Loc.Format("hud.unlock_rule", section.UnlockAtVenuePercent)
-                : Loc.Get("hud.unlock_coins_only");
-            _unlockBuy.text = Loc.Format("hud.unlock_now", section.UnlockCoinCost);
-            _unlockBuy.style.display = section.UnlockCoinCost > 0 ? DisplayStyle.Flex : DisplayStyle.None;
-            _unlockBuy.SetEnabled(_wallet != null && _wallet.CanAfford(section.UnlockCoinCost));
+            _unlockText.text = Loc.Format("hud.unlock_rule", section.UnlockAtVenuePercent);
             _unlock.RemoveFromClassList("hidden");
         }
+
+        public bool IsUnlockCardOpen => !_unlock.ClassListContains("hidden");
 
         /// <summary>Black screen fade used by the zoom transition.</summary>
         public void Fade(float to, float duration, Action done = null)

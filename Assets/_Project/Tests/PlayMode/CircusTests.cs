@@ -11,7 +11,7 @@ namespace SortingGame.Tests
 {
     /// <summary>
     /// M8: the Abandoned Circus, the fourth venue. Eight rooms of 400 items with eight shelves each, opened in
-    /// stages; a Ringmaster Chubby in the Main Tent; it opens when the Warehouse is fully restored.
+    /// stages (by progress only); a Ringmaster Chubby in the Main Tent; it opens when the Warehouse is fully restored.
     /// </summary>
     public class CircusTests
     {
@@ -72,12 +72,9 @@ namespace SortingGame.Tests
             Assert.AreEqual(4, Boot.Overview.Rooms.Count(r => r.Status.Unlocked));
             Assert.IsTrue(Boot.Overview.RoomOf(circus.Sections[3]).Status.Unlocked);
 
-            // Or for coins, any time.
-            var music = circus.Sections[4];
-            Boot.Wallet.Add(music.UnlockCoinCost);
-            Flow.UnlockWithCoins(music);
-            Assert.IsTrue(Boot.Overview.RoomOf(music).Status.Unlocked);
-            Assert.AreEqual(0, Boot.Wallet.Coins);
+            // The rest wait their turn: the freshly opened, empty room pulls the average down.
+            Assert.IsFalse(Boot.Overview.RoomOf(circus.Sections[4]).Status.Unlocked);
+            Assert.IsFalse(Boot.Overview.RoomOf(tent).Status.Unlocked);
         }
 
         [UnityTest, Timeout(180000)]

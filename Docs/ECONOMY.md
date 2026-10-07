@@ -61,5 +61,5 @@ offers at that moment. Real players choose differently; this is a yardstick, not
 | 15 | Magnet level 4 | 2400 | not within this content |  |
 | 16 | Dot level 4 | 2600 | not within this content |  |
 
-Not in this model: Auto Sort (ads or real money, never coins), how fast a player actually sorts, and the
-optional coin shortcuts for locked rooms (6 rooms, 150 to 800 coins, 2750 in total).
+Not in this model: Auto Sort (ads or real money, never coins) and how fast a player actually sorts.
+Coins buy tools and helpers only: venues and locked rooms open by progress.

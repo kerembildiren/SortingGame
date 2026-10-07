@@ -82,7 +82,7 @@ Mekânın bölümlerini temizle ve düzenle → o mekânın Chubby'sini bul → 
 - Sıradan eşya doğru rafa → **Coin** (anında).
 - Nadir (mavi) eşya doğru rafa → biraz daha fazla **Coin**.
 - Chubby → **Koleksiyon Kitabı** (her Chubby yalnızca bir kez çıkar, kopya yoktur).
-- Coin → aletler, alet yükseltmeleri, yardımcılar, yardımcı yükseltmeleri, bölüm kilitleri.
+- Coin → aletler, alet yükseltmeleri, yardımcılar, yardımcı yükseltmeleri. Başka hiçbir şey Coin ile açılmaz.
 - Ödüllü reklam veya gerçek para → **Oto Sort** güçlendirmesi (Coin ile alınamaz).
 
 ---
@@ -113,10 +113,10 @@ Mekânlar doğrusal sırayla açılır: bir mekân tamamlanınca bir sonraki aç
 
 Sayılar **[VARSAYILAN]**, dengeleme testlerinde değişecek. Prototipteki güncel büyüklükler: Çizgi Roman Kutusu ~60, Garaj ~200, Depo'nun her odası ~300 eşya (bkz. karar günlüğü).
 
-### 5.4 Bölüm kilitleri [VARSAYILAN]
-Bir mekân içindeki bazı bölümler kilitli başlar (ör. Depo'daki Bodrum). Kilit, mekân içindeki diğer bölümlerin belli bir yüzdeye ulaşmasıyla veya Coin ile açılır.
+### 5.4 Bölüm kilitleri [KARAR]
+Bir mekân içindeki bazı bölümler kilitli başlar (ör. Depo'daki Bodrum). Kilit **yalnızca ilerlemeyle** açılır: mekânın açık bölümlerinin ortalaması belli bir yüzdeye ulaşınca. Kilitli bölüm Coin ile açılamaz; oyuncu kilitli bir odaya dokununca yalnızca neyin açacağını görür.
 
-Büyük mekânlarda kilitler kademelidir: Sirk'in 8 odasından 3'ü baştan açıktır; diğerleri, açık odaların ortalaması yükseldikçe sırayla açılır (%40, %50, %60, %70, Ana Çadır %85). Böylece oyuncunun önünde her zaman seçebileceği iki üç oda olur ama mekân tek seferde önüne yığılmaz. Her kilidin isteğe bağlı bir Coin kısayolu vardır.
+Büyük mekânlarda kilitler kademelidir: Sirk'in 8 odasından 3'ü baştan açıktır; diğerleri, açık odaların ortalaması yükseldikçe sırayla açılır (%40, %50, %60, %70, Ana Çadır %85). Böylece oyuncunun önünde her zaman seçebileceği iki üç oda olur ama mekân tek seferde önüne yığılmaz.
 
 ### 5.5 Hafif renovasyon [KARAR]
 - Oyunda duvar boyama, mobilya seçme gibi iç dekorasyon **yoktur**. Bu, prensip 3 ve 7 ile çelişir ve içerik maliyetini katlar.
@@ -293,7 +293,7 @@ Küçük mekânlarda oyuncu her eşyayı eliyle düzenler. Büyük mekânlarda a
 ## 11. Ekonomi ve gelir modeli
 
 ### 11.1 Para birimleri
-- **Coin** (yumuşak para) [KARAR]: Oyun içinde kazanılır. Aletler, alet yükseltmeleri, yardımcılar, yardımcı yükseltmeleri, bölüm kilitleri. Mekânlar ve Oto Sort Coin ile alınmaz.
+- **Coin** (yumuşak para) [KARAR]: Oyun içinde kazanılır. Yalnızca aletler, alet yükseltmeleri, yardımcılar ve yardımcı yükseltmeleri içindir. Mekânlar, kilitli bölümler ve Oto Sort Coin ile alınmaz.
 - **Premium para** (ör. Gem) **[AÇIK]**: Gerekip gerekmediği ve ne için kullanılacağı netleşmedi. Eklenirse prensip 9 geçerlidir.
 
 ### 11.2 Ödüllü reklamlar [KARAR]
@@ -542,3 +542,4 @@ Reklam ağı, IAP (Unity IAP önerilir), analitik ve uzaktan yapılandırma (rem
 | 2026-10-07 | Sirk yeni yardımcı getirmez. Onun yerine Mıknatıs'a ve iki yardımcıya 4. seviye eklendi (2400 / 2000 / 2600 Coin). | "Her mekânda yeni yardımcı gelmesin" kararı; yine de Sirk'in kazandırdığı Coin'in gidecek yeri olmalı (11.5). |
 | 2026-10-07 | Yanlış rafa bırakılan eşya alındığı yere dönmez, olduğu yerde yere düşer (7.2). Bırakılan ya da kaybolan eşya hiçbir zaman başka bir yerde belirmez. | Oyun sahibi kararı: uzun odalarda eşyanın ta alındığı yere uçması rahatsız ediciydi; eşyalar oda ortasında yığılıyordu. |
 | 2026-10-07 | Kutular ve eşyalar oda genişliğine eşit yayılır (7.2.1). | Oyun sahibi kararı: eşya çok, yığılma olmamalı. |
+| 2026-10-07 | Kilitli bölümler Coin ile açılamaz; yalnızca ilerlemeyle açılır (5.4, 11.1). | Oyun sahibi kararı: ilerleme odaları temizleyerek olmalı, parayla atlanmamalı. |

@@ -95,11 +95,8 @@ namespace SortingGame.EditorTools
                 text.AppendLine($"| {number} | {Name(purchase.Id)} level {purchase.Level} | {purchase.Cost} | {where} | {at} |");
             }
             text.AppendLine();
-            var shortcuts = database.Venues.SelectMany(v => v.Sections).Where(s => s.UnlockCoinCost > 0).Select(s => s.UnlockCoinCost).ToList();
-            text.AppendLine("Not in this model: Auto Sort (ads or real money, never coins), how fast a player actually sorts, and the");
-            text.AppendLine(shortcuts.Count == 0
-                ? "optional room shortcuts (none at the moment)."
-                : $"optional coin shortcuts for locked rooms ({shortcuts.Count} rooms, {shortcuts.Min()} to {shortcuts.Max()} coins, {shortcuts.Sum()} in total).");
+            text.AppendLine("Not in this model: Auto Sort (ads or real money, never coins) and how fast a player actually sorts.");
+            text.AppendLine("Coins buy tools and helpers only: venues and locked rooms open by progress.");
             return text.ToString();
         }
 

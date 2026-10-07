@@ -53,7 +53,6 @@ namespace SortingGame.Core
             _hud.BackRequested += OnBack;
             _hud.NextVenueRequested += GoToNextVenue;
             _hud.VenueOpenRequested += venue => SwitchVenue(venue);
-            _hud.UnlockRequested += UnlockWithCoins;
         }
 
         /// <summary>App start: continue where the player left off (GDD 15.4).</summary>
@@ -247,23 +246,6 @@ namespace SortingGame.Core
         {
             var next = Venue != null ? VenueProgress.Next(_ctx.Database.Venues, Venue) : null;
             if (next != null && IsOwned(next)) SwitchVenue(next);
-        }
-
-        /// <summary>GDD 5.4: pay coins instead of waiting for the other rooms.</summary>
-        public void UnlockWithCoins(SectionDefinition section)
-        {
-            if (section == null || VenueProgress.IsUnlocked(section, Data) || section.UnlockCoinCost <= 0) return;
-            if (!_ctx.Wallet.TrySpend(section.UnlockCoinCost))
-            {
-                SfxPlayer.Instance?.Play(Sfx.Wrong, 0f);
-                _hud.ShowToast(Loc.Get("hud.not_enough"));
-                return;
-            }
-            Data.UnlockedSections.Add(section.Id);
-            SfxPlayer.Instance?.Play(Sfx.Purchase, 0f);
-            Haptics.Medium();
-            ShowOverviewNow(Venue);
-            _hud.ShowCelebration(Loc.Format("hud.room_unlocked", Loc.Get(section.DisplayNameKey)));
         }
     }
 }

@@ -50,10 +50,8 @@ namespace SortingGame.Data
         [Tooltip("Same seed = same layout every time.")]
         public int Seed = 1;
 
-        [Tooltip("Locked at start (GDD 5.4).")]
+        [Tooltip("Locked at start (GDD 5.4). Rooms open by progress only, never for coins.")]
         public bool StartsLocked;
-        [Tooltip("Coins to unlock right away. 0 = cannot be bought.")]
-        public int UnlockCoinCost;
         [Range(0, 100), Tooltip("Unlocks by itself when the venue's other unlocked sections reach this average %. 0 = never.")]
         public int UnlockAtVenuePercent;
 

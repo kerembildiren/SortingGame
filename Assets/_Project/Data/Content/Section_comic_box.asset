@@ -32,5 +32,4 @@ MonoBehaviour:
   BuriedItemRatio: 0.1
   Seed: 1
   StartsLocked: 0
-  UnlockCoinCost: 0
   UnlockAtVenuePercent: 0
