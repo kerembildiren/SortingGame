@@ -169,8 +169,13 @@ Oyun tamamen dikey (portrait) ve tek elle oynanabilir olmalıdır. Sık kullanı
 | Mavi parlayan nadir eşyayı sürükle-bırak | Normal eşya gibi kendi kategorisinin rafına konur, biraz daha fazla Coin verir (bkz. 9.4). |
 | Oda bittikten sonra yardımcıya dokunma | Yardımcı sevinir: kalpler çıkar, tatlı bir ses çıkarır (bkz. 10.3). |
 
-### 7.2 Yanlış yerleştirme [VARSAYILAN]
-Ceza yoktur (prensip 2). Eşya yanlış rafa bırakılırsa yumuşak bir animasyonla zemine geri döner; doğru raf kısa bir an hafifçe vurgulanabilir. Hiçbir zaman Coin kaybı olmaz.
+### 7.2 Yanlış yerleştirme ve bırakma [KARAR]
+Ceza yoktur (prensip 2). Eşya yanlış rafa bırakılırsa **olduğu yerde**, o rafın önünde yere düşer ve orada kalır; alındığı yere geri uçmaz. Doğru raf kısa bir an hafifçe vurgulanır. Hiçbir zaman Coin kaybı olmaz.
+
+Genel kural: bırakılan her eşya (boş zemine, yanlış rafa, taşıma yarıda kesildiğinde) bulunduğu yerin altına düşer ve orada durur. Eşya hiçbir durumda odanın başka bir yerinde belirmez. Odadan dışarı fırlayan ya da zeminin altına düşen bir eşya da kaybolduğu noktanın hemen üstüne, zemine geri gelir.
+
+### 7.2.1 Eşyaların odaya dağılımı [KARAR]
+Kutular, yerde açıkta duran eşyalar ve tozun altındakiler odanın genişliği boyunca eşit yayılır: oda, nesne sayısı kadar dilime bölünür ve her dilime bir nesne düşer. Uzun odalarda hiçbir bölge kalabalık, hiçbir bölge boş kalmaz. Kutular odanın derinliğine doğru devrilir, böylece içinden dökülenler kutunun yakınında kalır.
 
 ### 7.3 Çöp ve kategorisiz eşyalar [VARSAYILAN]
 Süpürülen toz ve kâğıt parçaları ayrı eşya sayılmaz; zemindeki bir "kirlilik katmanı" olarak modellenir ve bölüm yüzdesine katkı sağlar. Gerçek "çöp" eşyalar (kırık şeyler vb.) için bölümde bir çöp kutusu bulunur **[AÇIK: dahil edilip edilmeyeceği]**.
@@ -535,3 +540,5 @@ Reklam ağı, IAP (Unity IAP önerilir), analitik ve uzaktan yapılandırma (rem
 | 2026-10-07 | Sirk 8 yeni kategori getirir (Bilet, Atıştırmalık, Şapka, Kostüm, Maske, Jonglör, Enstrüman, Fener); her odada 8 raf vardır ve eski kategoriler de karışır. Her yeni kategorinin kendine ait bir renk ailesi vardır. | Çeşitlilik merdiven boyunca artar (8.2); bir odada 8 kategori olunca bir bakışta ayırt etmek renk ailesiyle mümkün. |
 | 2026-10-07 | Sirk'te odalar kademeli açılır (3 açık, 5 kilitli; Ana Çadır en son). Chubby (Sunucu Chubby) Ana Çadır'dadır. 5 odada birer nadir eşya vardır. | 8 oda tek seferde yığılmasın; final odası hem en zengin oda hem koleksiyonun ödülü olsun. |
 | 2026-10-07 | Sirk yeni yardımcı getirmez. Onun yerine Mıknatıs'a ve iki yardımcıya 4. seviye eklendi (2400 / 2000 / 2600 Coin). | "Her mekânda yeni yardımcı gelmesin" kararı; yine de Sirk'in kazandırdığı Coin'in gidecek yeri olmalı (11.5). |
+| 2026-10-07 | Yanlış rafa bırakılan eşya alındığı yere dönmez, olduğu yerde yere düşer (7.2). Bırakılan ya da kaybolan eşya hiçbir zaman başka bir yerde belirmez. | Oyun sahibi kararı: uzun odalarda eşyanın ta alındığı yere uçması rahatsız ediciydi; eşyalar oda ortasında yığılıyordu. |
+| 2026-10-07 | Kutular ve eşyalar oda genişliğine eşit yayılır (7.2.1). | Oyun sahibi kararı: eşya çok, yığılma olmamalı. |

@@ -4,7 +4,7 @@ Living notes so any session (any machine, any Claude account) can pick up where 
 Update this file at the end of every work chunk, before committing. Newest entry on top in the log.
 
 ## Current state
-- **Active milestone:** M8 (Abandoned Circus, fourth venue) implemented, tests green (EditMode 72/72, PlayMode 20/20), screenshots reviewed. **Waiting for the user's playtest.** M0 to M7 are approved.
+- **Active milestone:** M8 (Abandoned Circus) + M8.1 (playtest fixes: no piles, even spread, items drop where released) implemented, tests green (EditMode 72/72, PlayMode 23/23), screenshots reviewed. **Waiting for the user's playtest.** The user has not played the Circus yet (stopped at the pile-up problem). M0 to M7 are approved.
 - **Open item from M7: on-device test.** There is no Android device yet. When one is there: `tools/unity.sh android`, install `Builds/Android/SortingGame.apk`, and check
   - frame rate in a 400-item Circus room (and a 300-item Warehouse room), with both helpers and Auto Sort running,
   - touch sizes: picking small items, the tool bar, the Shop and Auto Sort rows,
@@ -17,6 +17,13 @@ Update this file at the end of every work chunk, before committing. Newest entry
 - **Not built after M8:** the Android APK. Run `tools/unity.sh android` before a device test.
 - **Pushed:** `origin/main` has everything up to M7 (2026-10-07). The M7 approval commit and M8 are local only. Push only when the user asks.
 - **User intent:** mechanics first, limits/numbers later. Helpers and upgrades should not be cheap; the game should stay playable for a long time.
+
+## M8.1 notes (where items end up)
+- **Gotcha (cost a pile in the middle of every room):** a Rigidbody keeps its own pose. Setting `transform.position` on an item and starting physics in the same frame makes it jump back to the body's old pose; for a freshly created item that is the room origin. `ItemView.Launch` therefore copies the transform into `_body.position` / `_body.rotation` first. Move items with `SetResting` or `SectionController.DropOnFloor`, never by transform + physics on the same frame elsewhere.
+- Every release that is not a correct placement goes through `SectionController.DropOnFloor(item)`: wrong shelf (`TryPlace`, `DeliverStack`), release over the floor and cancelled drags (`DragController`). It keeps the item where it is, pulled just clear of the shelves (`FloorPointUnder`, `FloorBackLimit`), and lets it fall. `ItemView.ReturnToPickup` is gone.
+- Lost items: `ItemView.FloorPointFor` (set to `FloorPointUnder`) brings an item that fell below the floor back above the spot it left. `ItemView.Settled` -> `OnItemSettled` moves an item that came to rest behind the shelf guard to the floor in front.
+- Even spread: `SpreadSpots` (one slice of the room's width per object) for boxes, loose and buried items; `FindSpot` only searches inside a slice. Same seed still gives the same room.
+- `FloorTests` (PlayMode) cover all of it: shares per quarter of the room before and after opening every box, nothing under the floor / on the shelves, lost items, wrong-shelf drop.
 
 ## M8 notes (Abandoned Circus)
 - All content, no new systems: `ContentBuilder` adds 8 categories (32 item variants), 5 rare items, `ringmaster_chubby`, 8 sections `cs_*` and `Venue_Circus`. Room ids: `cs_tickets`, `cs_snacks`, `cs_costumes`, `cs_caravan`, `cs_music`, `cs_props`, `cs_backstage`, `cs_main_tent`.
@@ -115,6 +122,12 @@ Update this file at the end of every work chunk, before committing. Newest entry
 - graphify setup on a new machine (once, in project root): `graphify hook install` (git hooks are not versioned) and `graphify claude install` (writes machine-local `.claude/settings.json`; rename it to `.claude/settings.local.json`, which is git-ignored, and revert any duplicate graphify section it adds to CLAUDE.md). `graphify-out/` itself is versioned.
 
 ## Session log
+### 2026-10-07 — M8.1 playtest fixes (piles, spread, drops)
+- User feedback while playing towards the Circus: items pile up in the middle of every room; spilled or off-screen items reappear there; a wrong-shelf drop flies all the way back to the pickup spot. Wanted: even spread, and an item always falls and stays where it is.
+- Fixed: physics body sync in `ItemView.Launch` (root cause of the pile), safety net target, stratified placement, box tip direction, solid floor + lid, wrong-shelf drop in place. Details in "M8.1 notes".
+- Existing rooms in a save keep their old layout; the even spread shows in rooms generated from now on (Settings -> Restart section, or a new room).
+- EditMode 72/72, PlayMode 23/23.
+
 ### 2026-10-07 — M8 implemented (Abandoned Circus)
 - User asked for a fourth venue with a new theme and 8 rooms; picked "Abandoned Circus" and "about 400 items per room".
 - Content, staged room locks, level 4 upgrades, economy report regenerated, GDD 0.3.

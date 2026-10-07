@@ -374,7 +374,7 @@ namespace SortingGame.Section
                 if (_stack.Count > 0)
                 {
                     if (_hoveredShelf != null) _section.DeliverStack(_stack, _hoveredShelf, _shelfHitPoint, true);
-                    else foreach (var item in _stack) item.Drop();
+                    else foreach (var item in _stack) _section.DropOnFloor(item); // it falls where it is and stays there
                 }
                 EndCarry();
             }
@@ -505,7 +505,11 @@ namespace SortingGame.Section
         public void CancelDrag()
         {
             foreach (var item in _stack)
-                if (item != null) item.Drop();
+            {
+                if (item == null) continue;
+                if (_section != null && _section.IsLoaded) _section.DropOnFloor(item);
+                else item.Drop();
+            }
             EndCarry();
             _tapContainer = null;
             _tapCollectible = null;

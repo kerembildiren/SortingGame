@@ -173,11 +173,12 @@ namespace SortingGame.Tests
             stack.RemoveAll(delivered.Contains);
             Assert.That(stack.All(i => i.State == ItemState.Dragging), "The rest are still carried.");
 
-            // Let go over the comics shelf: the comic lands, the tool goes back to where it was.
+            // Let go over the comics shelf: the comic lands, the tool falls to the floor.
             var comics = Section.ShelfFor(categories.First(c => c.Id == "comics"));
             delivered = Section.DeliverStack(stack, comics, comics.transform.position, true);
             Assert.AreEqual(1, delivered.Count);
             yield return new WaitForSeconds(1f);
+            for (var waited = 0f; waited < 8f && stack.Any(i => i.State == ItemState.Physics); waited += Time.deltaTime) yield return null;
             Assert.AreEqual(1, toys.FilledCount);
             Assert.AreEqual(1, comics.FilledCount);
             var tool = stack.First(i => i.Definition.Category.Id == "tools");

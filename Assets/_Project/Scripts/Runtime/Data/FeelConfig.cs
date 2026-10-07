@@ -36,7 +36,6 @@ namespace SortingGame.Data
         [Header("Placement")]
         public float PlaceDuration = 0.22f;
         public float PlacePunchScale = 1.25f;
-        public float ReturnDuration = 0.35f;
         public float WrongShelfHintDuration = 0.8f;
 
         [Header("Containers")]

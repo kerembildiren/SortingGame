@@ -99,12 +99,13 @@ namespace SortingGame.Tests
             Assert.That(rares.All(r => r.Definition.CoinValue > r.Definition.Category.BaseCoinValue));
             yield return Snapshot("m5_06_rare_items");
 
-            // Wrong shelf: item comes back, no coins lost or gained (GDD 7.2).
+            // Wrong shelf: the item falls to the floor, no coins lost or gained (GDD 7.2).
             var item = section.SortableItems.First(i => i.State == ItemState.Resting);
             var wrong = section.Shelves.First(s => s.Category != item.Definition.Category);
             var coinsBefore = _boot.Wallet.Coins;
             Assert.IsFalse(section.TryPlace(item, wrong, wrong.transform.position));
-            yield return new WaitForSeconds(0.6f);
+            // It tumbles for a moment (a tyre may roll) before it lies still again.
+            for (var waited = 0f; waited < 8f && item.State == ItemState.Physics; waited += Time.deltaTime) yield return null;
             Assert.AreEqual(coinsBefore, _boot.Wallet.Coins);
             Assert.AreEqual(ItemState.Resting, item.State);
 

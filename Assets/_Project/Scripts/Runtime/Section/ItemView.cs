@@ -36,6 +36,11 @@ namespace SortingGame.Section
         float _physicsTimer;
         Coroutine _motion;
 
+        /// <summary>Set by the room: the nearest spot on the open floor for a world position. Used when an item gets lost.</summary>
+        public Func<Vector3, Vector3> FloorPointFor;
+        /// <summary>Raised when a tumbling item has come to rest.</summary>
+        public Action<ItemView> Settled;
+
         public bool IsCollectible => Definition.IsCollectible;
         public bool IsRare => Definition.IsRare;
 
@@ -85,6 +90,8 @@ namespace SortingGame.Section
             body.angularDamping = 0.6f;
             body.interpolation = RigidbodyInterpolation.Interpolate;
             body.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+            // Items spill out of a box on top of each other; without a cap the solver shoots them across the room.
+            body.maxDepenetrationVelocity = 2f;
             return view;
         }
 
@@ -105,6 +112,10 @@ namespace SortingGame.Section
 
         public void Launch(Vector3 velocity, Vector3 angularVelocity)
         {
+            // Physics starts from where the item is shown, not from where the body last was. An item that was just
+            // created or moved by its transform would otherwise jump back there (new items: the room's centre).
+            _body.position = transform.position;
+            _body.rotation = transform.rotation;
             SetCollidersEnabled(true);
             SetPhysics(true);
             _body.linearVelocity = velocity;
@@ -152,23 +163,6 @@ namespace SortingGame.Section
             StopMotion();
             transform.localScale = Vector3.one;
             Launch(Vector3.zero, UnityEngine.Random.insideUnitSphere * 2f);
-        }
-
-        /// <summary>Wrong shelf: soft arc back to where it was picked up (GDD 7.2, no penalty).</summary>
-        public void ReturnToPickup()
-        {
-            StopMotion();
-            State = ItemState.Flying;
-            var from = transform.position;
-            var fromRotation = transform.rotation;
-            var fromScale = transform.localScale;
-            var to = _pickupPosition;
-            _motion = Tween.Run(this, _feel.ReturnDuration, t =>
-            {
-                transform.position = Vector3.Lerp(from, to, t) + Vector3.up * (Ease.Pulse(t) * 0.35f);
-                transform.rotation = Quaternion.Slerp(fromRotation, _pickupRotation, t);
-                transform.localScale = Vector3.Lerp(fromScale, Vector3.one, t);
-            }, Ease.InOutQuad, () => SetResting(to, _pickupRotation));
         }
 
         /// <param name="duration">Defaults to FeelConfig.PlaceDuration.</param>
@@ -285,10 +279,13 @@ namespace SortingGame.Section
         {
             if (State != ItemState.Physics) return;
 
-            // Safety net: anything that escapes the room comes back.
-            if (transform.position.y < -2f)
+            // Safety net: anything that escapes the room comes back onto the floor right where it left,
+            // never somewhere else (it used to reappear in the middle of the room and pile up there).
+            if (transform.position.y < -1f)
             {
-                SetResting(_pickupPosition + Vector3.up * 0.3f, _pickupRotation);
+                var back = FloorPointFor != null ? FloorPointFor(transform.position) : new Vector3(transform.position.x, 0f, transform.position.z);
+                // Through SetResting: moving the transform of a live, interpolated body does not stick.
+                SetResting(back + Vector3.up * 0.3f, transform.rotation);
                 Launch(Vector3.zero, Vector3.zero);
                 return;
             }
@@ -301,6 +298,7 @@ namespace SortingGame.Section
                 SetPhysics(false);
                 State = ItemState.Resting;
                 RememberPose();
+                Settled?.Invoke(this);
             }
         }
 

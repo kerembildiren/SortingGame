@@ -183,7 +183,7 @@ namespace SortingGame.Section
                 }
             }
 
-            item.ReturnToPickup();
+            DropOnFloor(item); // GDD 7.2: no penalty, it simply falls to the floor in front of this shelf
             var correct = ShelfFor(item.Definition.Category);
             if (correct != null && correct != shelf) correct.FlashHint(_feel.WrongShelfHintDuration);
             SfxPlayer.Instance?.Play(Sfx.Wrong);
@@ -196,6 +196,12 @@ namespace SortingGame.Section
         public void OpenContainer(ContainerView container)
         {
             if (container == null || container.IsOpened) return;
+            // Items lying on top of the box fall with it instead of hanging in the air.
+            foreach (var item in _items)
+            {
+                if (item == null || item.State != ItemState.Resting || item.transform.position.y < 0.3f) continue;
+                if (FlatDistance(item.transform.position, container.transform.position) < 0.7f) item.Launch(Vector3.zero, Vector3.zero);
+            }
             container.Open(_feel);
             StateChanged?.Invoke();
         }
@@ -224,7 +230,7 @@ namespace SortingGame.Section
 
         /// <summary>
         /// Puts every carried item that belongs on <paramref name="shelf"/> into its slots, one after another.
-        /// Returns the delivered items. When <paramref name="releasing"/>, the rest go back where they were picked up
+        /// Returns the delivered items. When <paramref name="releasing"/>, the rest fall to the floor right there
         /// (no penalty, GDD 7.2); otherwise they stay in hand for the next shelf.
         /// </summary>
         public List<ItemView> DeliverStack(IReadOnlyList<ItemView> stack, ShelfView shelf, Vector3 nearPoint, bool releasing)
@@ -243,7 +249,7 @@ namespace SortingGame.Section
             if (!releasing) return delivered;
 
             var misses = stack.Where(i => !delivered.Contains(i)).ToList();
-            foreach (var item in misses) item.ReturnToPickup();
+            foreach (var item in misses) DropOnFloor(item);
             if (delivered.Count == 0 && misses.Count > 0)
             {
                 var correct = ShelfFor(misses[0].Definition.Category);
@@ -374,6 +380,44 @@ namespace SortingGame.Section
         }
 
         public ShelfView ShelfFor(CategoryDefinition category) => _shelves.FirstOrDefault(s => s.Category == category);
+
+        /// <summary>Deepest z (room space) at which a loose item may lie: just in front of the shelf guard.</summary>
+        float FloorBackLimit => _floorSize.y / 2f - _shelfZoneDepth - 0.06f - 0.3f;
+
+        /// <summary>
+        /// The spot on the open floor closest to <paramref name="world"/> (y = floor): inside the side walls and
+        /// in front of the shelves. An item is only ever put back here, never somewhere else in the room.
+        /// </summary>
+        public Vector3 FloorPointUnder(Vector3 world)
+        {
+            var local = _root.InverseTransformPoint(world);
+            var hx = _floorSize.x / 2f - 0.25f;
+            local.x = Mathf.Clamp(local.x, -hx, hx);
+            local.z = Mathf.Clamp(local.z, -_floorSize.y / 2f + 0.25f, Mathf.Max(-_floorSize.y / 2f + 0.25f, FloorBackLimit));
+            local.y = 0f;
+            return _root.TransformPoint(local);
+        }
+
+        /// <summary>
+        /// Lets go of an item where it is: it falls to the floor below (pulled just clear of the shelves if it is
+        /// held over them) and stays there. Used for every release that is not a correct placement.
+        /// </summary>
+        public void DropOnFloor(ItemView item)
+        {
+            if (item == null) return;
+            var floor = FloorPointUnder(item.transform.position);
+            item.transform.position = new Vector3(floor.x, Mathf.Max(item.transform.position.y, 0.15f), floor.z);
+            item.Drop();
+        }
+
+        /// <summary>A tumbling item came to rest: if it ended up among the shelves, set it down on the floor in front.</summary>
+        void OnItemSettled(ItemView item)
+        {
+            var local = _root.InverseTransformPoint(item.transform.position);
+            if (local.z <= FloorBackLimit + 0.3f) return; // the guard in front of the shelves stands 0.3 behind the limit
+            item.transform.position = FloorPointUnder(item.transform.position) + Vector3.up * 0.25f;
+            item.Launch(Vector3.zero, Vector3.zero);
+        }
 
         public Vector3 ClampToRoom(Vector3 point)
         {
@@ -723,6 +767,10 @@ namespace SortingGame.Section
             AddInvisibleWall("BlockL", new Vector3(-w / 2f - 0.1f, 1.5f, 0f), new Vector3(0.2f, 3f, d + 0.4f));
             AddInvisibleWall("BlockR", new Vector3(w / 2f + 0.1f, 1.5f, 0f), new Vector3(0.2f, 3f, d + 0.4f));
             AddInvisibleWall("BlockFront", new Vector3(0f, 1.5f, -d / 2f - 0.1f), new Vector3(w + 0.4f, 3f, 0.2f));
+            // A thick slab under the thin floor: items that spill out pressed into the ground cannot be pushed through it.
+            AddInvisibleWall("FloorSolid", new Vector3(0f, -1f, 0f), new Vector3(w + 0.8f, 2f, d + 0.8f));
+            // And a lid, so nothing is thrown over the walls or onto the shelves.
+            AddInvisibleWall("BlockTop", new Vector3(0f, 3.1f, 0f), new Vector3(w + 0.8f, 0.2f, d + 0.8f));
         }
 
         static void SetMaterial(GameObject go, Material material) => go.GetComponent<MeshRenderer>().sharedMaterial = material;
@@ -795,14 +843,18 @@ namespace SortingGame.Section
         {
             var free = FreeFloor();
             var placed = new List<Vector2>();
-            foreach (var content in layout.Containers)
+            var spots = SpreadSpots(layout.Containers.Count, free, placed, 1.1f, random, null);
+            for (var i = 0; i < layout.Containers.Count; i++)
             {
-                var spot = FindSpot(free, placed, 1.1f, random, null);
-                placed.Add(spot);
+                var content = layout.Containers[i];
+                var spot = spots[i];
 
-                // Tip towards the open middle of the room and slightly towards the camera, so the spill is visible.
-                var toCentre = new Vector3(free.center.x - spot.x, 0f, free.center.y - spot.y - 0.6f);
-                var yaw = Mathf.Atan2(toCentre.x, toCentre.z) * Mathf.Rad2Deg + Range(random, -25f, 25f);
+                // Tip across the room (towards the middle of its depth, slightly towards the camera) so the spill is
+                // visible and stays near the box. Only boxes close to a side wall also lean away from it.
+                var aimX = Mathf.Clamp(spot.x, free.xMin + 1.2f, free.xMax - 1.2f);
+                var across = new Vector3(aimX - spot.x, 0f, free.center.y - spot.y - 0.6f);
+                if (across.sqrMagnitude < 0.04f) across = Vector3.back;
+                var yaw = Mathf.Atan2(across.x, across.z) * Mathf.Rad2Deg + Range(random, -25f, 25f);
 
                 // Collectibles hide among the commons inside the box.
                 var contents = new List<ItemDefinition>(content.Items);
@@ -837,10 +889,12 @@ namespace SortingGame.Section
                 return _dirt.Sample(u, v, 0.02f) > 0.85f;
             }
 
-            foreach (var definition in layout.BuriedItems.Concat(layout.BuriedCollectibles))
+            var buried = layout.BuriedItems.Concat(layout.BuriedCollectibles).ToList();
+            var spots = SpreadSpots(buried.Count, free, taken, 0.45f, random, Dirty);
+            for (var i = 0; i < buried.Count; i++)
             {
-                var spot = FindSpot(free, taken, 0.45f, random, Dirty);
-                taken.Add(spot);
+                var definition = buried[i];
+                var spot = spots[i];
                 var (rest, height) = PlaceholderFactory.RestPose(definition.Placeholder);
                 var rotation = Quaternion.Euler(0f, Range(random, 0f, 360f), 0f) * rest;
                 var view = SpawnItem(definition, _root.TransformPoint(new Vector3(spot.x, height + 0.002f, spot.y)), rotation);
@@ -853,10 +907,12 @@ namespace SortingGame.Section
         {
             var free = FreeFloor();
             // Keep loose items apart from boxes and from each other so nothing intersects at rest.
-            foreach (var definition in layout.LooseItems.Concat(layout.LooseCollectibles))
+            var loose = layout.LooseItems.Concat(layout.LooseCollectibles).ToList();
+            var spots = SpreadSpots(loose.Count, free, taken, 0.45f, random, null);
+            for (var i = 0; i < loose.Count; i++)
             {
-                var spot = FindSpot(free, taken, 0.45f, random, null);
-                taken.Add(spot);
+                var definition = loose[i];
+                var spot = spots[i];
                 var (rest, height) = PlaceholderFactory.RestPose(definition.Placeholder);
                 var rotation = Quaternion.Euler(0f, Range(random, 0f, 360f), 0f) * rest;
                 var view = SpawnItem(definition, _root.TransformPoint(new Vector3(spot.x, height + 0.002f, spot.y)), rotation);
@@ -868,27 +924,74 @@ namespace SortingGame.Section
         {
             var glow = definition.IsCollectible ? _visuals.RareGlowColor : _visuals.RareItemGlowColor;
             var view = ItemView.Create(definition, _factory, _feel, _root, _fx, glow);
+            view.FloorPointFor = FloorPointUnder;
+            view.Settled = OnItemSettled;
             view.transform.SetPositionAndRotation(position, rotation);
             _items.Add(view);
             return view;
         }
 
-        static Vector2 FindSpot(Rect area, List<Vector2> avoid, float minDistance, Random random, Func<Vector2, bool> accept)
+        /// <summary>
+        /// <paramref name="count"/> spots spread evenly along the room: the width is cut into one slice per spot and
+        /// every slice gets exactly one, anywhere across the depth. Plain random picks left some stretches of a long
+        /// room crowded and others empty. A slice that has no acceptable place (e.g. no dirt to bury something under)
+        /// falls back to the whole floor. Chosen spots are added to <paramref name="avoid"/>.
+        /// </summary>
+        static List<Vector2> SpreadSpots(int count, Rect area, List<Vector2> avoid, float minDistance, Random random, Func<Vector2, bool> accept)
+        {
+            var spots = new List<Vector2>(count);
+            if (count <= 0) return spots;
+
+            // Which slice each spot gets: shuffled, so neighbours in the list are not neighbours in the room.
+            var slices = Enumerable.Range(0, count).ToList();
+            for (var i = slices.Count - 1; i > 0; i--)
+            {
+                var j = random.Next(i + 1);
+                (slices[i], slices[j]) = (slices[j], slices[i]);
+            }
+
+            var sliceWidth = area.width / count;
+            foreach (var slice in slices)
+            {
+                // Narrow slices (many small items) are widened a little so there is room to keep the minimum distance.
+                var centre = area.xMin + (slice + 0.5f) * sliceWidth;
+                var half = Mathf.Max(sliceWidth * 0.5f, Mathf.Min(minDistance, area.width * 0.5f));
+                var strip = Rect.MinMaxRect(Mathf.Max(area.xMin, centre - half), area.yMin, Mathf.Min(area.xMax, centre + half), area.yMax);
+                var spot = FindSpot(strip, avoid, minDistance, random, accept, out var accepted);
+                if (accept != null && !accepted) spot = FindSpot(area, avoid, minDistance, random, accept, out _);
+                avoid.Add(spot);
+                spots.Add(spot);
+            }
+            return spots;
+        }
+
+        static Vector2 FindSpot(Rect area, List<Vector2> avoid, float minDistance, Random random, Func<Vector2, bool> accept, out bool accepted)
         {
             var best = area.center;
             var bestScore = float.MinValue;
-            for (var attempt = 0; attempt < 60; attempt++)
+            accepted = false;
+            for (var attempt = 0; attempt < 40; attempt++)
             {
                 var candidate = new Vector2(Range(random, area.xMin, area.xMax), Range(random, area.yMin, area.yMax));
                 var clearance = float.MaxValue;
-                foreach (var other in avoid) clearance = Mathf.Min(clearance, Vector2.Distance(candidate, other));
-                var accepted = accept == null || accept(candidate);
-                if (clearance >= minDistance && accepted) return candidate;
-                var score = Mathf.Min(clearance, minDistance) + (accepted ? 10f : 0f);
+                foreach (var other in avoid)
+                {
+                    // Only neighbours matter; in a long room most of the list is far away.
+                    if (Mathf.Abs(other.x - candidate.x) >= minDistance) continue;
+                    clearance = Mathf.Min(clearance, Vector2.Distance(candidate, other));
+                }
+                var fits = accept == null || accept(candidate);
+                if (clearance >= minDistance && fits)
+                {
+                    accepted = true;
+                    return candidate;
+                }
+                var score = Mathf.Min(clearance, minDistance) + (fits ? 10f : 0f);
                 if (score > bestScore)
                 {
                     bestScore = score;
                     best = candidate;
+                    accepted = fits;
                 }
             }
             return best;
